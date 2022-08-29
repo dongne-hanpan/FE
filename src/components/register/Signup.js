@@ -4,20 +4,20 @@ import Button from "./Button";
 
 const Signup = () => {
   //닉네임, 아이디, 비밀번호, 비밀번호확인
-  const [nickname, setNickname] = useState("");
   const [id, setId] = useState("");
+  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswrodCheck] = useState("");
 
   //오류메세지 상태저장
-  const [nickMessage, setNickMessage] = useState("");
   const [idMessage, setIdMessage] = useState("");
+  const [nickMessage, setNickMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [passwordCheckMessage, setPasswordCheckMessage] = useState("");
 
   //유효성 검사
-  const [isNick, setIsNick] = useState(false);
   const [isId, setIsId] = useState(false);
+  const [isNick, setIsNick] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordCheck, setIsPasswordCheck] = useState(false);
 
@@ -32,7 +32,7 @@ const Signup = () => {
       setNickMessage("10글자 미만으로 입력해주세요 :)");
       setIsNick(false);
     } else {
-      setNickMessage("올바른 형식입니다 :)");
+      setNickMessage("사용가능");
       setIsNick(true);
     }
   }, []);
@@ -47,7 +47,7 @@ const Signup = () => {
       setIdMessage("소문자 + 숫자 + 언더바/하이픈 허용 4~20자리 :)");
       setIsId(false);
     } else {
-      setIdMessage("올바른 형식이에요 :)");
+      setIdMessage("사용가능");
       setIsId(true);
     }
   }, []);
@@ -98,58 +98,72 @@ const Signup = () => {
 
   return (
     <Form onSubmit={onSubmitHandler}>
-      <h2 style={{ color: "rgba(3, 115, 243, 1)" }}>회원가입</h2>
       <InputBox>
+        <div>
+          <label htmlFor="id">아이디</label>
+          {id.length > 0 && (
+            <span className={`message ${isId ? "success" : "error"}`}>
+              {idMessage}
+            </span>
+          )}
+        </div>
+        <input id="id" onChange={idHandler} value={id} name="id" type="text" />
+      </InputBox>
+      <InputBox>
+        <div>
+          <label htmlFor="nickname">닉네임</label>
+          {nickname.length > 0 && (
+            <span className={`message ${isNick ? "success" : "error"}`}>
+              {nickMessage}
+            </span>
+          )}
+        </div>
         <input
+          id="nickname"
           onChange={nicknameHandler}
           value={nickname}
           name="nickname"
           type="text"
         />
-        {nickname.length > 0 && (
-          <span className={`message ${isNick ? "success" : "error"}`}>
-            {nickMessage}
-          </span>
-        )}
       </InputBox>
       <InputBox>
-        <input onChange={idHandler} value={id} name="id" type="text" />
-        {id.length > 0 && (
-          <span className={`message ${isId ? "success" : "error"}`}>
-            {idMessage}
-          </span>
-        )}
-      </InputBox>
-      <InputBox>
+        <div>
+          <label htmlFor="password">비밀번호</label>
+          {password.length > 0 && (
+            <span className={`message ${isPassword ? "success" : "error"}`}>
+              {passwordMessage}
+            </span>
+          )}
+        </div>
         <input
+          id="password"
           onChange={passwordHandler}
           value={password}
           name="password"
           type="text"
         />
-        {password.length > 0 && (
-          <span className={`message ${isPassword ? "success" : "error"}`}>
-            {passwordMessage}
-          </span>
-        )}
       </InputBox>
       <InputBox>
+        <div>
+          <label htmlFor="passwordCheck">비밀번호 확인</label>
+          {passwordCheck.length > 0 && (
+            <span
+              className={`message ${isPasswordCheck ? "success" : "error"}`}
+            >
+              {passwordCheckMessage}
+            </span>
+          )}
+        </div>
         <input
+          id="passwordCheck"
           onChange={passwrodCheckHandler}
           value={passwordCheck}
           name="passwordCheck"
           type="text"
+          style={{ marginBottom: "50px" }}
         />
-        {passwordCheck.length > 0 && (
-          <span
-            style={{ marginBottom: "50px" }}
-            className={`message ${isPasswordCheck ? "success" : "error"}`}
-          >
-            {passwordCheckMessage}
-          </span>
-        )}
       </InputBox>
-      <Button btnSize={"large"}>가입하기</Button>
+      <Button btnSize={"large"}>회원가입</Button>
     </Form>
   );
 };
@@ -174,9 +188,15 @@ const Form = styled.form`
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 400px;
   margin: auto;
   margin: 20px;
+  span {
+    font-size: 8px;
+  }
+  div {
+    display: flex;
+  }
   input {
     border-radius: 10px;
     height: 40px;
@@ -186,9 +206,13 @@ const InputBox = styled.div`
       outline-color: rgba(244, 210, 85, 1);
     }
   }
+  label {
+    width: 110px;
+    font-weight: bold;
+  }
   .message {
     &.success {
-      color: #8f8c8b;
+      color: #47c83e;
     }
     &.error {
       color: #ff2727;

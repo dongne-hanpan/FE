@@ -10,8 +10,8 @@ const Button = ({ children, bgColor, color, btnSize }) => {
 export default Button;
 Button.defaultProps = {
   btnSize: "mid",
-  bgColor: "rgba(138, 204, 228, 1)",
-  color: "white",
+  bgColor: "8ACCE4",
+  color: "black",
 };
 const Btn = styled.button`
   display: flex;
@@ -22,10 +22,11 @@ const Btn = styled.button`
   border-radius: 10px;
   color: ${({ color }) => color};
   background-color: ${({ bgColor }) => bgColor};
+  border: none;
   ${({ btnSize }) =>
     btnSize === "large" &&
     css`
-      width: 250px;
+      width: 400px;
       height: 50px;
       font-size: 1.2rem;
     `}
