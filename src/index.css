@@ -10,6 +10,7 @@
   --color-green: #41CC00;
   --color-yellow: #FFC700;
   /* addtional color */
+  --color-dark: #6d6d6d71;
   --color-darkgray: #767676;
   --color-gray: #b5b3ac;
   --color-red-light: #ff0000;
@@ -38,6 +39,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+.App {
+  position: relative;
 }
 
 body {
