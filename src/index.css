@@ -9,10 +9,17 @@
   --color-red: #CC0000;
   --color-green: #41CC00;
   --color-yellow: #FFC700;
+  /* addtional color */
+  --color-darkgray: #767676;
+  --color-gray: #b5b3ac;
+  --color-red-light: #ff0000;
+  --color-orange: #ff9100;
+  --color-orange-pale: #ffcf91;
 
   /* Font size */
   --font-32: 32px;
   --font-26: 26px;
+  --font-24: 24px;
   --font-22: 22px;
   --font-20: 20px;
   --font-18: 18px;
@@ -35,6 +42,7 @@
 
 body {
   margin: 0px;
+  background-color: var(--color-background);
 }
 
 button {
