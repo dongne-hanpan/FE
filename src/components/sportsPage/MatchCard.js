@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReuseBadge from '../y_reusable/ReuseBadge';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 
 
@@ -12,7 +13,7 @@ const MatchCard = () => {
           <span className="matchTime">11:00 ~ 12:00</span>
           <span className="matchPlace">동작 볼링장</span>
         </div>
-        <div className="badge">입문</div>
+        <ReuseBadge level={'중급'} />
       </MatchDate>
       <MatchBtns>
         <div className="matchIntake"><span>3</span>/4 명</div>
