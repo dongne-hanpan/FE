@@ -5,6 +5,7 @@ import IndexPage from './pages/IndexPage'
 import Register from './pages/Register';
 import SportsPage from './pages/SportsPage';
 import ChatPage from './pages/ChatPage';
+import ModalTemplate from './components/y_modal/ModalTemplate';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
         </Routes>
+        <ModalTemplate />
       </Router>
     </div>
   );
