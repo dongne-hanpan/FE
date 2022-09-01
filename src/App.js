@@ -15,7 +15,6 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<IndexPage />} />
-          <Route path='/register' element={<Register />} />
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
         </Routes>

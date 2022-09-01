@@ -13,23 +13,23 @@ const Signup = () => {
           <InputTitle>아이디<span>error_message</span></InputTitle>
           <ReuseBtn content={'중복체크'} />
         </InputTitleBox>
-        <ReuseInput inputType={'email'} placeholderValue={'example@gmail.com'} />
+        <ReuseInput injType={'email'} placeholderValue={'example@gmail.com'} />
 
         <InputTitleBox>
           <InputTitle>닉네임<span>error_message</span></InputTitle>
           <ReuseBtn content={'중복체크'} />
         </InputTitleBox>
-        <ReuseInput inputType={'text'} placeholderValue={'직박구리'} />
+        <ReuseInput injType={'text'} placeholderValue={'직박구리'} />
 
         <InputTitleBox>
           <InputTitle>비밀번호<span>error_message</span></InputTitle>
         </InputTitleBox>
-        <ReuseInput inputType={'password'} placeholderValue={'비밀번호'} />
+        <ReuseInput injType={'password'} placeholderValue={'비밀번호'} />
 
         <InputTitleBox>
           <InputTitle>비밀번호 확인<span>error_message</span></InputTitle>
         </InputTitleBox>
-        <ReuseInput inputType={'password'} placeholderValue={'비밀번호 확인'} />
+        <ReuseInput injType={'password'} placeholderValue={'비밀번호 확인'} />
       </div>
       <ReuseBtn styleType={'stretch'} content={'회원가입'} />
       <div className="switchToLogin">이미 회원이신가요? <span>로그인하기</span></div>
