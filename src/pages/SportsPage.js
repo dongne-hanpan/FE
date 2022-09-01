@@ -7,7 +7,7 @@ import MatchCard from '../components/sportsPage/MatchCard';
 import sun from '../asset/sun.png';
 import you from '../asset/profileYou.png';
 import ReuseRank from '../components/y_reusable/ReuseRank';
-import ReuseRankVertical from '../components/y_reusable/ReuseRankVertical';
+import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
 const SportsPage = () => {
   return(
@@ -15,7 +15,7 @@ const SportsPage = () => {
       <SportsAndRank>
         <ReuseProfile imgSrc={sun} imgSize={'220'} />
         <article>
-          <ReuseRankVertical userProfile={you} username={'성 원'} temperture={69}/>
+          <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
           <div className="rankSection">
             <ReuseRank type={'avg'} content={'85'} userProfile={you} username={'성 원'}/>
             <ReuseRank type={'cnt'} content={'69'} userProfile={you} username={'성 원'}/>

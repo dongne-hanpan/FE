@@ -4,22 +4,31 @@ import Progress from '../sportsPage/Progress';
 import ReuseProfile from './ReuseProfile';
 
 
-const ReuseRankVertical = ({content, userProfile}) => {
+const ReuseTemperature = ({tempType,username, userProfile, temp}) => {
   return(
-    <RankCompVertical>
+
+
+    <TemperatureComp tempType={tempType}>
+      {tempType === 'rank' ? 
       <div className="rankName">동네 한판 <br/> 매너 왕</div>
-      <Progress data={69} />
+      : 
+      <div className="rankName">매너 온도</div>
+      }
+      <Progress data={temp} />
       <div className="rankInfo">
-        <ReuseProfile imgSrc={userProfile} content={'성 원'}/>
-        <div className="temperture">69 도</div>
+        {userProfile ? 
+        <ReuseProfile imgSrc={userProfile} content={username}/>
+        :<></>
+        }
+        <div className="temperture">{temp} 도</div>
       </div>
-    </RankCompVertical>
+    </TemperatureComp>
   )
 }
 
-export default ReuseRankVertical;
+export default ReuseTemperature;
 
-const RankCompVertical = styled.div`
+const TemperatureComp = styled.div`
   position: relative;
   width: 100px;
   height: 220px;
@@ -27,7 +36,7 @@ const RankCompVertical = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 10px 20px;
+  padding: ${({tempType}) => tempType === 'rank' ? '10px 20px' :'20px'};
   border-radius: 1rem;
   background-color: var(--color-background-light);
   filter: drop-shadow(0px 0px 0px var(--color-gray));
@@ -42,7 +51,7 @@ const RankCompVertical = styled.div`
     flex-direction: column;
     align-items: center;
     .temperture{
-      font-size: var(--font-14);
+      font-size: ${({tempType}) => tempType === 'rank' ? 'var(--font-14)' :'var(--font-16)'};
       font-weight: 500;
     }
   }
