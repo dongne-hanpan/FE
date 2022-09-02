@@ -14,12 +14,12 @@ const Login = () => {
       <InputTitleBox>
         <InputTitle>아이디</InputTitle>
       </InputTitleBox>
-      <ReuseInput inputType={'email'} placeholderValue={'example@gmail.com'} />
+      <ReuseInput injType={'email'} placeholderValue={'example@gmail.com'} />
 
       <InputTitleBox>
         <InputTitle>비밀번호<span>error_message</span></InputTitle>
       </InputTitleBox>
-      <ReuseInput inputType={'password'} placeholderValue={'비밀번호를 입력하세요'} />
+      <ReuseInput injType={'password'} placeholderValue={'비밀번호를 입력하세요'} />
       <div className="errorMsg"></div>
 
       <button className="socialLogin">Google로 로그인</button>
