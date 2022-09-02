@@ -49,11 +49,16 @@ const SportsPage = () => {
 export default SportsPage;
 
 const MainPage = styled.main`
-  // width: 100vw;
-  height: 90vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 30px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   & ul{
     padding: 0px;
   }
