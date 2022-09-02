@@ -17,8 +17,8 @@ const SportsPage = () => {
         <article>
           <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
           <div className="rankSection">
-            <ReuseRank type={'avg'} content={'85'} userProfile={you} username={'성 원'}/>
-            <ReuseRank type={'cnt'} content={'69'} userProfile={you} username={'성 원'}/>
+            <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
+            <ReuseRank contentTitle={'우리 동네 매치 왕'} content={'69 회'} userProfile={you} username={'성 원'}/>
           </div>
         </article>
       </SportsAndRank>
@@ -65,13 +65,14 @@ const SportsAndRank = styled.section`
   margin-bottom: 20px;
   & article{
     display: flex;
-  }
-  .rankSection{
-    height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-left: 10px;
+    .rankSection{
+      width: 280px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-left: 10px;
+    }
   }
 `
 const MatchContainer = styled.section`

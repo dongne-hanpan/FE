@@ -3,21 +3,16 @@ import styled from 'styled-components';
 import ReuseProfile from './ReuseProfile';
 
 
-const ReuseRank = ({type, content, userProfile, username}) => {
+const ReuseRank = ({ contentTitle, content, userProfile, username}) => {
   return(
-    <RankComp>
-      {type === 'avg' ?
-        <div className="rankInfo">
-          <div className="rankName"> 우리 동네 점수 왕</div>
-          <div className="rankScore"> {content} 점</div>
-        </div>
-        :
-        <div className="rankInfo">
-          <div className="rankName"> 우리 동네 매치 왕</div>
-          <div className="rankScore"> {content} 회</div>
-        </div>
+    <RankComp userProfile={userProfile}>
+      <div className="rankInfo">
+        <div className="rankName">{contentTitle}</div>
+        <div className="rankScore"> {content}</div>
+      </div>
+      {userProfile ? 
+        <ReuseProfile imgSrc={userProfile} content={username}/> : <></>
       }
-      <ReuseProfile imgSrc={userProfile} content={username}/>
     </RankComp>
   )
 }
@@ -25,13 +20,12 @@ const ReuseRank = ({type, content, userProfile, username}) => {
 export default ReuseRank;
 
 const RankComp = styled.div`
-  width: 300px;
+  width: 100%;
   height: 80px;
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({userProfile}) => userProfile ? 'space-between':'center'};
   align-items: center;
-  padding-left: 30px;
-  padding-right: 20px;
+  padding: 0px 20px;
   border-radius: 1rem;
   background-color: var(--color-background-light);
   filter: drop-shadow(0px 0px 0px var(--color-gray));
