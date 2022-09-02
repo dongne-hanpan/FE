@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Login from '../y_login/Login';
-import Signup from '../y_login/Signup';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import Deco from './Deco';
+import Login from '../y_login/Login';
+import Signup from '../y_login/Signup';
+import MatchWrite from './MatchWrite';
+import MatchWatch from './MatchWatch';
 
 
 const ModalTemplate = () => {
@@ -16,7 +18,9 @@ const ModalTemplate = () => {
       <ModalSection>
         <Deco />
         {/* <Signup /> */}
-        <Login />
+        {/* <Login /> */}
+        {/* <MatchWrite /> */}
+        <MatchWatch />
       </ModalSection>
     </ModalComp>
   )
