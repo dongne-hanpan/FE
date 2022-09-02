@@ -19,7 +19,7 @@ function App() {
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
         </Routes>
-        <ModalTemplate />
+        {/* <ModalTemplate /> */}
       </Router>
     </div>
   );

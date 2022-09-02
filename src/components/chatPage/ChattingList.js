@@ -1,13 +1,7 @@
-import useInput from "../../../shared/redux_j/hooks/useInput";
+import useInput from "../../shared/hooks/useInput";
 import { FiSend } from "react-icons/fi";
 // import { MessageWrapper } from "../message/style";
-import {
-  ChattingInputWrapper,
-  ChattingListWrapper,
-  InputBox,
-  MessageListWrapper,
-  SubmitButton,
-} from "./style";
+import styled from "styled-components";
 import { useEffect, useState } from "react";
 // import { connect } from "../../socket/clients";
 import { useParams } from "react-router";
@@ -15,7 +9,7 @@ import StompJS from "stompjs";
 import SockJS from "sockjs-client";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import Message from "../message";
+import Message from "./Message";
 
 const ChattingList = () => {
   const username = window.localStorage.getItem("username");
@@ -120,5 +114,64 @@ const ChattingList = () => {
     </ChattingListWrapper>
   );
 };
+
+
+
+const ChattingListWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+`;
+const MessageListWrapper = styled.div`
+  /* background-color: red; */
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: end;
+  gap: 15px;
+`;
+
+const ChattingInputWrapper = styled.div`
+  margin-top: 30px;
+  height: 150px;
+  width: 100%;
+  padding: 10px;
+  border: 0.1px solid grey;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
+const InputBox = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  resize: none;
+  :focus {
+    outline: none;
+    outline-color: ${(props) => props.theme.palette.blue};
+  }
+`;
+
+const SubmitButton = styled.button`
+  width: 70px;
+  height: 30px;
+  padding: 3px;
+  text-align: center;
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  border: none;
+`;
+
+
 
 export default ChattingList;

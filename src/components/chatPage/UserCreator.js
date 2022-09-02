@@ -1,16 +1,7 @@
 import { useEffect } from "react";
-import useInput from "../../../shared/redux_j/hooks/useInput";
-import { ChatAPI } from "../../../shared/redux_j/api";
-
-import {
-  UserCreatorWrapper,
-  ButtonBox,
-  ChannelInput,
-  ChannelInputBox,
-  SubmitButton,
-  Text,
-  TextBox,
-} from "./style";
+import useInput from "../../shared/hooks/useInput";
+import { ChatAPI } from "../../shared/api";
+import styled from "styled-components";
 import { useParams } from "react-router";
 
 const UserCreator = ({ visible, closeModal, userData, setUserData }) => {
@@ -66,5 +57,59 @@ const UserCreator = ({ visible, closeModal, userData, setUserData }) => {
     </UserCreatorWrapper>
   );
 };
+
+
+const UserCreatorWrapper = styled.div`
+  height: 200px;
+  width: 400px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 30px;
+`;
+
+const TextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const Text = styled.span`
+  font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
+  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : "500")};
+`;
+
+const ChannelInputBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 10px;
+`;
+const ChannelInput = styled.input`
+  width: 100%;
+  height: 30px;
+  :focus {
+    outline-color: ${(props) => props.theme.palette.purple};
+  }
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: end;
+`;
+
+const SubmitButton = styled.button`
+  border: none;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.palette.purple};
+  width: 65px;
+  height: 40px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+
 
 export default UserCreator;

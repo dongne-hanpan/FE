@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
-import ChannelCreator from "../ChannelCreator";
-import Modal from "../../../components/chatPage/elements/modal";
-import { ChannelIcon, ChannelListWrapper, PlusIcon } from "./style";
-import { ChatAPI } from "../../../shared/redux_j/api";
+import ChannelCreator from "./ChannelCreator";
+import Modal from "../../components/chatPage/elements/Modal";
+import { ChatAPI } from "../../shared/api";
 import { useNavigate, useParams } from "react-router";
+import styled from "styled-components";
 
 const ChannelList = () => {
   const [modalToggel, setModlaToggle] = useState(false);
@@ -45,13 +45,13 @@ const ChannelList = () => {
           <ChannelIcon>{channel.channelName[0]}</ChannelIcon>
         </div>
       ))}
-      <PlusIcon
+      {/* <PlusIcon
         onClick={() => {
           setModlaToggle(true);
         }}
       >
         <FiPlus></FiPlus>
-      </PlusIcon>
+      </PlusIcon> */}
 
       <Modal visible={modalToggel} closeModal={closeModal}>
         <ChannelCreator
@@ -64,5 +64,39 @@ const ChannelList = () => {
     </ChannelListWrapper>
   );
 };
+
+
+
+const ChannelListWrapper = styled.section`
+  width: 80px;
+  height: 100%;
+  padding-top: 10px;
+  border-right: 0.1px solid grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+`;
+
+const ChannelIcon = styled.div`
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.palette.dark_grey};
+`;
+const PlusIcon = styled(ChannelIcon)`
+  font-size: 32px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+`;
+
 
 export default ChannelList;
