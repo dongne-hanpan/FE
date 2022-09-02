@@ -6,6 +6,7 @@ import Login from '../y_login/Login';
 import Signup from '../y_login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
+import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {
@@ -20,7 +21,8 @@ const ModalTemplate = () => {
         {/* <Signup /> */}
         {/* <Login /> */}
         {/* <MatchWrite /> */}
-        <MatchWatch />
+        {/* <MatchWatch /> */}
+        <UserWatch />
       </ModalSection>
     </ModalComp>
   )
