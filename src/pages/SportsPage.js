@@ -33,8 +33,13 @@ const SportsPage = () => {
           <button><div>+</div></button>
         </CircleBtns>
         <ul>
-          <MatchCard />
-          <MatchCard />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'recruit'} />
         </ul>
       </MatchContainer>
     </MainPage>
