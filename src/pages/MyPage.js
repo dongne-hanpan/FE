@@ -1,20 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
+import ReuseRank from '../components/y_reusable/ReuseRank';
+import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
+import ReuseBadge from '../components/y_reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
 
 // tmp
 import sun from '../asset/sun.png';
 import you from '../asset/profileYou.png';
-import ReuseRank from '../components/y_reusable/ReuseRank';
-import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
-const SportsPage = () => {
+const MyPage = () => {
   return(
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={sun} imgSize={'220'} />
-        <article>
+        <article className="userBtns">
+          <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
+        </article>
+        <article className="userRank">
           <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
           <div className="rankSection">
             <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
@@ -25,28 +30,24 @@ const SportsPage = () => {
 
       <MatchContainer>
         <MatchContainerHeader>
-          <span>동네 한 판?</span>
+          <span>나의 매치</span>
           <div>profile 컨테이너</div>
         </MatchContainerHeader>
-        <CircleBtns>
-          <button><div>필</div></button>
-          <button><div>+</div></button>
-        </CircleBtns>
         <ul>
+          <MatchCard matchState={'reserved'} />
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
+          <MatchCard matchState={'done'} />
+          <MatchCard matchState={'done'} />
+          <MatchCard matchState={'done'} />
+          <MatchCard matchState={'done'} />
         </ul>
       </MatchContainer>
     </MainPage>
   )
 };
 
-export default SportsPage;
+export default MyPage;
 
 const MainPage = styled.main`
   width: 100vw;
@@ -68,7 +69,12 @@ const SportsAndRank = styled.section`
   justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
-  & article{
+  .userBtns{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .userRank{
     display: flex;
     .rankSection{
       width: 280px;
@@ -99,25 +105,3 @@ const MatchContainerHeader = styled.div`
     display: flex;
   }
 `
-
-const CircleBtns = styled.div`
-  position: absolute;
-  right: -60px;
-  top: 70px;
-  & button{
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    border-radius: 2rem;
-    background-color: var(--color-skyblue);
-    & div{
-      font-size: var(--font-20);
-      font-weight: 700;
-    }
-  }
-`
-
-

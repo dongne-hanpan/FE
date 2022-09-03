@@ -49,7 +49,6 @@ const HeaderComp = styled.header`
   padding: 10px 20px;
   background-color: var(--color-core);
   border-radius: 0 0 1rem 1rem;
-  margin-bottom: 30px;
   &:hover{
     height: 200px;
     transition: height 0.5s ease-in-out;
