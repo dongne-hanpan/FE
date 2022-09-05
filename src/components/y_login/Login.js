@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setModal } from '../../shared/redux_d/modules/modalSlice';
@@ -6,14 +6,29 @@ import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 //temp
 import logo from '../../asset/logo.png';
+import { loginUser } from '../../shared/redux_d/modules/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
   const moveToSignup = () => {
     dispatch(setModal({modalType: 'signup'}))
   }
+  //로그인
+  const loginIdRef = useRef(null);
+  const loginPwRef = useRef(null);
+
   const doLogin = (e) => {
-    console.log('hahahahaha');
+    const idValue = loginIdRef.current.value;
+    const pwValue = loginPwRef.current.value;
+
+    const payload = {
+      id: idValue,
+      pw: pwValue
+    };
+    dispatch(loginUser(payload));
+
+    loginIdRef.current.value = '';
+    loginPwRef.current.value = '';
   }
 
   return(
@@ -24,12 +39,12 @@ const Login = () => {
       <InputTitleBox>
         <InputTitle>아이디</InputTitle>
       </InputTitleBox>
-      <ReuseInput injType={'email'} placeholderValue={'example@gmail.com'} />
+      <ReuseInput injRef={loginIdRef} injType={'text'} placeholderValue={'아이디를 입력해주세요'} />
 
       <InputTitleBox>
         <InputTitle>비밀번호<span>error_message</span></InputTitle>
       </InputTitleBox>
-      <ReuseInput injType={'password'} placeholderValue={'비밀번호를 입력하세요'} />
+      <ReuseInput injRef={loginPwRef} injType={'password'} placeholderValue={'비밀번호를 입력해주세요'} />
       <div className="errorMsg"></div>
 
       <button className="socialLogin">Google로 로그인</button>
