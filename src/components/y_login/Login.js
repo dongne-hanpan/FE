@@ -1,11 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 //temp
 import logo from '../../asset/logo.png';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const moveToSignup = () => {
+    dispatch(setModal({modalType: 'signup'}))
+  }
+  const doLogin = (e) => {
+    console.log('hahahahaha');
+  }
+
   return(
     <RegisterComp>
       <LogoBox>
@@ -23,8 +33,8 @@ const Login = () => {
       <div className="errorMsg"></div>
 
       <button className="socialLogin">Google로 로그인</button>
-      <ReuseBtn styleType={'stretch'} content={'회원가입'} />
-      <div className="switchToSignup">아직 회원이 아니신가요? <span>회원가입 하기</span></div>
+      <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doLogin} />
+      <div className="switchToSignup">아직 회원이 아니신가요? <span onClick={moveToSignup}>회원가입 하기</span></div>
     </RegisterComp>
   )
 };

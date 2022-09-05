@@ -1,11 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 
 
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const moveToLogin = () => {
+    dispatch(setModal({modalType: 'login'}))
+  }
+  const doSignup = (e) => {
+    e.preventDefault();
+    console.log('hahaha');
+  }
+
   return(
     <RegisterComp>
       <div className="signupSection">
@@ -31,8 +42,8 @@ const Signup = () => {
         </InputTitleBox>
         <ReuseInput injType={'password'} placeholderValue={'비밀번호 확인'} />
       </div>
-      <ReuseBtn styleType={'stretch'} content={'회원가입'} />
-      <div className="switchToLogin">이미 회원이신가요? <span>로그인하기</span></div>
+      <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doSignup}/>
+      <div className="switchToLogin">이미 회원이신가요? <span onClick={moveToLogin}>로그인하기</span></div>
     </RegisterComp>
   )
 };
