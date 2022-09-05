@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseBadge from '../y_reusable/ReuseBadge';
