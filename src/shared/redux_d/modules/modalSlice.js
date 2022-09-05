@@ -5,7 +5,6 @@ const modalSlice = createSlice({
   name: "modalSlice",
   initialState: {
     modalData: {
-      modalType: 'login'
     },
   },
   reducers:{
