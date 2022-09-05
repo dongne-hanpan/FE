@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from './components/univ/Header';
 import IndexPage from './pages/IndexPage'
 import MyPage from './pages/MyPage';
@@ -9,6 +10,8 @@ import ModalTemplate from './components/y_modal/ModalTemplate';
 
 
 function App() {
+  const modalData = useSelector((state) => state.modal.modalData);
+
   return (
     <div className="App">
       <Router>
@@ -19,7 +22,9 @@ function App() {
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
         </Routes>
-        {/* <ModalTemplate /> */}
+        {modalData.modalType ?
+          <ModalTemplate />:<></>
+        }
       </Router>
     </div>
   );

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import Deco from './Deco';
 import Login from '../y_login/Login';
@@ -10,19 +12,36 @@ import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {
+  const modalData = useSelector((state) => state.modal.modalData);
+  const dispatch = useDispatch();
+  const removeModal = (e) => {
+    if(e.target.ariaLabel === 'modalToggle'){
+      dispatch(clearModal());
+    }
+  }
+
+  const modalRouter = () => {
+    if(modalData.modalType === 'login'){
+      return <Login />
+    } else if(modalData.modalType === 'signup'){
+      return <Signup />
+    } else if(modalData.modalType === 'matchWrite'){
+      return <MatchWrite />
+    } else if(modalData.modalType === 'matchWatch'){
+      return <MatchWatch />
+    } else if(modalData.modalType === 'userWatch'){
+      return <UserWatch />
+    } 
+  }
 
   return(
-    <ModalComp>
+    <ModalComp aria-label='modalToggle' onClick={removeModal}>
       <ModalOutBtn>
-        <ReuseBtn content={'X'} />
+        <ReuseBtn name={'modalToggle'} content={'X'} clickEvent={removeModal} />
       </ModalOutBtn>
       <ModalSection>
         <Deco />
-        {/* <Signup /> */}
-        {/* <Login /> */}
-        {/* <MatchWrite /> */}
-        {/* <MatchWatch /> */}
-        <UserWatch />
+        {modalRouter()}
       </ModalSection>
     </ModalComp>
   )

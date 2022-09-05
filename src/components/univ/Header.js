@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../y_reusable/ReuseWeather';
@@ -13,6 +15,16 @@ import sun from '../../asset/sun.png';
 
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  useEffect(() => {
+    if(userData.id){
+      dispatch(setModal({}));
+    } else{
+      dispatch(setModal({modalType: 'login'}))
+    }
+  },[userData]);
+  
   return(
     <HeaderComp>
       <HeaderLogoSection>

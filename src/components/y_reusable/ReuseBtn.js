@@ -2,9 +2,9 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 
 
-const ReuseBtn = ({styleType, content, clickEvent}) => {
+const ReuseBtn = ({name, styleType, content, clickEvent}) => {
   return(
-    <BtnComp styleType={styleType} onClick={clickEvent}>
+    <BtnComp aria-label={name} styleType={styleType} onClick={clickEvent}>
       {content}
     </BtnComp>
   )
