@@ -7,10 +7,12 @@ import MyPage from './pages/MyPage';
 import SportsPage from './pages/SportsPage';
 import ChatPage from './pages/ChatPage';
 import ModalTemplate from './components/y_modal/ModalTemplate';
+import DialTemplate from './components/y_dialogue/DialTemplate';
 
 
 function App() {
   const modalData = useSelector((state) => state.modal.modalData);
+  const dialogueData = useSelector((state) => state.modal.dialogueData);
 
   return (
     <div className="App">
@@ -22,9 +24,8 @@ function App() {
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
         </Routes>
-        {modalData.modalType ?
-          <ModalTemplate />:<></>
-        }
+        {modalData.modalType ? <ModalTemplate />:<></>}
+        {dialogueData.dialType ? <DialTemplate />:<></>}
       </Router>
     </div>
   );
