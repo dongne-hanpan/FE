@@ -20,7 +20,7 @@ const MatchCard = ({matchState}) => {
         {matchState === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
           :
-          <ReuseBtn content={'연락하기'} />
+          <ReuseBtn styleType={'shrink'} content={'연락하기'} />
         }
       </MatchBtns>
     </MatchComp>
