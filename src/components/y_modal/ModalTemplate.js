@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
-import Deco from './Deco';
+import Deco from '../univ/Deco';
 import Login from '../y_login/Login';
 import Signup from '../y_login/Signup';
 import MatchWrite from './MatchWrite';
@@ -37,7 +37,7 @@ const ModalTemplate = () => {
   return(
     <ModalComp aria-label='modalToggle' onClick={removeModal}>
       <ModalOutBtn>
-        <ReuseBtn name={'modalToggle'} content={'X'} clickEvent={removeModal} />
+        <ReuseBtn name={'modalToggle'} styleType={'shrink'} content={'X'} clickEvent={removeModal} />
       </ModalOutBtn>
       <ModalSection>
         <Deco />
