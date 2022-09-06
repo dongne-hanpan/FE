@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled, {css} from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setModal } from '../../shared/redux_d/modules/modalSlice';
+import { setDialogue, setModal } from '../../shared/redux_d/modules/modalSlice';
 import { getwithoutCookie, postWithoutCookie } from '../../shared/axios_d/axios';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
@@ -62,7 +62,7 @@ const Signup = () => {
     signupUsernameRef.current.value = '';
     signupPwRef.current.value = '';
     signupPwConfirmRef.current.value = '';
-    dispatch(setModal({modalType: 'login'}))
+    dispatch(setDialogue({dialType: 'confirmSignup'}))
   };
 
   //유효성 체크
@@ -122,13 +122,13 @@ const Signup = () => {
       <div className="signupSection">
         <InputTitleBox>
           <InputTitle>아이디<ErrMessage ref={idMsg} status={idErr}></ErrMessage></InputTitle>
-          <ReuseBtn content={'중복체크'} clickEvent={checkDupId} />
+          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupId} />
         </InputTitleBox>
         <ReuseInput injRef={signupIdRef} injType={'text'} placeholderValue={'아이디 (6-12자 이내, 영문, 숫자 사용 가능)'} />
 
         <InputTitleBox>
           <InputTitle>닉네임<ErrMessage ref={usernameMsg} status={usernameErr}></ErrMessage></InputTitle>
-          <ReuseBtn content={'중복체크'} clickEvent={checkDupUsername} />
+          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupUsername} />
         </InputTitleBox>
         <ReuseInput injRef={signupUsernameRef} injType={'text'} placeholderValue={'닉네임을 입력해주세요'} />
 
