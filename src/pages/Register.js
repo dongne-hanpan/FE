@@ -4,7 +4,7 @@ import Signup from "../components/register/Signup";
 
 const Register = () => {
   const [openSignin, setOpenSignin] = useState(true);
-  const [openSignup, setOpenSignun] = useState(false);
+  const [openSignup, setOpenSignup] = useState(false);
   return (
     <div>
       {openSignin && <Signin />}
