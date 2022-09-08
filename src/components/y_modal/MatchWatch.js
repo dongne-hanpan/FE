@@ -21,14 +21,13 @@ const MatchWatch = () => {
           </div>
         </div>
         <div className="matchHost">
-            <ReuseProfile imgSrc={you} content={'영 준'} imgSize={80} contentSize={'var(--font-16)'}/>
+            <ReuseProfile imgSrc={you} content={'영 준'} imgSize={80} contentSize={16}/>
             <ReuseBadge level={'초급'} />
           </div>
       </MatchInfo>
       <hr />
       <Matchadditional>
         <div className="matchDesc">
-
           <p>주말에 함께 볼링 치실 분들 찾습니다. 남녀 무관합니다.</p>
         </div>
         <ReuseTemperature tempType={'personal'} temp={69} />
@@ -63,24 +62,24 @@ const MatchInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
+  font-weight: ${({theme}) => theme.fontWeight.bold};
   .matchDate{
     width: 100%;
     margin-bottom: 10px;
-    font-size: var(--font-40);
+    font-size: ${({theme}) => theme.fontSize.font_40};
   }
   .matchTime{
     width: 100%;
     margin-bottom: 10px;
-    font-size: var(--font-26);
+    font-size: ${({theme}) => theme.fontSize.font_26};
   }
   .matchPlace{
     width: 100%;
     display: flex;
-    font-size: var(--font-32);
+    font-size: ${({theme}) => theme.fontSize.font_32};
     .placeIcon{
       margin-left: 14px;
-      font-size: var(--font-12);
+      font-size: ${({theme}) => theme.fontSize.font_12};
       cursor: pointer;
     }
     .placeDetail{
@@ -88,7 +87,7 @@ const MatchInfo = styled.div`
     }
     .placeIcon:hover .placeDetail{
       display: flex;
-      font-size: var(--font-14);
+      font-size: ${({theme}) => theme.fontSize.font_14};
     }
   }
   .matchHost{
@@ -108,11 +107,11 @@ const Matchadditional = styled.div`
   .matchDesc{
     width: 240px;
     padding: 10px 0px;
-    background-color: var(--color-background-light);
+    background-color: ${({theme}) => theme.colors.background_light};
     border-radius: 1rem;
   }
   & p{
-    font-size: var(--font-14);
+    font-size: ${({theme}) => theme.fontSize.font_14};
     padding: 0px 20px;
     line-height: 20px;
   }
@@ -124,11 +123,11 @@ const MatchContact = styled.div`
     width: 400px;
     display: flex;
     align-items: center;
-    font-size: var(--font-18);
-    font-weight: 700;
+    font-size: ${({theme}) => theme.fontSize.font_18};
+    font-weight: ${({theme}) => theme.fontWeight.bold};
     & span{
       margin-left: 10px;
-      color: var(--color-gray);
+      color: ${({theme}) => theme.colors.gray};
     }
   }
 

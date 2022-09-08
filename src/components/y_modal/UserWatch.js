@@ -78,8 +78,8 @@ const UserWatchComp = styled.section`
       margin-top: 14px;
       .name{
         margin-right: 10px;
-        font-weight: 700;
-        font-size: var(--font-40);
+        font-size: ${({theme}) => theme.fontSize.font_40};
+        font-weight: ${({theme}) => theme.fontWeight.bold};
       }
     }
     .sportsBadges{

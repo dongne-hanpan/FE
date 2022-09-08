@@ -67,19 +67,19 @@ const RegisterComp = styled.section`
   .socialLogin{
     width: 100%;
     height: 40px;
-    border: 2px solid var(--color-gray);
-    border-radius: 0.5rem;
     margin-bottom: 10px;
+    border: 2px solid ${({theme}) => theme.colors.gray};
+    border-radius: 0.5rem;
   }
   .socialLogin:hover{
-    border: 2px solid var(--color-darkgray);
+    border: 2px solid ${({theme}) => theme.colors.darkgray};
     transition: all 0.3s ease-in-out;
   }
   .switchToSignup{
     margin-top: 26px;
-    font-size: var(--font-14);
+    font-size: ${({theme}) => theme.fontSize.font_14};
     & span{
-      color: var(--color-core);
+      color: ${({theme}) => theme.colors.core};
     }
   }
 `
@@ -102,8 +102,8 @@ const InputTitleBox = styled.div`
   margin-bottom: 10px;
 `
 const InputTitle = styled.div`
-  font-size: var(--font-18);
-  font-weight: 500;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
   & span{
     display: none;
   }

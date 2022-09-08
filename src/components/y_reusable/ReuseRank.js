@@ -27,21 +27,21 @@ const RankComp = styled.div`
   align-items: center;
   padding: 0px 20px;
   border-radius: 1rem;
-  background-color: var(--color-background-light);
-  filter: drop-shadow(0px 0px 0px var(--color-gray));
+  background-color: ${({theme}) => theme.colors.background_light};
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
   .rankInfo{
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   .rankName{
-    font-size: var(--font-20);
+    font-size: ${({theme}) => theme.fontSize.font_20};
   }
   .rankScore{
     height: 0px;
     overflow-y: hidden;
-    font-size: var(--font-26);
-    font-weight: 700;
+    font-size: ${({theme}) => theme.fontSize.font_26};
+    font-weight: ${({theme}) => theme.fontWeight.bold};
   }
   &:hover{
     .rankName{
@@ -53,6 +53,6 @@ const RankComp = styled.div`
     }
     height: 120px;
     transition: all 0.4s ease-in-out;
-    filter: drop-shadow(4px 2px 1px var(--color-gray));
+    filter: drop-shadow(4px 2px 1px ${({theme}) => theme.colors.gray});
   }
 `

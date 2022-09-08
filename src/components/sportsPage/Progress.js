@@ -33,7 +33,7 @@ const ProgressBar = styled.div`
   justify-content: flex-end;
   align-items: center;
   border-radius: 20px;
-  background-color: var(--color-orange-pale);
+  background-color: ${({theme}) => theme.colors.orange_pale};
   z-index: -1;
 `
 const Dot = styled.div`
@@ -41,7 +41,7 @@ const Dot = styled.div`
   height: 16px;
   position: relative;
   top: 8px;
-  background-color: var(--color-red-light);
+  background-color: ${({theme}) => theme.colors.red_light};
   border-radius: 40px;
   z-index: 2;
 `
@@ -49,6 +49,6 @@ const HighLight = styled.div`
   width: 12px;
   height: ${({height}) => height};
   border-radius: 20px;
-  background: var(--color-orange);
+  background-color: ${({theme}) => theme.colors.orange};
   transition: 1s width;
 `

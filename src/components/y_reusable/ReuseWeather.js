@@ -26,8 +26,8 @@ const WeatherComp = styled.div`
     margin-bottom: 15px;
   }
   & div{
-    color: var(--color-background);
-    font-weight: 300;
+    color: ${({theme}) => theme.colors.background};
+    font-weight: ${({theme}) => theme.fontWeight.light};
   }
 `
 

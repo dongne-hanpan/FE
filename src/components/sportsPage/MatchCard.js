@@ -39,27 +39,27 @@ const MatchComp = styled.li`
   padding: 0px 30px;
   margin-bottom: 20px;
   border-radius: 1rem;
-  filter: drop-shadow(0px 0px 0px var(--color-gray));
-  background-color: var(--color-background-light);
-  ${({matchState}) => {
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
+  background-color: ${({theme}) => theme.colors.background_light};
+  ${({matchState,theme}) => {
     if(matchState === 'reserved'){
       return css`
-      border: 2px solid var(--color-skyblue);
+      border: 2px solid ${theme.colors.skyblue};
       &:hover{
-        filter: drop-shadow(8px 4px 2px var(--color-gray));
+        filter: drop-shadow(8px 4px 2px ${theme.colors.gray});
         transition: filter 0.3s ease-in;
       }
       `
     } else if(matchState === 'recruit'){
       return css`
       &:hover{
-        filter: drop-shadow(8px 4px 2px var(--color-gray));
+        filter: drop-shadow(8px 4px 2px ${theme.colors.gray});
         transition: filter 0.3s ease-in;
       }
       `
     } else if(matchState === 'done'){
       return css`
-      color: var(--color-gray);
+      color: ${theme.colors.gray};
       `
     }
   }}
@@ -69,35 +69,35 @@ const MatchDate = styled.div`
   display: flex;
   align-items: center;
   .matchDay{
-    font-size: var(--font-24);
-    font-weight: 700;
+    font-size: ${({theme}) => theme.fontSize.font_24};
+    font-weight: ${({theme}) => theme.fontWeight.bold};
     margin-right: 10px;
   }
   .matchTime{
     margin-right: 10px;
-    font-weight: 700;
-    color: ${({matchState}) => matchState === 'done' ? 'var(--color-gray)':'var(--color-darkgray)' };
+    font-weight: ${({theme}) => theme.fontWeight.bold};
+    color: ${({matchState,theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.darkgray };
   }
   .matchPlace{
     margin-right: 10px;
-    font-weight: 700;
-    font-size: var(--font-20);
+    font-weight: ${({theme}) => theme.fontWeight.bold};
+    font-size: ${({theme}) => theme.fontSize.font_20};
   }
   .badge{
-    font-size: 12px;
+    font-size: ${({theme}) => theme.fontSize.font_12};
   }
 `
   const MatchBtns = styled.div`
   display: flex;
   .matchIntake{
     margin-right: 14px;
-    font-size: var(--font-20);
-    font-weight: 700;
+    font-size: ${({theme}) => theme.fontSize.font_20};
+    font-weight:${({theme}) => theme.fontWeight.bold};
   }
-  ${({matchState}) => {
+  ${({matchState, theme}) => {
     if(matchState === 'done'){
       return css`
-      color: var(--color-gray);
+      color: ${theme.colors.gray};
       `
     }
   }}

@@ -5,6 +5,7 @@ const modalSlice = createSlice({
   name: "modalSlice",
   initialState: {
     modalData: {
+      modalType: 'modalWatch'
     },
     dialogueData:
     {}

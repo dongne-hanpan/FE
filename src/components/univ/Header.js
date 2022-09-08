@@ -59,7 +59,7 @@ const HeaderComp = styled.header`
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
-  background-color: var(--color-core);
+  background-color: ${({theme}) => theme.colors.core};
   border-radius: 0 0 1rem 1rem;
   &:hover{
     height: 200px;
@@ -79,7 +79,7 @@ const HeaderAlermSection = styled.article`
   height: 40px;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-black);
+  background-color: ${({theme}) => theme.colors.black};
   cursor: pointer;
   ${HeaderComp}:hover &{
     height: 170px;
@@ -97,10 +97,10 @@ const HeaderUserSection = styled.article`
     margin-bottom: 10px;
     & div{
       margin-left: 10px;
-      color: var(--color-background);
-      font-weight: 300;
+      color: ${({theme}) => theme.colors.background};
+      font-weight: ${({theme}) => theme.fontWeight.light};
       & span{
-        font-weight: 500;
+        font-weight: ${({theme}) => theme.fontWeight.medium};
       }
     }
   }

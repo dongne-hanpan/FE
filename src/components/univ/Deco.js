@@ -28,45 +28,45 @@ width: 20px;
 .barcode1{
   height: 4px;
   margin-bottom: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode2{
   height: 8px;
   margin-bottom: 1px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode3{
   height: 2px;
   margin-bottom: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode4{
   height: 8px;
   margin-bottom: 1px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode5{
   height: 4px;
   margin-bottom: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode6{
   height: 8px;
   margin-bottom: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode7{
   height: 4px;
   margin-bottom: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode8{
   height: 8px;
   margin-bottom: 1px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 .barcode9{
   height: 2px;
-  background-color: black;
+  background-color: ${({theme}) => theme.colors.black};
 }
 `

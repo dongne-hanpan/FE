@@ -42,28 +42,28 @@ const ProfileComp = styled.button`
     ${({imgSize}) =>
     imgSize ? 
     css`
-      width: ${imgSize}px;
-      height: ${imgSize}px;
-      `:
-      css`
-        width: 40px;
-        height: 40px;
-      `
+    width: ${imgSize}px;
+    height: ${imgSize}px;
+    `:
+    css`
+      width: 40px;
+      height: 40px;
+    `
     }
   }
 `
 
 const ProfileContent = styled.div`
-  ${({contentSize}) => contentSize ? 
+  ${({contentSize, theme}) => contentSize ? 
   css`
     margin-top: 20px;
     font-size: ${contentSize};
-    font-weight: 700;
+    font-weight: ${theme.fontWeight.bold};
   `:
   css`
     margin-top: 4px;
-    font-size: var(--font-12);
-    font-weight: 500;
+    font-size: ${theme.fontSize.font_12};
+    font-weight: ${theme.fontWeight.medium};
   `
   }
 `

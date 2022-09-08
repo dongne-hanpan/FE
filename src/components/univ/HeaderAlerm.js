@@ -39,9 +39,9 @@ const AlermComp = styled.div`
     }
   }
   .alermMsg{
-    font-size: var(--font-14);
     padding-left: 100px;
-    color: var(--color-background);
+    font-size: ${({theme}) => theme.fontSize.font_14};
+    color: ${({theme}) => theme.colors.background};
   }
 
 `

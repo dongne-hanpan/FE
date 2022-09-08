@@ -60,7 +60,7 @@ const ModalComp = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-dark);
+  background-color: ${({theme}) => theme.colors.dark};
 `
 const ModalOutBtn = styled.div`
   position: absolute;
@@ -76,5 +76,5 @@ const ModalSection = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 1rem;
-  background-color: var(--color-background);
+  background-color: ${({theme}) => theme.colors.background};
 `

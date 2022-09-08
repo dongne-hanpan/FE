@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createGlobalStyle } from 'styled-components';
-import App from './App';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
+import App from './App';
+import theme from './shared/y_css/theme';
 import store from './shared/redux_d/configure';
-import './index.css';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         margin: 0px;
-        background-color: var(--color-background);
+        background-color: ${({theme}) => theme.colors.background};
         &::-webkit-scrollbar {
             display: none;
         }
@@ -40,7 +40,9 @@ const GlobalStyle = createGlobalStyle`
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-        <GlobalStyle />
-        <App />
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <App />
+        </ThemeProvider>
     </Provider>
 );

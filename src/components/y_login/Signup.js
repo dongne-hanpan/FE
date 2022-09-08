@@ -77,11 +77,11 @@ const Signup = () => {
   const [pwConfirmErr, setPwConfirmErr] = useState('none');
 
   const isValidId = (idValue) => {
-    var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
+    const regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
     return regExp.test(idValue);
   }
   const isValidPw = (pwValue) => {
-    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     return regExp.test(pwValue);
   }
 
@@ -162,9 +162,9 @@ const RegisterComp = styled.section`
   }
   .switchToLogin{
     margin-top: 26px;
-    font-size: var(--font-14);
+    font-size: ${({theme}) => theme.fontSize.font_14};
     & span{
-      color: var(--color-core);
+      color: ${({theme}) => theme.colors.core};
     }
   }
 
@@ -177,22 +177,22 @@ const InputTitleBox = styled.div`
   margin-bottom: 10px;
 `
 const InputTitle = styled.div`
-  font-size: var(--font-18);
-  font-weight: 500;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `
 const ErrMessage = styled.span`
-  font-size: var(--font-12);
   margin-left: 10px;
-  ${({status}) => {
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  ${({status, theme}) => {
     if(status === 'success'){
       return css`
       display: inline;
-      color: var(--color-green);
+      color: ${theme.colors.green};
       `
     } else if(status === 'danger'){
       return css`
       display: inline;
-      color: var(--color-red-light);
+      color: ${theme.colors.red_light};
       `
     } else if(status === 'none'){
       return css`

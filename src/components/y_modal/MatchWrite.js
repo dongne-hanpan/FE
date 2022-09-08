@@ -77,8 +77,8 @@ const InputTitleBox = styled.div`
   margin-bottom: 10px;
 `
 const InputTitle = styled.div`
-  font-size: var(--font-18);
-  font-weight: 500;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
   & span{
     display: none;
   }
@@ -110,7 +110,7 @@ const PlaceSection = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-skyblue);
+    background-color: ${({theme}) => theme.colors.skyblue};
     border-radius: 0.5rem;
     margin-bottom: 14px;
   }

@@ -98,8 +98,8 @@ const MatchContainerHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   & span{
-    font-size: var(--font-32);
-    font-weight: 700;
+    font-size: ${({theme}) => theme.fontSize.font_32};
+    font-weight: ${({theme}) => theme.fontWeight.bold};
   }
   & div{
     display: flex;

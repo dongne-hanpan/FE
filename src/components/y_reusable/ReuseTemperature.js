@@ -38,11 +38,11 @@ const TemperatureComp = styled.div`
   align-items: center;
   padding: ${({tempType}) => tempType === 'rank' ? '10px 20px' :'20px'};
   border-radius: 1rem;
-  background-color: var(--color-background-light);
-  filter: drop-shadow(0px 0px 0px var(--color-gray));
+  background-color: ${({theme}) => theme.colors.background_light};
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
   .rankName{
-    font-size: var(--font-16);
-    font-weight: 500;
+    font-size: ${({theme}) => theme.fontSize.font_14};
+    font-weight: ${({theme}) => theme.fontWeight.medium};
     text-align: center;
     margin-bottom: 4px;
   }
@@ -51,12 +51,12 @@ const TemperatureComp = styled.div`
     flex-direction: column;
     align-items: center;
     .temperture{
-      font-size: ${({tempType}) => tempType === 'rank' ? 'var(--font-14)' :'var(--font-16)'};
-      font-weight: 500;
+      font-size: ${({tempType,theme}) => tempType === 'rank' ? theme.fontSize.font_14 : theme.fontSize.font_16};
+      font-weight: ${({theme}) => theme.fontWeight.medium};
     }
   }
   &:hover{
-    filter: drop-shadow(4px 2px 1px var(--color-gray));
+    filter: drop-shadow(4px 2px 1px ${({theme}) => theme.colors.gray};);
     transition: all 0.4s ease-in-out;
   }
 `

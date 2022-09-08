@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearDialogue } from '../../shared/redux_d/modules/modalSlice';
-import ReuseBtn from '../y_reusable/ReuseBtn';
 import Deco from '../univ/Deco';
 import DialConfRemove from './DialConfRemove';
 import DialConfSignup from './DialConfSignup';
@@ -52,7 +50,7 @@ const DialComp = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-dark);
+  background-color: ${({theme}) => theme.colors.dark};
 `
 const DialOutBtn = styled.div`
   position: absolute;
@@ -68,5 +66,5 @@ const DialSection = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 1rem;
-  background-color: var(--color-background);
+  background-color: ${({theme}) => theme.colors.background};
 `
