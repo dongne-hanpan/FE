@@ -5,15 +5,10 @@ import styled from 'styled-components';
 const ReuseReserved = ({matches, marginPx}) => {
   return(
     <ReserveComp>
-      <div className="reserveCnt">
-        <div>
-          {matches}회
-        </div>
-      </div>
-      <div>
-        예약 된 <br />
-        매치
-      </div>
+      <ReserveCnt>
+        {matches}회
+      </ReserveCnt>
+        예약 된 <br /> 매치
     </ReserveComp>
   )
 };
@@ -26,15 +21,15 @@ const ReserveComp = styled.div`
   color: ${({theme}) => theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
   text-align: center;
-  .reserveCnt{
-    height: 50px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: ${({theme}) => theme.fontSize.font_32};
-    font-weight: ${({theme}) => theme.fontWeight.medium};
-  }
+`
+const ReserveCnt = styled.div`
+  height: 50px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `
 
 

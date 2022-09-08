@@ -119,7 +119,7 @@ const Signup = () => {
 
   return(
     <RegisterComp>
-      <div className="signupSection">
+      <SignupSection>
         <InputTitleBox>
           <InputTitle>아이디<ErrMessage ref={idMsg} status={idErr}></ErrMessage></InputTitle>
           <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupId} />
@@ -141,9 +141,9 @@ const Signup = () => {
           <InputTitle>비밀번호 확인<ErrMessage ref={pwConfirmMsg} status={pwConfirmErr}></ErrMessage></InputTitle>
         </InputTitleBox>
         <ReuseInput injRef={signupPwConfirmRef} injType={'password'} placeholderValue={'비밀번호를 다시 한번 입력해주세요'} />
-      </div>
+      </SignupSection>
       <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doSignup}/>
-      <div className="switchToLogin">이미 회원이신가요? <span onClick={moveToLogin}>로그인하기</span></div>
+      <SwitchToLogin>이미 회원이신가요? <SwitchToLoginLink onClick={moveToLogin}>로그인하기</SwitchToLoginLink></SwitchToLogin>
     </RegisterComp>
   )
 };
@@ -156,18 +156,10 @@ const RegisterComp = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .signupSection{
-    margin-top: 50px;
-    margin-bottom: 30px;
-  }
-  .switchToLogin{
-    margin-top: 26px;
-    font-size: ${({theme}) => theme.fontSize.font_14};
-    & span{
-      color: ${({theme}) => theme.colors.core};
-    }
-  }
-
+`
+const SignupSection = styled.div`
+  margin-top: 50px;
+  margin-bottom: 30px;
 `
 const InputTitleBox = styled.div`
   width: 360px;
@@ -200,4 +192,11 @@ const ErrMessage = styled.span`
       `
     }
   }}
+`
+const SwitchToLogin = styled.div`
+  margin-top: 26px;
+  font-size: ${({theme}) => theme.fontSize.font_14};
+`
+const SwitchToLoginLink = styled.span`
+  color: ${({theme}) => theme.colors.core};
 `

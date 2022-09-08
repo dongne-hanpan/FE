@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 const ReuseBadge = ({direc, bdgType, content}) => {
   return(
     <BadgeComp direc={direc} bdgType={bdgType} content={content}>
-      <div>{content}</div>
+      {content}
     </BadgeComp>
   )
 };

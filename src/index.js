@@ -20,6 +20,12 @@ const GlobalStyle = createGlobalStyle`
             display: none;
         }
     }
+    h1{
+        margin: 0px;
+    }
+    h2{
+        margin: 0px;
+    }
     button {
         outline: none;
         border: none;

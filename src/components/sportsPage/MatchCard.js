@@ -8,19 +8,18 @@ const MatchCard = ({matchState}) => {
   return(
     <MatchComp matchState={matchState}>
       <MatchDate matchState={matchState}>
-        <div>
-          <span className="matchDay">2022.08.27 (토)</span>
-          <span className="matchTime">11:00 ~ 12:00</span>
-          <span className="matchPlace">동작 볼링장</span>
-        </div>
-        <ReuseBadge level={'중급'} />
+        <MatchDayTimePlace>
+          <MatchDay>2022.08.27 (토)</MatchDay>
+          <MatchTime>11:00 ~ 12:00</MatchTime>
+          <MatchPlace>동작 볼링장</MatchPlace>
+        </MatchDayTimePlace>
+        {matchState !== 'done' ? <ReuseBadge bdgType={'rank'} content={'중급'} /> : <></>}
       </MatchDate>
       <MatchBtns>
-        <div className="matchIntake"><span>3</span>/4 명</div>
+        <MatchIntake><MatchIntakeCnt>3</MatchIntakeCnt>/<MatchIntakeFull>4</MatchIntakeFull> 명</MatchIntake>
         {matchState === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :
-          <ReuseBtn styleType={'shrink'} content={'연락하기'} />
+          :<ReuseBtn styleType={'shrink'} content={'연락하기'} />
         }
       </MatchBtns>
     </MatchComp>
@@ -68,38 +67,38 @@ const MatchComp = styled.li`
 const MatchDate = styled.div`
   display: flex;
   align-items: center;
-  .matchDay{
-    font-size: ${({theme}) => theme.fontSize.font_24};
-    font-weight: ${({theme}) => theme.fontWeight.bold};
-    margin-right: 10px;
-  }
-  .matchTime{
-    margin-right: 10px;
-    font-weight: ${({theme}) => theme.fontWeight.bold};
-    color: ${({matchState,theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.darkgray };
-  }
-  .matchPlace{
-    margin-right: 10px;
-    font-weight: ${({theme}) => theme.fontWeight.bold};
-    font-size: ${({theme}) => theme.fontSize.font_20};
-  }
   .badge{
     font-size: ${({theme}) => theme.fontSize.font_12};
   }
 `
-  const MatchBtns = styled.div`
+const MatchDayTimePlace = styled.div`
+`
+const MatchDay = styled.span`
+  font-size: ${({theme}) => theme.fontSize.font_24};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+  margin-right: 10px;
+`
+const MatchTime = styled.span`
+  margin-right: 10px;
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+  color: ${({matchState,theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.darkgray };
+`
+const MatchPlace = styled.span`
+  margin-right: 10px;
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+  font-size: ${({theme}) => theme.fontSize.font_20};
+`
+const MatchBtns = styled.div`
   display: flex;
-  .matchIntake{
-    margin-right: 14px;
-    font-size: ${({theme}) => theme.fontSize.font_20};
-    font-weight:${({theme}) => theme.fontWeight.bold};
-  }
-  ${({matchState, theme}) => {
-    if(matchState === 'done'){
-      return css`
-      color: ${theme.colors.gray};
-      `
-    }
-  }}
+  color: ${({matchState, theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.black}
+`
+const MatchIntake = styled.div`
+  margin-right: 14px;
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight:${({theme}) => theme.fontWeight.bold};
+`
+const MatchIntakeCnt = styled.span`
+`
+const MatchIntakeFull = styled.span`
 `
 

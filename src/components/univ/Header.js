@@ -28,7 +28,7 @@ const Header = () => {
   return(
     <HeaderComp>
       <HeaderLogoSection>
-        <img className="headerLogo" src={logo} alt="dongne_logo" />
+        <HeaderLogo src={logo} alt="dongne_logo" />
       </HeaderLogoSection>
 
       <HeaderAlermSection>
@@ -36,15 +36,15 @@ const Header = () => {
       </HeaderAlermSection>
 
       <HeaderUserSection>
-        <div className='userGreet'>
-          <div> 동작구 </div>
-          <div><span>영동</span> 님 안녕하세요</div>
+        <UserGreet>
+          <UserGreetNormal> 동작구 </UserGreetNormal>
+          <UserGreetNormal><UserName>영동</UserName> 님 안녕하세요</UserGreetNormal>
           <ReuseProfile imgSrc={profile} />
-        </div>
-        <div className="userElse">
+        </UserGreet>
+        <UserElse>
           <ReuseReserved matches={2} marginPx={2}/>
           <ReuseWeather imgSrc={sun} />
-        </div>
+        </UserElse>
       </HeaderUserSection>
     </HeaderComp>
   )
@@ -69,10 +69,10 @@ const HeaderComp = styled.header`
 const HeaderLogoSection = styled.article`
   flex-grow: 3;
   cursor: pointer;
-  .headerLogo{
-    height: 40px;
-    margin: 0px 10px;
-  }
+`
+const HeaderLogo = styled.img`
+  height: 40px;
+  margin: 0px 10px;
 `
 const HeaderAlermSection = styled.article`
   min-width: 450px;
@@ -90,25 +90,26 @@ const HeaderUserSection = styled.article`
   flex-grow: 2;
   display: flex;
   flex-direction: column;
-  .userGreet{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-    & div{
-      margin-left: 10px;
-      color: ${({theme}) => theme.colors.background};
-      font-weight: ${({theme}) => theme.fontWeight.light};
-      & span{
-        font-weight: ${({theme}) => theme.fontWeight.medium};
-      }
-    }
-  }
-  .userElse{
-    height: 0px;
-    overflow-y: hidden;
-  }
-  ${HeaderComp}:hover & .userElse{
+`
+const UserGreet = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+`
+const UserGreetNormal = styled.div`
+  margin-left: 10px;
+  color: ${({theme}) => theme.colors.background};
+  font-weight: ${({theme}) => theme.fontWeight.light};
+`
+const UserName = styled.span`
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+
+const UserElse = styled.div`
+  height: 0px;
+  overflow-y: hidden;
+  ${HeaderComp}:hover &{
     height: 120px;
     transition: height 0.5s ease-in-out;
     display: flex;

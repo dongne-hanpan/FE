@@ -15,25 +15,25 @@ const MyPage = () => {
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={sun} imgSize={'220'} />
-        <article className="userBtns">
+        <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
-        </article>
-        <article className="userRank">
+        </UserBtns>
+        <RankArticle>
           <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
-          <div className="rankSection">
+          <RankVerticl>
             <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
             <ReuseRank contentTitle={'우리 동네 매치 왕'} content={'69 회'} userProfile={you} username={'성 원'}/>
-          </div>
-        </article>
+          </RankVerticl>
+        </RankArticle>
       </SportsAndRank>
 
       <MatchContainer>
         <MatchContainerHeader>
-          <span>나의 매치</span>
-          <div>profile 컨테이너</div>
+          <MatchContainerHeaderTitle>나의 매치</MatchContainerHeaderTitle>
+          <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
-        <ul>
+        <MatchContainerBody>
           <MatchCard matchState={'reserved'} />
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
@@ -41,7 +41,7 @@ const MyPage = () => {
           <MatchCard matchState={'done'} />
           <MatchCard matchState={'done'} />
           <MatchCard matchState={'done'} />
-        </ul>
+        </MatchContainerBody>
       </MatchContainer>
     </MainPage>
   )
@@ -69,22 +69,22 @@ const SportsAndRank = styled.section`
   justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
-  .userBtns{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .userRank{
-    display: flex;
-    .rankSection{
-      width: 280px;
-      height: 220px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-left: 10px;
-    }
-  }
+`
+const UserBtns = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`
+const RankArticle = styled.article`
+  display: flex;
+`
+const RankVerticl = styled.article`
+  width: 280px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10px;
 `
 const MatchContainer = styled.section`
   width: 700px;
@@ -97,11 +97,14 @@ const MatchContainerHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  & span{
-    font-size: ${({theme}) => theme.fontSize.font_32};
-    font-weight: ${({theme}) => theme.fontWeight.bold};
-  }
-  & div{
-    display: flex;
-  }
+`
+const MatchContainerHeaderTitle = styled.h2`
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`
+const MatchContainerHeaderUsers = styled.div`
+  display: flex;
+`
+const MatchContainerBody = styled.ul`
+  padding: 0px;
 `

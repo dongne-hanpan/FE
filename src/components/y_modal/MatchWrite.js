@@ -34,27 +34,21 @@ const MatchWrite = () => {
         <InputTitle>장소</InputTitle>
       </InputTitleBox>
       <PlaceSection>
-        <select className="selectBox" onChange={selectChangeHandler}>
+        <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
           {dummyOptionValues.map((each) => 
-            each.address === 'default' ?
-            <option key={each.value} value={each.value} disabled>
+            <PlaceOption key={each.value} value={each.value} address={each.address}>
               {each.value}
-            </option>
-              :
-            <option key={each.value} value={each.value}>
-              {each.value}
-            </option>
+            </PlaceOption>
           )}
-        </select>
-        <div className='map'>
+        </PlaceSelect>
+        <PlaceMap>
           <div>네이버 지도</div>
-        </div>
+        </PlaceMap>
       </PlaceSection>
       <InputTitleBox>
         <InputTitle>하고싶은 말</InputTitle>
       </InputTitleBox>
       <ReuseTextarea height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
-
       <ReuseBtn styleType={'stretch'} content={'게시하기'} />
     </ModalWriteComp>
   )
@@ -90,28 +84,30 @@ const PlaceSection = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-bottom: 10px;
-  & select{
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    height: 40px;
-    padding: 0px 10px;
-    border: none;
-    border-radius: 0.5rem;
-    & option{
-      height: 40px;
-      padding: 0px 20px;
-    }
-  }
-  .map{
-    width: 100%;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: ${({theme}) => theme.colors.skyblue};
-    border-radius: 0.5rem;
-    margin-bottom: 14px;
-  }
+`
+const PlaceSelect = styled.select`
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  height: 40px;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 0.5rem;
+`
+const PlaceOption = styled.option.attrs(({address}) => ({
+    disabled : address === 'default' ? true : false,
+  }))`
+  height: 40px;
+  padding: 0px 20px;
+`
+const PlaceMap = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({theme}) => theme.colors.skyblue};
+  border-radius: 0.5rem;
+  margin-bottom: 14px;
 `
