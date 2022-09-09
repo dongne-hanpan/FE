@@ -48,7 +48,7 @@ const Login = () => {
       <ErrorMsg></ErrorMsg>
 
       <SocialLogin>Google로 로그인</SocialLogin>
-      <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doLogin} />
+      <ReuseBtn styleType={'stretch'} content={'로그인'} clickEvent={doLogin} />
       <SwitchToSignup>아직 회원이 아니신가요? <SwitchToSignupLink onClick={moveToSignup}>회원가입 하기</SwitchToSignupLink></SwitchToSignup>
     </RegisterComp>
   )

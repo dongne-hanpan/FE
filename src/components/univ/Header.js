@@ -18,7 +18,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   useEffect(() => {
-    if(userData.id){
+    if(userData.username){
       dispatch(clearModal());
     } else{
       dispatch(setModal({modalType: 'login'}))

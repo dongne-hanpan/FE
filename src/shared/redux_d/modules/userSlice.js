@@ -53,22 +53,20 @@ const userSlice = createSlice({
       console.log('signup completed');
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
-      console.log('login completed');
-      console.log(action.payload);
-      // const token = action.payload;
-      // const expireDate = new Date(token.accessTokenExpiresIn);
-      // document.cookie = `mytoken=${token.accessToken}; path=/; expires=${expireDate}`;
-      // const refresh_data = {
-      //   refresh: token.refreshToken,
-      // };
-      // setLocal("refresh", refresh_data);
-      // //유저 데이터를 넘겨줘야해.
-      // const newUserData = {
-      //   username: action.payload.username,
-      //   nickname: action.payload.nickname,
-      //   profileImage: action.payload.profileImgUrl,
-      // };
-      // state.userData = newUserData;
+      if(action.payload.status !== 401){
+        console.log('login completed');
+        const data = action.payload;
+        const accessToken = data.accessToken;
+        document.cookie = `mytoken=${accessToken}; path=/;`;
+        const newUserData = {
+          username: data.username,
+          nickname: data.nickname,
+          profileImage: data.profileImage,
+        };
+        state.userData = newUserData;
+      } else{
+        alert('로그인 실패했습니다');
+      }
     });
     builder.addCase(clearUserThunk.fulfilled, (state, action) => {
       deleteCookie("mytoken");
