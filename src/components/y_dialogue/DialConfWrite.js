@@ -4,6 +4,7 @@ import ReuseBtn from '../y_reusable/ReuseBtn';
 import { useDispatch } from 'react-redux';
 import { clearAll} from '../../shared/redux_d/modules/modalSlice';
 
+
 const DialConfWrite = ({dialData}) => {
   const dispatch = useDispatch();
   const cancel = () => {
@@ -24,6 +25,7 @@ const DialConfWrite = ({dialData}) => {
 
 export default DialConfWrite;
 
+
 const DialMessages = styled.div`
   width: 100%;
   height: 120px;
@@ -33,13 +35,13 @@ const DialMessages = styled.div`
   align-items: center;
 `
 const DialMessageTitle = styled.div`
-  font-size: var(--font-16);
-  font-weight: 500;
   margin-bottom: 12px;
+  font-size: ${({theme}) => theme.fontSize.font_16};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `
   const DialMessageExtra = styled.div`
-  font-size: var(--font-16);
-  font-weight: 300;
+  font-size: ${({theme}) => theme.fontSize.font_16};
+  font-weight: ${({theme}) => theme.fontWeight.light};
 `
 const DialBtns = styled.div`
   width: 100%;

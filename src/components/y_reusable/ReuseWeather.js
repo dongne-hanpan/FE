@@ -6,9 +6,9 @@ const ReuseWeather = ({imgSrc}) => {
   //데이터 값 들어오면 프론트에서 처리
   return(
     <WeatherComp>
-      <img src={imgSrc} alt="weather emoji"/>
-      <div>맑음</div>
-      <div>22 도</div>
+      <WeatherImg src={imgSrc} alt="weather emoji"/>
+      <WeatherContent>맑음</WeatherContent>
+      <WeatherContent>22 도</WeatherContent>
     </WeatherComp>
   )
 };
@@ -21,14 +21,14 @@ const WeatherComp = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0px 15px;
-  & img{
-    width: 50px;
-    margin-bottom: 15px;
-  }
-  & div{
-    color: var(--color-background);
-    font-weight: 300;
-  }
+`
+const WeatherImg = styled.img`
+  width: 50px;
+  margin-bottom: 15px;
+`
+const WeatherContent = styled.div`
+  color: ${({theme}) => theme.colors.background};
+  font-weight: ${({theme}) => theme.fontWeight.light};
 `
 
 

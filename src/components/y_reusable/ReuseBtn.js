@@ -20,17 +20,17 @@ const BtnComp = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
-  font-weight: 500;
-  ${({styleType}) => {
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+  ${({styleType, theme}) => {
     if(styleType === 'stretch'){
       return css`
       width: 100%;
       height: 40px;
-      background-color: var(--color-skyblue);
+      background-color: ${theme.colors.skyblue};
       &:hover{
-        background-color: var(--color-core);
-        color: var(--color-background);
-        font-weight: 700;
+        background-color: ${theme.colors.core};
+        color: ${theme.colors.background};
+        font-weight: ${theme.fontWeight.bold};
         transition: all 0.2s ease-in-out;
       }
       `
@@ -38,11 +38,11 @@ const BtnComp = styled.button`
       return css`
       height: 26px;
       padding: 0px 12px;
-      background-color: var(--color-skyblue);
+      background-color: ${theme.colors.skyblue};
       &:hover{
-        background-color: var(--color-core);
-        color: var(--color-background);
-        font-weight: 700;
+        background-color: ${theme.colors.core};
+        color: ${theme.colors.background};
+        font-weight: ${theme.fontWeight.bold};
         transform: scale(1.1);
         transition: all 0.2s ease-in-out;
       }
@@ -51,19 +51,19 @@ const BtnComp = styled.button`
       return css`
       height: 26px;
       padding: 0px 12px;
-      color: var(--color-darkgray);
-      background-color: var(--color-gray);
+      color: ${theme.colors.darkgray};
+      background-color: ${theme.colors.gray};
       `
     }else if(styleType === 'danger'){
       return css`
       height: 40px;
       width: 120px;
-      background-color: var(--color-background);
-      border: 2px solid var(--color-red-pale);
+      background-color: ${theme.colors.background};
+      border: 2px solid ${theme.colors.red_pale};
       &:hover{
-        background-color: var(--color-red-light);
-        color: var(--color-background);
-        font-weight: 700;
+        color: ${theme.colors.background};
+        background-color: ${theme.colors.red_light};
+        font-weight: ${theme.fontWeight.bold};
         transition: all 0.2s ease-in-out;
       }
       `
@@ -71,19 +71,15 @@ const BtnComp = styled.button`
       return css`
       height: 40px;
       width: 120px;
-      background-color: var(--color-background);
-      border: 2px solid var(--color-skyblue);
+      background-color: ${theme.colors.background};
+      border: 2px solid ${theme.colors.skyblue};
       &:hover{
-        background-color: var(--color-core);
-        color: var(--color-background);
-        font-weight: 700;
+        background-color: ${theme.colors.core};
+        color: ${theme.colors.background};
+        font-weight: ${theme.fontWeight.bold};
         transition: all 0.2s ease-in-out;
       }
       `
     }
   }}
-
-`
-
-
-
+  `

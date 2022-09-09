@@ -14,25 +14,29 @@ const SportsPage = () => {
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={sun} imgSize={'220'} />
-        <article>
+        <RankArticle>
           <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
-          <div className="rankSection">
+          <RankVertical>
             <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
             <ReuseRank contentTitle={'우리 동네 매치 왕'} content={'69 회'} userProfile={you} username={'성 원'}/>
-          </div>
-        </article>
+          </RankVertical>
+        </RankArticle>
       </SportsAndRank>
 
       <MatchContainer>
         <MatchContainerHeader>
-          <span>동네 한 판?</span>
-          <div>profile 컨테이너</div>
+          <MatchContainerHeaderTitle>동네 한 판?</MatchContainerHeaderTitle>
+          <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <CircleBtns>
-          <button><div>필</div></button>
-          <button><div>+</div></button>
+          <CircleBtn>
+            <CircleBtnContent>필</CircleBtnContent>
+          </CircleBtn>
+          <CircleBtn>
+            <CircleBtnContent>+</CircleBtnContent>
+          </CircleBtn>
         </CircleBtns>
-        <ul>
+        <MatchContainerBody>
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
@@ -40,7 +44,7 @@ const SportsPage = () => {
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
           <MatchCard matchState={'recruit'} />
-        </ul>
+        </MatchContainerBody>
       </MatchContainer>
     </MainPage>
   )
@@ -59,26 +63,23 @@ const MainPage = styled.main`
   &::-webkit-scrollbar {
     display: none;
   }
-  & ul{
-    padding: 0px;
-  }
 `
 const SportsAndRank = styled.section`
   display: flex;
   justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
-  & article{
-    display: flex;
-    .rankSection{
-      width: 280px;
-      height: 220px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-left: 10px;
-    }
-  }
+`
+const RankArticle = styled.article`
+  display: flex;
+`
+const RankVertical = styled.div`
+  width: 280px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10px;
 `
 const MatchContainer = styled.section`
   width: 700px;
@@ -91,33 +92,33 @@ const MatchContainerHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  & span{
-    font-size: var(--font-32);
-    font-weight: 700;
-  }
-  & div{
-    display: flex;
-  }
 `
-
+const MatchContainerHeaderTitle = styled.h2`
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`
+const MatchContainerHeaderUsers = styled.div`
+  display: flex;
+`
+const MatchContainerBody = styled.ul`
+  padding: 0px;
+`
 const CircleBtns = styled.div`
   position: absolute;
   right: -60px;
   top: 70px;
-  & button{
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    border-radius: 2rem;
-    background-color: var(--color-skyblue);
-    & div{
-      font-size: var(--font-20);
-      font-weight: 700;
-    }
-  }
 `
-
-
+const CircleBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 2rem;
+  background-color: ${({theme}) => theme.colors.skyblue};
+`
+const CircleBtnContent = styled.div`
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`

@@ -1,11 +1,11 @@
 import React from 'react';
-import styled,{ css } from 'styled-components';
+import styled from 'styled-components';
 
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   return(
-    <ProfileComp direc={direc} imgSize={imgSize} onClick={clickEvent}>
-      <img src={imgSrc} alt='profile' />
+    <ProfileComp direc={direc} onClick={clickEvent}>
+      <Profile imgSize={imgSize} src={imgSrc} alt='profile' />
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>
       : <></>
@@ -26,44 +26,16 @@ const ProfileComp = styled.button`
   outline: none;
   cursor: pointer;
   background-color: transparent;
-  ${({direc}) => {
-    if(direc === 'horiz'){
-      return css`
-      margin-right: 8px;
-      `
-    } else if(direc === 'vertic'){
-      return css`
-      margin-bottom: 6px;
-      `
-    }
-  }}
-  & img{
-    border-radius: 5rem;
-    ${({imgSize}) =>
-    imgSize ? 
-    css`
-      width: ${imgSize}px;
-      height: ${imgSize}px;
-      `:
-      css`
-        width: 40px;
-        height: 40px;
-      `
-    }
-  }
+  margin-right: ${({direc}) => direc === 'horiz' ? 8:0}px;
+  margin-bottom: ${({direc}) => direc === 'vertic' ? 6:0}px;
 `
-
+const Profile = styled.img`
+  border-radius: 5rem;
+  width: ${({imgSize}) => imgSize ? imgSize : 40}px;
+  height: ${({imgSize}) => imgSize ? imgSize : 40}px;
+`
 const ProfileContent = styled.div`
-  ${({contentSize}) => contentSize ? 
-  css`
-    margin-top: 20px;
-    font-size: ${contentSize};
-    font-weight: 700;
-  `:
-  css`
-    margin-top: 4px;
-    font-size: var(--font-12);
-    font-weight: 500;
-  `
-  }
+  margin-top: ${({contentSize, theme}) => contentSize ? (contentSize - parseInt(contentSize/3)) : 4}px;
+  font-size: ${({contentSize, theme}) => contentSize ? contentSize+'px' : theme.fontSize.font_12};
+  font-weight: ${({contentSize, theme}) => contentSize ? theme.fontWeight.bold : theme.fontWeight.medium};
 `
