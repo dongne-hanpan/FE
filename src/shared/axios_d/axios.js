@@ -26,13 +26,14 @@ export const postWithoutCookie = async(url,payload) => {
       data: payload
     })
     if(res.status === 200 || res.status === 201){
+      console.log(res);
       return res.data;
-    } else if(res.status === 400 || res.status === 404){
-      return res;
-    }
+    } else
     throw new Error('bad status');
   }catch(e){
-    throw new Error('failed in axios');
+    if(e.response.status === 400 || e.response.status === 404 || e.response.status === 401){
+      return e.response.data;
+    }
   }
 }
 
