@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { clearLocal, getLocal, setLocal } from '../../axios_d/local';
 import { getWithCookie, postWithoutCookie } from '../../axios_d/axios';
 import { deleteCookie, getCookie } from '../../axios_d/cookie';
+// tmp
+import me from '../../../asset/profileMe.png'
 
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
@@ -35,7 +37,12 @@ export const clearUserThunk = createAsyncThunk(
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
-    userData: {},
+    userData: {
+      // userId: 1,
+      // username: 'sparta12',
+      // nickname: '영동',
+      // profileImage: me
+    },
   },
   reducers: {
     loadUser: (state, action) => {

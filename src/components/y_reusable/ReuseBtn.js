@@ -20,6 +20,8 @@ const BtnComp = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
+  margin-right: ${({direc}) => direc === 'horiz' ? 8:0}px;
+  margin-bottom: ${({direc}) => direc === 'vertic' ? 6:0}px;
   font-weight: ${({theme}) => theme.fontWeight.medium};
   ${({styleType, theme}) => {
     if(styleType === 'stretch'){

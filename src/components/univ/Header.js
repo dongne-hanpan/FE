@@ -9,10 +9,35 @@ import ReuseReserved from '../y_reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';
-import profile from '../../asset/profileMe.png';
 import sun from '../../asset/sun.png';
+import profile from '../../asset/defaultprofile.jpg';
 
-
+const dummyAlerms = [
+  {
+    id: 1,
+    type: 'normal',
+    checked: true,
+    msg: '최영준 님이 친구 신청을 보냈습니다.'
+  },
+  {
+    id: 2,
+    type: 'normal',
+    checked: false,
+    msg: '곽대우 님이 친구 신청을 보냈습니다.'
+  },
+  {
+    id: 3,
+    type: 'choose',
+    checked: false,
+    msg: '김동윤 님이 매치 신청을 보냈습니다.'
+  },
+  {
+    id: 4,
+    type: 'normal',
+    checked: true,
+    msg: '곽대우 님이 친구 신청을 보냈습니다.'
+  },
+];
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -32,17 +57,26 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-          <HeaderAlerm checked={true}/>
+        {dummyAlerms.map((each) => 
+          <HeaderAlerm key={each.id} alermType={each.type} checked={each.checked} content={each.msg} />
+        )}
       </HeaderAlermSection>
 
       <HeaderUserSection>
         <UserGreet>
           <UserGreetNormal> 동작구 </UserGreetNormal>
-          <UserGreetNormal><UserName>영동</UserName> 님 안녕하세요</UserGreetNormal>
-          <ReuseProfile imgSrc={profile} />
+          <UserGreetNormal>
+            {userData.nickname ? 
+            <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
+            :'로그인 해주세요'
+            }
+          </UserGreetNormal>
+          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} />
         </UserGreet>
         <UserElse>
-          <ReuseReserved matches={2} marginPx={2}/>
+          {userData.userId ? 
+          <ReuseReserved matches={2} marginPx={2}/> : <></>
+          }
           <ReuseWeather imgSrc={sun} />
         </UserElse>
       </HeaderUserSection>
@@ -95,10 +129,11 @@ const UserGreet = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  margin-top: 4px;
   margin-bottom: 10px;
 `
 const UserGreetNormal = styled.div`
-  margin-left: 10px;
+  margin-right: 10px;
   color: ${({theme}) => theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `
