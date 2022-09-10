@@ -6,7 +6,7 @@ import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 //temp
 import logo from '../../asset/logo.png';
-import { loginUser } from '../../shared/redux_d/modules/userSlice';
+import { loginUserThunk } from '../../shared/redux_d/modules/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -14,20 +14,20 @@ const Login = () => {
     dispatch(setModal({modalType: 'signup'}))
   }
   //로그인
-  const loginIdRef = useRef(null);
+  const loginUsernameRef = useRef(null);
   const loginPwRef = useRef(null);
 
-  const doLogin = (e) => {
-    const idValue = loginIdRef.current.value;
+  const doLogin = async(e) => {
+    const usernameValue = loginUsernameRef.current.value;
     const pwValue = loginPwRef.current.value;
 
     const payload = {
-      id: idValue,
-      pw: pwValue
+      username: usernameValue,
+      password: pwValue
     };
-    dispatch(loginUser(payload));
+    dispatch(loginUserThunk(payload));
 
-    loginIdRef.current.value = '';
+    loginUsernameRef.current.value = '';
     loginPwRef.current.value = '';
   }
 
@@ -39,7 +39,7 @@ const Login = () => {
       <InputTitleBox>
         <InputTitle>아이디</InputTitle>
       </InputTitleBox>
-      <ReuseInput injRef={loginIdRef} injType={'text'} placeholderValue={'아이디를 입력해주세요'} />
+      <ReuseInput injRef={loginUsernameRef} injType={'text'} placeholderValue={'아이디를 입력해주세요'} />
 
       <InputTitleBox>
         <InputTitle>비밀번호</InputTitle>
@@ -48,7 +48,7 @@ const Login = () => {
       <ErrorMsg></ErrorMsg>
 
       <SocialLogin>Google로 로그인</SocialLogin>
-      <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doLogin} />
+      <ReuseBtn styleType={'stretch'} content={'로그인'} clickEvent={doLogin} />
       <SwitchToSignup>아직 회원이 아니신가요? <SwitchToSignupLink onClick={moveToSignup}>회원가입 하기</SwitchToSignupLink></SwitchToSignup>
     </RegisterComp>
   )

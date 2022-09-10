@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import styled, {css} from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { signupUserThunk } from '../../shared/redux_d/modules/userSlice';
 import { setDialogue, setModal } from '../../shared/redux_d/modules/modalSlice';
-import { getwithoutCookie, postWithoutCookie } from '../../shared/axios_d/axios';
+import { getwithoutCookie } from '../../shared/axios_d/axios';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 
@@ -14,106 +15,128 @@ const Signup = () => {
   }
 
   //회원가입
-  const signupIdRef = useRef(null);
   const signupUsernameRef = useRef(null);
+  const signupNicknameRef = useRef(null);
   const signupPwRef = useRef(null);
   const signupPwConfirmRef = useRef(null);
 
   const doSignup = () => {
-    const idValue = signupIdRef.current.value;
     const usernameValue = signupUsernameRef.current.value;
+    const nicknameValue = signupNicknameRef.current.value;
     const pwValue = signupPwRef.current.value;
     const pwConfirmValue = signupPwConfirmRef.current.value;
     //아이디, 닉네임 중복체크 여부 확인
-    if(idErr !== 'success'){
+    if(usernameErr !== 'success'){
       console.log('아이디 중복체크 눌러라')
       return
     }
-    if( usernameErr !== 'success'){
+    if(nicknameErr !== 'success'){
       console.log('유저네임 중복체크 눌러라')
       return
     }
     //비밀번호 유효성 확인
     if(!isValidPw(pwValue)){
-      signupPwRef.current.innerText = '비밀번호 형식을 확인해주세요'
+      pwMsg.current.innerText = '비밀번호 형식을 확인해주세요'
       setPwErr('danger')
       return
     } else{
-      signupPwRef.current.innerText = '사용 가능한 비밀번호입니다'
+      pwMsg.current.innerText = '사용 가능한 비밀번호입니다'
       setPwErr('success')
     }
     //비밀번호 일치 확인
     if(pwValue !== pwConfirmValue){
-      signupPwConfirmRef.current.innerText = '비밀번호가 일치하지 않습니다'
+      pwConfirmMsg.current.innerText = '비밀번호가 일치하지 않습니다'
       setPwConfirmErr('danger');
       return
     } else{
-      signupPwConfirmRef.current.innerText = ''
+      pwConfirmMsg.current.innerText = ''
       setPwConfirmErr('success')
     }
     const signupPayload = {
-      "nickname": usernameValue,
+      "nickname": nicknameValue,
       "password": pwValue,
-      "username": idValue,
-    }
-    postWithoutCookie(`/api/auth/signup`, signupPayload);
+      "username": usernameValue,
+    };
+    dispatch(signupUserThunk(signupPayload));
 
-    signupIdRef.current.value = '';
+    //인풋 값 정리
     signupUsernameRef.current.value = '';
+    signupNicknameRef.current.value = '';
     signupPwRef.current.value = '';
     signupPwConfirmRef.current.value = '';
+    //에러메시지 정리
+    usernameMsg.current.innerText = '';
+    nicknameMsg.current.innerText = '';
+    pwMsg.current.innerText = '';
+    pwConfirmMsg.current.innerText = '';
+    setUsernameErr(null);
+    setNicknameErr(null);
+    setPwErr(null);
+    setPwConfirmErr(null);
     dispatch(setDialogue({dialType: 'confirmSignup'}))
   };
 
   //유효성 체크
-  const idMsg = useRef(null);
   const usernameMsg = useRef(null);
+  const nicknameMsg = useRef(null);
   const pwMsg = useRef(null);
   const pwConfirmMsg = useRef(null);
 
-  const [idErr, setIdErr] = useState('none');
   const [usernameErr, setUsernameErr] = useState('none');
+  const [nicknameErr, setNicknameErr] = useState('none');
   const [pwErr, setPwErr] = useState('none');
   const [pwConfirmErr, setPwConfirmErr] = useState('none');
 
-  const isValidId = (idValue) => {
-    const regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
+  const isValidUsername = (idValue) => {
+    // var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
+    var regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{6,12}$/;
     return regExp.test(idValue);
   }
+  const isValidNickname = (asValue) => {
+    var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,12}$/;
+    return regExp.test(asValue);
+  }
   const isValidPw = (pwValue) => {
-    const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+    // var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+    var regExp = /^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{8,20}$/;
     return regExp.test(pwValue);
   }
 
   //아이디 중복체크
-  const checkDupId = async(e) => {
-    const id = signupIdRef.current.value;
-    const afterCheck = isValidId(id);
+  const checkDupUsername = async(e) => {
+    const username = signupUsernameRef.current.value;
+    const afterCheck = isValidUsername(username);
     if(!afterCheck){
-      idMsg.current.innerText = '아이디 형식을 다시 확인해주세요';
-      setIdErr('danger')
+      usernameMsg.current.innerText = '아이디 형식을 다시 확인해주세요';
+      setUsernameErr('danger');
     }else{
-      const res = await getwithoutCookie(`/api/auth/${id}`);
+      const res = await getwithoutCookie(`/api/auth/username/${username}`);
       if(res){
-        idMsg.current.innerText = '사용 가능한 아이디입니다';
-        setIdErr('success')
+        usernameMsg.current.innerText = '사용 가능한 아이디입니다';
+        setUsernameErr('success')
       } else {
-        idMsg.current.innerText = '사용 중인 아이디입니다';
-        setIdErr('danger')
+        usernameMsg.current.innerText = '사용 중인 아이디입니다';
+        setUsernameErr('danger')
       }
     }
   };
 
   //유저이름 중복체크
-  const checkDupUsername = async(e) => {
-    const username = signupUsernameRef.current.value;
-    const res = await getwithoutCookie(`/api/auth/${username}`);
-    if(res){
-      usernameMsg.current.innerText = '사용 가능한 닉네임';
-      setUsernameErr('success');
+  const checkDupNickname = async(e) => {
+    const nickname = signupNicknameRef.current.value;
+    const afterCheck = isValidNickname(nickname);
+    if(!afterCheck){
+      nicknameMsg.current.innerText = '닉네임 형식을 다시 확인해주세요';
+      setNicknameErr('danger');
     }else{
-      usernameMsg.current.innerText = '사용 중인 닉네임';
-      setUsernameErr('danger');
+      const res = await getwithoutCookie(`/api/auth/nickname/${nickname}`);
+      if(res){
+        nicknameMsg.current.innerText = '사용 가능한 닉네임입니다';
+        setNicknameErr('success');
+      }else{
+        nicknameMsg.current.innerText = '사용 중인 닉네임입니다';
+        setNicknameErr('danger');
+      }
     }
   };
 
@@ -121,16 +144,16 @@ const Signup = () => {
     <RegisterComp>
       <SignupSection>
         <InputTitleBox>
-          <InputTitle>아이디<ErrMessage ref={idMsg} status={idErr}></ErrMessage></InputTitle>
-          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupId} />
-        </InputTitleBox>
-        <ReuseInput injRef={signupIdRef} injType={'text'} placeholderValue={'아이디 (6-12자 이내, 영문, 숫자 사용 가능)'} />
-
-        <InputTitleBox>
-          <InputTitle>닉네임<ErrMessage ref={usernameMsg} status={usernameErr}></ErrMessage></InputTitle>
+          <InputTitle>아이디<ErrMessage ref={usernameMsg} status={usernameErr}></ErrMessage></InputTitle>
           <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupUsername} />
         </InputTitleBox>
-        <ReuseInput injRef={signupUsernameRef} injType={'text'} placeholderValue={'닉네임을 입력해주세요'} />
+        <ReuseInput injRef={signupUsernameRef} injType={'text'} placeholderValue={'아이디 (6-12자 이내, 영문, 숫자 사용 가능)'} />
+
+        <InputTitleBox>
+          <InputTitle>닉네임<ErrMessage ref={nicknameMsg} status={nicknameErr}></ErrMessage></InputTitle>
+          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupNickname} />
+        </InputTitleBox>
+        <ReuseInput injRef={signupNicknameRef} injType={'text'} placeholderValue={'닉네임(2-12자 이내, 영문,숫자 사용 가능)'} />
 
         <InputTitleBox>
           <InputTitle>비밀번호<ErrMessage ref={pwMsg} status={pwErr}></ErrMessage></InputTitle>
