@@ -6,6 +6,7 @@ import DialConfRemove from './DialConfRemove';
 import DialConfSignup from './DialConfSignup';
 import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
+import DialConfLogin from './DialConfLogin';
 
 
 const DialTemplate = () => {
@@ -20,6 +21,8 @@ const DialTemplate = () => {
       return <DialConfRemove />
     } else if(dialData.dialType === 'confirmSignup'){
       return <DialConfSignup />
+    } else if(dialData.dialType === 'confirmLogin'){
+      return <DialConfLogin />
     } else if(dialData.dialType === 'confirmWrite'){
       return <DialConfWrite />
     } else if(dialData.dialType === 'confirmApply'){
