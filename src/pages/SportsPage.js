@@ -1,25 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import MatchCard from '../components/sportsPage/MatchCard';
+import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
 // tmp
 import sun from '../asset/sun.png';
 import you from '../asset/profileYou.png';
-import ReuseRank from '../components/y_reusable/ReuseRank';
-import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
+import dummyMatch from '../dummyData/dummyMatch';
+
 
 const SportsPage = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const doMatchWrite = () => {
+    if(userData.username){
+      console.log('write!!');
+      dispatch(setModal({modalType: 'matchWrite'}))
+    }else{
+      dispatch(setDialogue({dialType: 'confirmLogin'}))
+    }
+  }
+  const filtering = () => {
+    console.log('나중에 구현할 필터링')
+  }
   return(
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={sun} imgSize={'220'} />
         <RankArticle>
-          <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
-          <RankVertical>
-            <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
-            <ReuseRank contentTitle={'우리 동네 매치 왕'} content={'69 회'} userProfile={you} username={'성 원'}/>
-          </RankVertical>
+          <ReuseTemperature type={'rank'} type2={'score'} userProfile={you} username={'영 동'} data={85}/>
+          <ReuseTemperature type={'rank'} type2={'count'} userProfile={you} username={'성 원'} data={10}/>
+          <ReuseTemperature type={'rank'} type2={'temper'} userProfile={you} username={'동 윤'} data={69}/>
         </RankArticle>
       </SportsAndRank>
 
@@ -29,21 +43,17 @@ const SportsPage = () => {
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <CircleBtns>
-          <CircleBtn>
+          <CircleBtn onClick={filtering}>
             <CircleBtnContent>필</CircleBtnContent>
           </CircleBtn>
-          <CircleBtn>
+          <CircleBtn onClick={doMatchWrite}>
             <CircleBtnContent>+</CircleBtnContent>
           </CircleBtn>
         </CircleBtns>
         <MatchContainerBody>
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
+          {dummyMatch? dummyMatch.map((each) => 
+            <MatchCard key={each.id} data={each} />
+          ):<></>}
         </MatchContainerBody>
       </MatchContainer>
     </MainPage>
