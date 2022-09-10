@@ -15,6 +15,9 @@ const modalSlice = createSlice({
     //   dialType: 'confirmSignup',
     // }
     // {
+    //   dialType: 'confirmLogin',
+    // }
+    // {
     //   dialType: 'confirmWrite',
     // }
     // {
