@@ -2,50 +2,43 @@ import React from 'react';
 import styled from 'styled-components';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseBadge from '../y_reusable/ReuseBadge';
-import ReuseRank from '../y_reusable/ReuseRank';
 import ReuseTemperature from '../y_reusable/ReuseTemperature';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 
-//tmp
-import you from '../../asset/profileYou.png';
-import me from '../../asset/profileMe.png';
-
+// tmp
+import dummyUserDetail from '../../dummyData/dummyUserDetail';
+import defaultProfile from '../../asset/defaultprofile.jpg';
 
 const UserWatch = () => {
   return(
     <UserWatchComp>
       <UserInfo>
-        <ReuseProfile imgSrc={you} imgSize={120}/>
+        <ReuseProfile imgSrc={dummyUserDetail.profileImage ? dummyUserDetail.profileImage :defaultProfile} imgSize={120}/>
         <UserInfoDetail>
           <NameAndBadge>
-            <Name>영동</Name>
+            <Name>{dummyUserDetail.nickname}</Name>
             <ReuseBadge bdgType={'rank'} content={'상급'}/>
           </NameAndBadge>
           <SportsBadges>
-            <ReuseBadge bdgType={'sports'} content={'테니스'} />
-            <ReuseBadge bdgType={'sports'} content={'볼링'} />
-            <ReuseBadge bdgType={'sports'} content={'배드민턴'} />
-            <ReuseBadge bdgType={'sports'} content={'달리기'} />
-            <ReuseBadge bdgType={'sports'} content={'축구'} />
-            <ReuseBadge bdgType={'sports'} content={'라이딩'} />
+            {dummyUserDetail.sports.length !== 0 ?
+              dummyUserDetail.sports.map((each) => 
+                <ReuseBadge key={each} bdgType={'sports'} content={each} />
+              ):<></>
+            }
           </SportsBadges>
         </UserInfoDetail>
       </UserInfo>
       <UserFriends>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'동윤'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'대우'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'성원'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'영준'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'상우'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'동욱'}/>
-        <ReuseProfile direc={'horiz'} imgSrc={me} content={'영훈'}/>
+        {dummyUserDetail.friends.length !== 0 ?
+          dummyUserDetail.friends.map((each) => 
+            <ReuseProfile key={each.nickname} direc={'horiz'} imgSrc={each.profileImage ? each.profileImage:defaultProfile} content={each.nickname}/>
+          ):<></>
+        }
       </UserFriends>
       <UserRank>
-        <ReuseTemperature tempType={'personal'} temp={69}/>
-        <RankVertical>
-          <ReuseRank type={'avg'} contentTitle={'평균 점수'} content={'85 점'} />
-          <ReuseRank type={'cnt'} contentTitle={'총 매치 수'} content={'69 회'} />
-        </RankVertical>
+        <ReuseTemperature type={'personal'} type2={'score'} data={dummyUserDetail.rank.average} />
+        <ReuseTemperature type={'personal'} type2={'count'} data={dummyUserDetail.rank.matchcount} />
+        <ReuseTemperature type={'personal'} type2={'temper'} data={dummyUserDetail.rank.temperature} />
       </UserRank>
       <ReuseBtn styleType={'stretch'} content={'친구하기'} />
     </UserWatchComp>
@@ -100,6 +93,7 @@ const UserRank = styled.article`
   width: 100%;
   height: 240px;
   display: flex;
+  justify-content: center;
 `
 const RankVertical = styled.div`
   flex-grow:1;
