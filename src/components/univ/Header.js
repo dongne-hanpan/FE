@@ -12,32 +12,8 @@ import logo from '../../asset/logo.png';
 import sun from '../../asset/sun.png';
 import profile from '../../asset/defaultprofile.jpg';
 
-const dummyAlerms = [
-  {
-    id: 1,
-    type: 'normal',
-    checked: true,
-    msg: '최영준 님이 친구 신청을 보냈습니다.'
-  },
-  {
-    id: 2,
-    type: 'normal',
-    checked: false,
-    msg: '곽대우 님이 친구 신청을 보냈습니다.'
-  },
-  {
-    id: 3,
-    type: 'choose',
-    checked: false,
-    msg: '김동윤 님이 매치 신청을 보냈습니다.'
-  },
-  {
-    id: 4,
-    type: 'normal',
-    checked: true,
-    msg: '곽대우 님이 친구 신청을 보냈습니다.'
-  },
-];
+// tmp
+import dummyAlerm from '../../dummyData/dummyAlerm';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -57,7 +33,7 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        {dummyAlerms.map((each) => 
+        {dummyAlerm.map((each) => 
           <HeaderAlerm key={each.id} alermType={each.type} checked={each.checked} content={each.msg} />
         )}
       </HeaderAlermSection>
@@ -114,10 +90,15 @@ const HeaderAlermSection = styled.article`
   display: flex;
   flex-direction: column;
   background-color: ${({theme}) => theme.colors.black};
+  overflow-y: hidden;
   cursor: pointer;
   ${HeaderComp}:hover &{
     height: 170px;
+    overflow-y: scroll;
     transition: height 0.5s ease-in-out;
+  }
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 const HeaderUserSection = styled.article`
