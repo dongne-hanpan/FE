@@ -54,7 +54,7 @@ export const getWithCookie = async(url,access,refresh) => {
     throw new Error('failed in axios')
   }
 };
-export const postWithCookie = async(url,payload,access,refresh) => {
+export const postWithCookie = async(url,payload,access) => {
   try{
     const res = await axios({
       method: 'POST',
@@ -62,7 +62,6 @@ export const postWithCookie = async(url,payload,access,refresh) => {
       headers:{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
       },
       data: payload
     })
