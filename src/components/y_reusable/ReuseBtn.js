@@ -69,6 +69,18 @@ const BtnComp = styled.button`
         transition: all 0.2s ease-in-out;
       }
       `
+    }else if(styleType === 'small'){
+      return css`
+      height: 20px;
+      padding: 0px 10px;
+      background-color: ${theme.colors.skyblue};
+      &:hover{
+        background-color: ${theme.colors.core};
+        color: ${theme.colors.background};
+        font-weight: ${theme.fontWeight.bold};
+        transition: all 0.2s ease-in-out;
+      }
+      `
     }else if(styleType === 'normal'){
       return css`
       height: 40px;
