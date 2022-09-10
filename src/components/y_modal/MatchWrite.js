@@ -44,8 +44,8 @@ const MatchWrite = () => {
       <InputTitleBox>
         <InputTitle>하고싶은 말</InputTitle>
       </InputTitleBox>
-      <ReuseTextarea height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
-      <ReuseBtn styleType={'stretch'} content={'게시하기'} />
+      <ReuseTextarea injRef={matchDescRef} height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
+      <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
   )
 };
