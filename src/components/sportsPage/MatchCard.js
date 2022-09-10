@@ -1,25 +1,45 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled, {css} from 'styled-components';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBadge from '../y_reusable/ReuseBadge';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 
 
-const MatchCard = ({matchState}) => {
+const MatchCard = ({data}) => {
+  const dispatch = useDispatch();
+
+  const showMatch = (e) => {
+    if(e.target.ariaLabel !== 'contactBtn'){
+      const matchData = {
+        modalType:'matchWatch',
+        ...data
+      }
+      dispatch(setModal(matchData))
+    }
+  }
   return(
-    <MatchComp matchState={matchState}>
-      <MatchDate matchState={matchState}>
+    <MatchComp matchState={data.matchState} onClick={showMatch}>
+      <MatchDate matchState={data.matchState}>
         <MatchDayTimePlace>
-          <MatchDay>2022.08.27 (토)</MatchDay>
-          <MatchTime>11:00 ~ 12:00</MatchTime>
-          <MatchPlace>동작 볼링장</MatchPlace>
+          <MatchDay>{data.matchDay}</MatchDay>
+          <MatchTime matchState={data.matchState}>{data.matchTime}</MatchTime>
+          <MatchPlace>{data.matchPlace}</MatchPlace>
         </MatchDayTimePlace>
-        {matchState !== 'done' ? <ReuseBadge bdgType={'rank'} content={'중급'} /> : <></>}
+        {data.matchState !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.hostLevel} /> : <></>}
       </MatchDate>
       <MatchBtns>
-        <MatchIntake><MatchIntakeCnt>3</MatchIntakeCnt>/<MatchIntakeFull>4</MatchIntakeFull> 명</MatchIntake>
-        {matchState === 'done' ? 
+        <MatchIntake matchState={data.matchState}>
+          <MatchIntakeCnt
+            matchState={data.matchState}
+            isFull={data.matchIntakeCnt === data.matchIntakeFull}>
+            {data.matchIntakeCnt}
+          </MatchIntakeCnt>/
+          <MatchIntakeFull>{data.matchIntakeFull}</MatchIntakeFull> 명
+        </MatchIntake>
+        {data.matchState === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn styleType={'shrink'} content={'연락하기'} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={'연락하기'} />
         }
       </MatchBtns>
     </MatchComp>
@@ -94,10 +114,12 @@ const MatchBtns = styled.div`
 `
 const MatchIntake = styled.div`
   margin-right: 14px;
+  color: ${({matchState, theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.black};
   font-size: ${({theme}) => theme.fontSize.font_20};
   font-weight:${({theme}) => theme.fontWeight.bold};
 `
 const MatchIntakeCnt = styled.span`
+  color: ${({matchState,isFull, theme}) => isFull&&(matchState !== 'done') ? theme.colors.black : theme.colors.gray};
 `
 const MatchIntakeFull = styled.span`
 `
