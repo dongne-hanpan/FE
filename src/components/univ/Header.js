@@ -14,18 +14,20 @@ import profile from '../../asset/defaultprofile.jpg';
 
 // tmp
 import dummyAlerm from '../../dummyData/dummyAlerm';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  useEffect(() => {
+  const navigate = useNavigate();
+
+  const goMyPage = () => {
     if(userData.username){
-      dispatch(clearModal());
+      navigate('/mypage');
     } else{
       dispatch(setModal({modalType: 'login'}))
     }
-  },[userData]);
-  
+  }
   return(
     <HeaderComp>
       <HeaderLogoSection>
@@ -47,10 +49,10 @@ const Header = () => {
             :'로그인 해주세요'
             }
           </UserGreetNormal>
-          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} />
+          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} clickEvent={goMyPage} />
         </UserGreet>
         <UserElse>
-          {userData.userId ? 
+          {userData.username ? 
           <ReuseReserved matches={2} marginPx={2}/> : <></>
           }
           <ReuseWeather imgSrc={sun} />

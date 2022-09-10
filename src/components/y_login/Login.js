@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { setModal } from '../../shared/redux_d/modules/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearModal, setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 //temp
@@ -10,6 +10,12 @@ import { loginUserThunk } from '../../shared/redux_d/modules/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  useEffect(() => {
+    if(userData.username){
+      dispatch(clearModal());
+    }
+  },[userData])
   const moveToSignup = () => {
     dispatch(setModal({modalType: 'signup'}))
   }

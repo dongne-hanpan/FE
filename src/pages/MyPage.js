@@ -1,16 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import ReuseRank from '../components/y_reusable/ReuseRank';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 import ReuseBadge from '../components/y_reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
+import { clearUser } from '../shared/redux_d/modules/userSlice';
 
 // tmp
 import sun from '../asset/sun.png';
 import you from '../asset/profileYou.png';
 
 const MyPage = () => {
+  const doLogout = () => {
+    dispatch(clearUser());
+  }
   return(
     <MainPage>
       <SportsAndRank>
@@ -18,6 +23,7 @@ const MyPage = () => {
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
           <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
