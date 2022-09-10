@@ -12,8 +12,8 @@ import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {
-  const modalData = useSelector((state) => state.modal.modalData);
   const dispatch = useDispatch();
+  const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
       dispatch(clearModal());

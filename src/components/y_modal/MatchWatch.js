@@ -1,41 +1,65 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseTemperature from '../y_reusable/ReuseTemperature';
-
-import you from '../../asset/profileYou.png'
 import ReuseBadge from '../y_reusable/ReuseBadge';
 
-const MatchWatch = () => {
+import you from '../../asset/profileYou.png'
 
+const MatchWatch = () => {
+  const userData = useSelector((state) => state.user.userData);
+  const modalData = useSelector((state) => state.modal.modalData);
+  const copyPlaceDetail = async() => {
+    const placeDetail = modalData.matchPlaceDetail;
+    await navigator.clipboard.writeText(placeDetail);
+    alert('주소가 복사되었습니다');
+  }
+  const applyEnterChat = () => {
+    console.log('매치 신청되었습니다.')
+    console.log('not yet')
+  }
   return(
     <ModalWatchComp>
       <MatchInfo>
         <MatchDateTimePlace>
-          <MatchDate>2022.08.27</MatchDate>
-          <MatchTime>11:00 (토)</MatchTime>
+          <MatchDay>{modalData.matchDay}</MatchDay>
+          <MatchTime>{modalData.matchTime}</MatchTime>
           <MatchPlace>
-            <Place>한숲볼링센터<PlaceIcon>i</PlaceIcon></Place>
-            <PlaceDetail>서울 동작구 여의대방로 250 대림쇼핑타운 3층 309호 <CopyBtn>복사하기</CopyBtn></PlaceDetail>
+            <Place>{modalData.matchPlace}
+            <PlaceIcon>info
+              <PlaceDetail>{modalData.matchPlaceDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
+            </PlaceIcon>
+            </Place>
           </MatchPlace>
         </MatchDateTimePlace>
         <MatchHost>
-            <ReuseProfile imgSrc={you} content={'영 준'} imgSize={80} contentSize={16}/>
-            <ReuseBadge level={'초급'} />
+            <ReuseProfile imgSrc={you} content={modalData.hostNickname} imgSize={80} contentSize={16}/>
+            <ReuseBadge bdgType={'rank'} content={modalData.hostLevel} />
           </MatchHost>
       </MatchInfo>
       <SplitHoriz />
       <Matchadditional>
         <MatchDesc>
-          <MatchDescContent>주말에 함께 볼링 치실 분들 찾습니다. 남녀 무관합니다.</MatchDescContent>
+          <MatchDescContent>{modalData.matchDesc}</MatchDescContent>
         </MatchDesc>
-        <ReuseTemperature tempType={'personal'} temp={69} />
+        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.hostTemp} />
       </Matchadditional>
 
       <MatchContact>
-        <MatchIntake>모집 인원: <MatchIntakeNum>3</MatchIntakeNum>/4 명</MatchIntake>
-        <ReuseBtn styleType={'stretch'} content={'연락하기'} />
+        <MatchIntake>
+          모집 인원: 
+          <MatchIntakeNum isFull={modalData.matchIntakeCnt === modalData.matchIntakeFull}>
+            {modalData.matchIntakeCnt}
+          </MatchIntakeNum>
+          /{modalData.matchIntakeFull} 명
+        </MatchIntake>
+        {
+          modalData.hostNickname !== userData.nickname ?
+          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={applyEnterChat} />
+          :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
+        }
       </MatchContact>
     </ModalWatchComp>
   )
@@ -68,7 +92,7 @@ const MatchHost = styled.div`
 `
 const MatchDateTimePlace = styled.div`
 `
-const MatchDate = styled.div`
+const MatchDay = styled.div`
   width: 100%;
   margin-bottom: 10px;
   font-size: ${({theme}) => theme.fontSize.font_40};
@@ -86,18 +110,36 @@ const MatchPlace = styled.div`
 const Place = styled.div`
 `
 const PlaceIcon = styled.span`
-  margin-left: 14px;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 2rem;
+  margin-left: 7px;
+  background-color: ${({theme}) => theme.colors.background_light};
   font-size: ${({theme}) => theme.fontSize.font_12};
-  cursor: pointer;
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `
 const PlaceDetail = styled.div`
+  position: absolute;
+  top: -2px;
+  left: 0px;
+  width: 200px;
+  min-height: 40px;
   display: none;
-  ${PlaceIcon}:hover{
-    display: flex;
-    font-size: ${({theme}) => theme.fontSize.font_14};
+  padding: 10px;
+  border-radius: 0.5rem;
+  background-color: ${({theme}) => theme.colors.background_light};
+  ${PlaceIcon}:hover &{
+    display: inline;
+    font-size: ${({theme}) => theme.fontSize.font_12};
   }
 `
-const CopyBtn = styled.button`
+const CopyBtn = styled.span`
+  margin: 0px 6px;
+  color: ${({theme}) => theme.colors.core};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  cursor: pointer;
 `
 const SplitHoriz = styled.hr`
   width: 100%;
@@ -116,6 +158,11 @@ const MatchDesc = styled.div`
   padding: 10px 0px;
   background-color: ${({theme}) => theme.colors.background_light};
   border-radius: 1rem;
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
+  &:hover{
+    filter: drop-shadow(4px 2px 1px ${({theme}) => theme.colors.gray});
+    transition: all 0.4s ease-in-out;
+  }
 `
 const MatchDescContent = styled.p`
   font-size: ${({theme}) => theme.fontSize.font_14};
@@ -135,5 +182,5 @@ const MatchIntake = styled.div`
 `
 const MatchIntakeNum = styled.span`
   margin-left: 10px;
-  color: ${({theme}) => theme.colors.gray};
+  color: ${({isFull, theme}) => isFull ? theme.colors.black : theme.colors.gray};
 `
