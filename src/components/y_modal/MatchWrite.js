@@ -1,23 +1,56 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 import ReuseTextarea from '../y_reusable/ReuseTextarea';
-
+import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
+import { makeMatchThunk } from '../../shared/redux_d/modules/matchSlice';
 //temp
 import dummyOptionValues from '../../dummyData/dummyOptionValues';
 
 
 const MatchWrite = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
   const matchDateRef = useRef(null);
+  const matchDescRef = useRef(null);
+  const [place, setPlace] = useState(null);
+  //이전 날짜 불가능하게 만들기
   useEffect(() => {
     matchDateRef.current.min = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
     .toISOString()
     .slice(0, -8);
   },[]);
+
   const selectChangeHandler = (e) => {
-    console.log(e.target.value)
+    setPlace(e.target.value);
   }
+  const makeMatch = () => {
+    const matchDateValue = matchDateRef.current.value.split('T');
+    if(!matchDateValue){
+      console.log('날짜를 선택해주세요');
+      return
+    }
+    if(!place){
+      console.log('장소를 선택해주세요');
+      return
+    }
+    const matchDay = matchDateValue[0];
+    const matchTime = matchDateValue[1];
+
+    const matchMakeData = {
+      matchDay: matchDay,
+      matchTime: matchTime,
+      matchPlace: place,
+      contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
+      writer: userData.username
+    }
+    dispatch(makeMatchThunk(matchMakeData));
+    dispatch(setDialogue({dialType: 'confirmWrite'}))
+  }
+  // const getMatches = () => {
+  // }
 
   return(
     <ModalWriteComp>
