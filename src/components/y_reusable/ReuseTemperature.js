@@ -4,16 +4,42 @@ import Progress from '../sportsPage/Progress';
 import ReuseProfile from './ReuseProfile';
 
 
-const ReuseTemperature = ({tempType, username, userProfile, temp}) => {
-  return(
-    <TemperatureComp tempType={tempType}>
-      {tempType === 'rank' ? 
-      <RankName>동네 한판 <br/> 매너 왕</RankName> : <RankName>매너 온도</RankName>
+const ReuseTemperature = ({type, type2, data, userProfile, username}) => {
+  const titleRouter = () => {
+    if(type === 'rank'){
+      if(type2 === 'score'){
+        return `우리 동네 점수 왕`
+      } else if(type2 === 'count'){
+        return `우리 동네 매치 왕`
+      } else if(type2 === 'temper'){
+        return `우리 동네 매너 왕`
       }
-      <Progress data={temp} />
+    } else if (type === 'personal'){
+      if(type2 === 'score'){
+        return `평균 점수`
+      } else if(type2 === 'count'){
+        return `매치 수`
+      } else if(type2 === 'temper'){
+        return `매너 온도`
+      }
+    }
+  }
+  const unitRouter = () => {
+      if(type2 === 'score'){
+        return `점`
+      } else if(type2 === 'count'){
+        return `회`
+      } else if(type2 === 'temper'){
+        return `도`
+      }
+  }
+  return(
+    <TemperatureComp type={type}>
+      <RankName>{titleRouter()}</RankName>
+      <Progress data={data} />
       <RankInfo>
         {userProfile ? <ReuseProfile imgSrc={userProfile} content={username} />: <></>}
-        <Temperture tempType={tempType} >{temp} 도</Temperture>
+        <Temperture type={type}>{data}{unitRouter()}</Temperture>
       </RankInfo>
     </TemperatureComp>
   )
@@ -30,7 +56,8 @@ const TemperatureComp = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: ${({tempType}) => tempType === 'rank' ? '10px 20px' :'20px'};
+  padding: ${({type}) => type === 'rank' ? '10px 20px' :'20px'};
+  margin-left: 6px;
   border-radius: 1rem;
   background-color: ${({theme}) => theme.colors.background_light};
   filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
@@ -51,6 +78,6 @@ const RankInfo = styled.div`
   align-items: center;
 `
 const Temperture = styled.div`
-  font-size: ${({tempType, theme}) => tempType === 'rank' ? theme.fontSize.font_14 : theme.fontSize.font_16};
+  font-size: ${({type, theme}) => type === 'rank' ? theme.fontSize.font_14 : theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
