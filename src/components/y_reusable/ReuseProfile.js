@@ -1,10 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
+  const dispatch = useDispatch()
+  const showUserDetail = () => {
+    dispatch(setModal({modalType: 'userWatch'}))
+  }
   return(
-    <ProfileComp direc={direc} onClick={clickEvent}>
+    <ProfileComp direc={direc} onClick={clickEvent ? clickEvent: showUserDetail}>
       <Profile imgSize={imgSize} src={imgSrc} alt='profile' />
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>

@@ -1,13 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { setModal } from '../../shared/redux_d/modules/modalSlice';
+import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
+import { setDialogue, setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBadge from '../y_reusable/ReuseBadge';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 
 
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
 
   const showMatch = (e) => {
     if(e.target.ariaLabel !== 'contactBtn'){
@@ -18,6 +20,17 @@ const MatchCard = ({data}) => {
       dispatch(setModal(matchData))
     }
   }
+  const contactToHost = () => {
+    const applyData = {
+      matchId: null,
+      username: userData.username,
+      userLevel: userData.userLevel,
+      userTemperature: userData.userTemperature,
+    };
+    // dispatch(contactMatchThunk(applyData));
+    dispatch(setDialogue({dialType: 'confirmApply'}));
+  };
+
   return(
     <MatchComp matchState={data.matchState} onClick={showMatch}>
       <MatchDate matchState={data.matchState}>
@@ -39,7 +52,7 @@ const MatchCard = ({data}) => {
         </MatchIntake>
         {data.matchState === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={'연락하기'} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={'연락하기'} clickEvent={contactToHost} />
         }
       </MatchBtns>
     </MatchComp>

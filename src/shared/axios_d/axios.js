@@ -12,9 +12,14 @@ export const getwithoutCookie = async(url) => {
     if(res.status === 200){
       return res.data;
     }
-    throw new Error('bad status')
   }catch(e){
-    throw new Error('failed in axios')
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 }
 
@@ -29,32 +34,40 @@ export const postWithoutCookie = async(url,payload) => {
       return res.data;
     }
   }catch(e){
-    if(e.response.status === 400 || e.response.status === 404 || e.response.status === 401){
+    if(e.response){
       return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
     }
   }
 }
 
-export const getWithCookie = async(url,access,refresh) => {
+export const getWithCookie = async(url,access) => {
   try{
     const res = await axios({
       method: 'GET',
       url: `${BASE_URL}${url}`,
       headers:{
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
+        "Authorization": `Bearer ${access}`
       }
     })
     if(res.status === 200){
       return res.data;
     }
-    throw new Error('bad status')
   }catch(e){
-    throw new Error('failed in axios')
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 };
-export const postWithCookie = async(url,payload,access,refresh) => {
+export const postWithCookie = async(url,payload,access) => {
   try{
     const res = await axios({
       method: 'POST',
@@ -62,60 +75,71 @@ export const postWithCookie = async(url,payload,access,refresh) => {
       headers:{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
       },
       data: payload
     })
     if(res.status === 200){
       return res.data;
     }
-    throw new Error('bad status')
   }catch(e){
-    throw new Error('failed in axios')
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 };
-export const postWithCookieFormData = async(url,payload,access,refresh) => {
+export const postWithCookieFormData = async(url,payload,access) => {
   try{
     const res = await axios({
       method: 'POST',
       url: `${BASE_URL}${url}`,
       headers:{
         "Content-Type": "multipart/form-data",
-        "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
+        "Authorization": `Bearer ${access}`
       },
       data: payload
     })
     if(res.status === 200){
       return res.data;
     }
-    throw new Error('bad status')
   }catch(e){
-    throw new Error('failed in axios')
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 };
-export const putWithCookie = async(url,payload,access,refresh) => {
+export const putWithCookie = async(url,payload,access) => {
   try{
     const res = await axios({
       method: 'PUT',
       url: `${BASE_URL}${url}`,
       headers:{
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
+        "Authorization": `Bearer ${access}`
       },
       data: payload
     })
     if(res.status === 200){
       return res.data;
     }
-    console.log(res)
-    throw new Error('dd')
   }catch(e){
-    throw new Error('failed in axios',e)
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 };
-export const deleteWithCookie = async(url,access,refresh) => {
+export const deleteWithCookie = async(url,access) => {
   try{
     const res = await axios({
       method: 'DELETE',
@@ -123,16 +147,18 @@ export const deleteWithCookie = async(url,access,refresh) => {
       headers:{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${access}`,
-        "Refresh-Token": refresh
       },
     })
     if(res.status === 200){
       return res.data;
-    }else{
-      console.log(res)
-      return res
     }
   }catch(e){
-    throw new Error('failed in axios',e)
+    if(e.response){
+      return e.response.data;
+    } else if(e.request){
+      return e.request;
+    } else{
+      console.error('Error', e.message);
+    }
   }
 };

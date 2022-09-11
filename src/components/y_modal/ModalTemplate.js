@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearModal } from '../../shared/redux_d/modules/modalSlice';
+import { clearModal, setDialogue } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import Deco from '../univ/Deco';
 import Login from '../y_login/Login';
@@ -16,7 +16,11 @@ const ModalTemplate = () => {
   const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
-      dispatch(clearModal());
+      if(modalData.modalType === 'matchWrite'){
+        dispatch(setDialogue({dialType: 'confirmRemove'}));
+      } else{
+        dispatch(clearModal());
+      }
     }
   }
 

@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postWithoutCookie } from '../../axios_d/axios';
 import { deleteCookie } from '../../axios_d/cookie';
 
+import me from '../../../asset/profileMe.png';
+
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
   async (user_data) => {

@@ -6,13 +6,23 @@ import DialConfRemove from './DialConfRemove';
 import DialConfSignup from './DialConfSignup';
 import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
+import DialConfLogin from './DialConfLogin';
+import { clearAll, clearDialogue } from '../../shared/redux_d/modules/modalSlice';
 
 
 const DialTemplate = () => {
   const dialData = useSelector((state) => state.modal.dialogueData);
   const dispatch = useDispatch();
-  const nope = (e) => {
-    console.log('bad behavier')
+  const removeDial = (e) => {
+    if(e.target.ariaLabel === 'dialToggle'){
+      if(dialData.dialType !== 'confirmRemove'){
+        if(dialData.dialType === 'confirmWrite'){
+          dispatch(clearAll());
+        } else{
+          dispatch(clearDialogue());
+        }
+      }
+    }
   }
 
   const dialRouter = () => {
@@ -20,6 +30,8 @@ const DialTemplate = () => {
       return <DialConfRemove />
     } else if(dialData.dialType === 'confirmSignup'){
       return <DialConfSignup />
+    } else if(dialData.dialType === 'confirmLogin'){
+      return <DialConfLogin />
     } else if(dialData.dialType === 'confirmWrite'){
       return <DialConfWrite />
     } else if(dialData.dialType === 'confirmApply'){
@@ -28,8 +40,8 @@ const DialTemplate = () => {
   }
 
   return(
-    <DialComp aria-label='dialToggle' onClick={nope}>
-      <DialSection>
+    <DialComp aria-label='dialToggle' onClick={removeDial}>
+      <DialSection aria-label='dialTemplate'>
         <Deco />
         {dialRouter()}
       </DialSection>
