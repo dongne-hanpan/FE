@@ -35,14 +35,16 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        {dummyAlerm.map((each) => 
+        { userData.username ? 
+        dummyAlerm.map((each) => 
           <HeaderAlerm key={each.id} alermType={each.type} checked={each.checked} content={each.msg} />
-        )}
+        ): <HeaderAlerm alermType={'checked'} checked={false} content={''} />
+        }
       </HeaderAlermSection>
 
       <HeaderUserSection>
         <UserGreet>
-          <UserGreetNormal> 동작구 </UserGreetNormal>
+          <UserGreetNormal> {userData.region ? userData.region:''} </UserGreetNormal>
           <UserGreetNormal>
             {userData.nickname ? 
             <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
