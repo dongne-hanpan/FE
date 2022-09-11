@@ -2,9 +2,9 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 
-const ReuseBadge = ({direc, bdgType, content}) => {
+const ReuseBadge = ({direc, bdgType, content, clickEvent}) => {
   return(
-    <BadgeComp direc={direc} bdgType={bdgType} content={content}>
+    <BadgeComp direc={direc} bdgType={bdgType} content={content} onClick={clickEvent}>
       {content}
     </BadgeComp>
   )
@@ -78,17 +78,19 @@ const BadgeComp = styled.div`
         `  
       }
     } else if(bdgType === 'btn'){
-      if(content === '프로필 편집'){
+      if(content === '프로필 편집' || content ==='로그 아웃'){
         return css`
         margin: 2px;
         background-color: ${theme.colors.background};
         border: 1px solid ${theme.colors.gray};
+        cursor: pointer;
         `
       } else if(content === '과거 매치'){
         return css`
         margin: 2px;
         color: ${theme.colors.background};
         background-color: ${theme.colors.black};
+        cursor: pointer;
         `  
       }
     }

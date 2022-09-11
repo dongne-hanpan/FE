@@ -20,6 +20,8 @@ const BtnComp = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
+  margin-right: ${({direc}) => direc === 'horiz' ? 8:0}px;
+  margin-bottom: ${({direc}) => direc === 'vertic' ? 6:0}px;
   font-weight: ${({theme}) => theme.fontWeight.medium};
   ${({styleType, theme}) => {
     if(styleType === 'stretch'){
@@ -63,6 +65,18 @@ const BtnComp = styled.button`
       &:hover{
         color: ${theme.colors.background};
         background-color: ${theme.colors.red_light};
+        font-weight: ${theme.fontWeight.bold};
+        transition: all 0.2s ease-in-out;
+      }
+      `
+    }else if(styleType === 'small'){
+      return css`
+      height: 20px;
+      padding: 0px 10px;
+      background-color: ${theme.colors.skyblue};
+      &:hover{
+        background-color: ${theme.colors.core};
+        color: ${theme.colors.background};
         font-weight: ${theme.fontWeight.bold};
         transition: all 0.2s ease-in-out;
       }

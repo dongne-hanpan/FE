@@ -1,30 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
-import ReuseRank from '../components/y_reusable/ReuseRank';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 import ReuseBadge from '../components/y_reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
+import { clearUser } from '../shared/redux_d/modules/userSlice';
 
 // tmp
-import sun from '../asset/sun.png';
-import you from '../asset/profileYou.png';
+import profile from '../asset/defaultprofile.jpg';
+import dummyMyMatch from '../dummyData/dummyMyMatch';
+
 
 const MyPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  useEffect(() => {
+    if(!userData.username){
+      navigate('/')
+    }
+  },[userData])
+  const doLogout = () => {
+    dispatch(clearUser());
+  }
   return(
     <MainPage>
       <SportsAndRank>
-        <ReuseProfile imgSrc={sun} imgSize={'220'} />
+        <ReuseProfile imgSrc={userData.profileImage ? userData.profileImage : profile} imgSize={'220'} />
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
-          <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
-          <RankVerticl>
-            <ReuseRank contentTitle={'우리 동네 점수 왕'} content={'85 점'} userProfile={you} username={'성 원'}/>
-            <ReuseRank contentTitle={'우리 동네 매치 왕'} content={'69 회'} userProfile={you} username={'성 원'}/>
-          </RankVerticl>
+          <ReuseTemperature type={'personal'} type2={'score'} data={85}/>
+          <ReuseTemperature type={'personal'} type2={'count'} data={18}/>
+          <ReuseTemperature type={'personal'} type2={'temper'} data={69}/>
         </RankArticle>
       </SportsAndRank>
 
@@ -34,13 +47,9 @@ const MyPage = () => {
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <MatchContainerBody>
-          <MatchCard matchState={'reserved'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'recruit'} />
-          <MatchCard matchState={'done'} />
-          <MatchCard matchState={'done'} />
-          <MatchCard matchState={'done'} />
-          <MatchCard matchState={'done'} />
+          {dummyMyMatch? dummyMyMatch.map((each) => 
+            <MatchCard key={each.id} data={each} />
+          ):<></>}
         </MatchContainerBody>
       </MatchContainer>
     </MainPage>
@@ -77,14 +86,6 @@ const UserBtns = styled.article`
 `
 const RankArticle = styled.article`
   display: flex;
-`
-const RankVerticl = styled.article`
-  width: 280px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 10px;
 `
 const MatchContainer = styled.section`
   width: 700px;

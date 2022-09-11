@@ -30,7 +30,7 @@ const ProfileComp = styled.button`
   margin-bottom: ${({direc}) => direc === 'vertic' ? 6:0}px;
 `
 const Profile = styled.img`
-  border-radius: 5rem;
+  border-radius: 10rem;
   width: ${({imgSize}) => imgSize ? imgSize : 40}px;
   height: ${({imgSize}) => imgSize ? imgSize : 40}px;
 `

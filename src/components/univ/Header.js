@@ -9,22 +9,25 @@ import ReuseReserved from '../y_reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';
-import profile from '../../asset/profileMe.png';
 import sun from '../../asset/sun.png';
+import profile from '../../asset/defaultprofile.jpg';
 
-
+// tmp
+import dummyAlerm from '../../dummyData/dummyAlerm';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  useEffect(() => {
+  const navigate = useNavigate();
+
+  const goMyPage = () => {
     if(userData.username){
-      dispatch(clearModal());
+      navigate('/mypage');
     } else{
       dispatch(setModal({modalType: 'login'}))
     }
-  },[userData]);
-  
+  }
   return(
     <HeaderComp>
       <HeaderLogoSection>
@@ -32,17 +35,26 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-          <HeaderAlerm checked={true}/>
+        {dummyAlerm.map((each) => 
+          <HeaderAlerm key={each.id} alermType={each.type} checked={each.checked} content={each.msg} />
+        )}
       </HeaderAlermSection>
 
       <HeaderUserSection>
         <UserGreet>
           <UserGreetNormal> 동작구 </UserGreetNormal>
-          <UserGreetNormal><UserName>영동</UserName> 님 안녕하세요</UserGreetNormal>
-          <ReuseProfile imgSrc={profile} />
+          <UserGreetNormal>
+            {userData.nickname ? 
+            <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
+            :'로그인 해주세요'
+            }
+          </UserGreetNormal>
+          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} clickEvent={goMyPage} />
         </UserGreet>
         <UserElse>
-          <ReuseReserved matches={2} marginPx={2}/>
+          {userData.username ? 
+          <ReuseReserved matches={2} marginPx={2}/> : <></>
+          }
           <ReuseWeather imgSrc={sun} />
         </UserElse>
       </HeaderUserSection>
@@ -80,10 +92,15 @@ const HeaderAlermSection = styled.article`
   display: flex;
   flex-direction: column;
   background-color: ${({theme}) => theme.colors.black};
+  overflow-y: hidden;
   cursor: pointer;
   ${HeaderComp}:hover &{
     height: 170px;
+    overflow-y: scroll;
     transition: height 0.5s ease-in-out;
+  }
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 const HeaderUserSection = styled.article`
@@ -95,10 +112,11 @@ const UserGreet = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  margin-top: 4px;
   margin-bottom: 10px;
 `
 const UserGreetNormal = styled.div`
-  margin-left: 10px;
+  margin-right: 10px;
   color: ${({theme}) => theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `

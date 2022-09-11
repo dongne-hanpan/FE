@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { clearLocal, getLocal, setLocal } from '../../axios_d/local';
-import { getWithCookie, postWithoutCookie } from '../../axios_d/axios';
-import { deleteCookie, getCookie } from '../../axios_d/cookie';
+import { postWithoutCookie } from '../../axios_d/axios';
+import { deleteCookie } from '../../axios_d/cookie';
 
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
@@ -14,7 +13,6 @@ export const signupUserThunk = createAsyncThunk(
   "user/signupUserThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/signup", user_data);
-    console.log(res);
     if(res.status === 201){
       return res.data;
     } else{
@@ -22,31 +20,25 @@ export const signupUserThunk = createAsyncThunk(
     }
   }
 );
-export const clearUserThunk = createAsyncThunk(
-  "user/clearUserThunk",
-  async (user_data) => {
-    const cookie = getCookie();
-    const refresh = getLocal("refresh");
-    // const res = await getWithCookie("/api/auth/logout", cookie, refresh);
-    // return res.data;
-  }
-);
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
-    userData: {},
+    userData: {
+      // userId: 1,
+      // username: 'sparta12',
+      // nickname: '영동',
+      // profileImage: me
+    },
   },
   reducers: {
     loadUser: (state, action) => {
       state.userData = action.payload;
     },
-    loginUser: (state, action) => {
-      state.userData = action.payload;
-      console.log(state.userData);
+    clearUser: (state, action) => {
+      deleteCookie("mytoken");
+      state.userData = {};
     },
-    signupUser: (state, action) => {},
-    clearUser: (state, action) => {},
   },
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
@@ -68,13 +60,8 @@ const userSlice = createSlice({
         alert('로그인 실패했습니다');
       }
     });
-    builder.addCase(clearUserThunk.fulfilled, (state, action) => {
-      deleteCookie("mytoken");
-      clearLocal("refresh");
-      state.userData = {};
-    });
   }
 });
 
-export const { loadUser, loginUser, signupUser } = userSlice.actions;
+export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;
