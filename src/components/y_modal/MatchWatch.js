@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
+import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseTemperature from '../y_reusable/ReuseTemperature';
@@ -9,6 +11,7 @@ import ReuseBadge from '../y_reusable/ReuseBadge';
 import you from '../../asset/profileYou.png'
 
 const MatchWatch = () => {
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const modalData = useSelector((state) => state.modal.modalData);
   const copyPlaceDetail = async() => {
@@ -16,10 +19,16 @@ const MatchWatch = () => {
     await navigator.clipboard.writeText(placeDetail);
     alert('주소가 복사되었습니다');
   }
-  const applyEnterChat = () => {
-    console.log('매치 신청되었습니다.')
-    console.log('not yet')
-  }
+  const contactToHost = () => {
+    const applyData = {
+      matchId: null,
+      username: userData.username,
+      userLevel: userData.userLevel,
+      userTemperature: userData.userTemperature,
+    };
+    dispatch(contactMatchThunk(applyData));
+    dispatch(setDialogue({dialType: 'confirmApply'}));
+  };
   return(
     <ModalWatchComp>
       <MatchInfo>
@@ -57,7 +66,7 @@ const MatchWatch = () => {
         </MatchIntake>
         {
           modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={applyEnterChat} />
+          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={contactToHost} />
           :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
         }
       </MatchContact>

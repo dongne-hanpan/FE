@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 import { deleteWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios_d/axios';
 import { getCookie } from '../../axios_d/cookie';
 
@@ -34,6 +33,14 @@ export const deleteMatchThunk = createAsyncThunk(
     return res;
   }
 );
+export const contactMatchThunk = createAsyncThunk(
+  "match/contactMatchThunk",
+  async(apply_data) => {
+    const cookie = getCookie('mytoken');
+    const res = await postWithCookie("/api/match/contact", apply_data, cookie);
+    return res;
+  }
+);
 
 const matchSlice = createSlice({
   name: "matchSlice",
@@ -62,6 +69,9 @@ const matchSlice = createSlice({
     });
     builder.addCase(deleteMatchThunk.fulfilled, (state, action) => {
       console.log('delete match completed');
+    });
+    builder.addCase(contactMatchThunk.fulfilled, (state, action) => {
+      console.log('contact match completed');
     });
   }
 });
