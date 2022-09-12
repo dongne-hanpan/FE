@@ -4,7 +4,7 @@ export const setLocal = (key,value) => {
 }
 export const getLocal = (key) => {
   const local_refresh = localStorage.getItem(key);
-  return JSON.parse(local_refresh)[key];
+  return JSON.parse(local_refresh);
 }
 export const clearLocal = (key) => {
   localStorage.removeItem(key)
