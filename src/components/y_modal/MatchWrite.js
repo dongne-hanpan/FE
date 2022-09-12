@@ -48,15 +48,21 @@ const MatchWrite = () => {
     const regionAndSports = getLocal('regionAndSports');
     const sports = regionAndSports.sports;
     const regionId = regionAndSports.regionId;
+    const selectPlaceArray = place.split(',');
 
     const matchMakeData = {
-      matchDay: matchDay,
-      matchTime: matchTime,
-      matchPlace: place,
+      sports: sports,
+      region: regionId,
+      matchState: 'recruit',
+      date: matchDay,
+      time: matchTime,
+      place: selectPlaceArray[0],
+      placeDetail: selectPlaceArray[1],
       contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
-      writer: userData.username
       max_user: intakeValue,
+      now_user: 1
     }
+    console.log(matchMakeData);
     dispatch(makeMatchThunk(matchMakeData));
     dispatch(setDialogue({dialType: 'confirmWrite'}))
   }
@@ -73,7 +79,7 @@ const MatchWrite = () => {
       <PlaceSection>
         <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
           {dummyOptionValues.map((each) => 
-            <PlaceOption key={each.value} value={each.value} address={each.address}>
+            <PlaceOption key={each.value} value={[each.value,each.address]}>
               {each.value}
             </PlaceOption>
           )}

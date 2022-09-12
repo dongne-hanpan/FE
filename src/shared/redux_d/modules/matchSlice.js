@@ -56,7 +56,8 @@ const matchSlice = createSlice({
   },
   extraReducers:(builder) => {
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
-      state.matches = action.state;
+      console.log(action.payload)
+      state.matches = action.payload;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');
