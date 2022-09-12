@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
@@ -7,14 +8,17 @@ import MatchCard from '../components/sportsPage/MatchCard';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
 // tmp
-import sun from '../asset/sun.png';
 import you from '../asset/profileYou.png';
 import dummyMatch from '../dummyData/dummyMatch';
+import { dummySports } from '../dummyData/dummyIndex';
 
 
 const SportsPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const sports = userData.sports;
+  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+
   const doMatchWrite = () => {
     if(userData.username){
       console.log('write!!');
@@ -29,17 +33,17 @@ const SportsPage = () => {
   return(
     <MainPage>
       <SportsAndRank>
-        <ReuseProfile imgSrc={sun} imgSize={'220'} />
-        <RankArticle>
+        <SportsImg src={matchsports.sportsImage} alt={sports} />
+        {/* <RankArticle>
           <ReuseTemperature type={'rank'} type2={'score'} userProfile={you} username={'영 동'} data={85}/>
           <ReuseTemperature type={'rank'} type2={'count'} userProfile={you} username={'성 원'} data={10}/>
           <ReuseTemperature type={'rank'} type2={'temper'} userProfile={you} username={'동 윤'} data={69}/>
-        </RankArticle>
+        </RankArticle> */}
       </SportsAndRank>
 
       <MatchContainer>
         <MatchContainerHeader>
-          <MatchContainerHeaderTitle>동네 한 판?</MatchContainerHeaderTitle>
+          <MatchContainerHeaderTitle>{sports}, 동네 한 판?</MatchContainerHeaderTitle>
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <CircleBtns>
@@ -76,20 +80,18 @@ const MainPage = styled.main`
 `
 const SportsAndRank = styled.section`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  // justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
 `
+const SportsImg = styled.img`
+  width: 200px;
+  height: auto;
+  border-radius: 2rem 1rem 1rem 0rem;
+`
 const RankArticle = styled.article`
   display: flex;
-`
-const RankVertical = styled.div`
-  width: 280px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 10px;
 `
 const MatchContainer = styled.section`
   width: 700px;

@@ -34,8 +34,10 @@ const userSlice = createSlice({
     },
   },
   reducers: {
-    loadUser: (state, action) => {
-      state.userData = action.payload;
+    addRegionAndSports: (state, action) => {
+      const regionAndSports = action.payload;
+      state.userData = {...state.userData, ...regionAndSports};
+      console.log(state.userData);
     },
     clearUser: (state, action) => {
       deleteCookie("mytoken");
@@ -57,7 +59,8 @@ const userSlice = createSlice({
           nickname: data.nickname,
           profileImage: data.profileImage,
         };
-        state.userData = newUserData;
+        state.userData = {...state.userData,...newUserData};
+        console.log(state.userData);
       } else{
         alert('로그인 실패했습니다');
       }
@@ -65,5 +68,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { clearUser } = userSlice.actions;
+export const { addRegionAndSports, clearUser } = userSlice.actions;
 export default userSlice.reducer;

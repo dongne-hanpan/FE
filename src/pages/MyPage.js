@@ -69,9 +69,6 @@ const MainPage = styled.main`
   &::-webkit-scrollbar {
     display: none;
   }
-  & ul{
-    padding: 0px;
-  }
 `
 const SportsAndRank = styled.section`
   display: flex;

@@ -21,8 +21,8 @@ function App() {
         <Routes>
           <Route path='/' element={<IndexPage />} />
           <Route path='/mypage' element={<MyPage />} />
-          <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
+          <Route path='/:region/:sports' element={<SportsPage />} />
         </Routes>
         {modalData.modalType ? <ModalTemplate />:<></>}
         {dialogueData.dialType ? <DialTemplate />:<></>}
