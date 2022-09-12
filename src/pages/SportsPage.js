@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
-import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import MatchCard from '../components/sportsPage/MatchCard';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
 // tmp
-import you from '../asset/profileYou.png';
 import dummyMatch from '../dummyData/dummyMatch';
-import { dummySports } from '../dummyData/dummyIndex';
-
+import { dummySports, dummyRegion } from '../dummyData/dummyIndex';
+import { getLocal } from '../shared/axios_d/local';
 
 const SportsPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const sports = userData.sports;
+  const regionAndSports = getLocal('regionAndSports');
+  const sports = regionAndSports.sports;
+  const region = regionAndSports.region;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
 
   const doMatchWrite = () => {

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ReuseBtn from '../components/y_reusable/ReuseBtn';
+import { setLocal } from '../shared/axios_d/local';
 
 //temp
 import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
@@ -42,7 +43,8 @@ const IndexPage = () => {
       region: region,
       sports: sports
     }
-    dispatch(addRegionAndSports(regionAndSports));
+    //새로고침 버그 해결 위해 localstorage에 저장
+    setLocal('regionAndSports', regionAndSports);
     navigate(`/${region}/${sports}`);
   }
   return (

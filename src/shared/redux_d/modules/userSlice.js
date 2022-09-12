@@ -34,11 +34,6 @@ const userSlice = createSlice({
     },
   },
   reducers: {
-    addRegionAndSports: (state, action) => {
-      const regionAndSports = action.payload;
-      state.userData = {...state.userData, ...regionAndSports};
-      console.log(state.userData);
-    },
     clearUser: (state, action) => {
       deleteCookie("mytoken");
       state.userData = {};
@@ -68,5 +63,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { addRegionAndSports, clearUser } = userSlice.actions;
+export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;
