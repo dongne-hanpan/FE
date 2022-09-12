@@ -5,8 +5,8 @@ import { getCookie } from '../../axios_d/cookie';
 
 export const loadMatchThunk = createAsyncThunk(
   "match/loadMatchThunk",
-  async(user_data) => {
-    const res = await getwithoutCookie("/api/match/list", user_data);
+  async(additionalUrl) => {
+    const res = await getwithoutCookie(`/api/match/list${additionalUrl}`);
     return res;
   }
 );
@@ -56,7 +56,7 @@ const matchSlice = createSlice({
   },
   extraReducers:(builder) => {
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
-      console.log('load match completed');
+      state.matches = action.state;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');

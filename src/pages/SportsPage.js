@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
 import MatchCard from '../components/sportsPage/MatchCard';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
+import { loadMatchThunk } from '../shared/redux_d/modules/matchSlice';
 
 // tmp
 import dummyMatch from '../dummyData/dummyMatch';
@@ -17,6 +18,19 @@ const SportsPage = () => {
   const sports = regionAndSports.sports;
   const region = regionAndSports.region;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+
+  //match 받아오기
+  useEffect(() => {
+    console.log('get matches!!!');
+    let regionNum = null;
+    dummyRegion.map((each) => {
+      if(each.region === region){
+        regionNum = each.regionId
+      }
+    });
+    const additionalUrl = `/${regionNum}/${sports}`;
+    dispatch(loadMatchThunk(additionalUrl));
+  },[])
 
   const doMatchWrite = () => {
     if(userData.username){
