@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getWeather } from '../../shared/weather';
 import sunny from '../../asset/weather/sunny.png';
@@ -33,12 +33,14 @@ const ReuseWeather = () => {
   }
   //날씨 관련
   const [weather,setWeather] = useState([]);
-  getWeather().then((res) => {
-    const weatherId = res.weather[0].id;
-    const weatherSrc = weatherRouter(weatherId);
-    const weaterTemp = Math.round(res.main.temp * 10)/10;
-    setWeather([...weatherSrc, weaterTemp]);
-  });
+  useEffect(() => {
+    getWeather().then((res) => {
+      const weatherId = res.weather[0].id;
+      const weatherSrc = weatherRouter(weatherId);
+      const weaterTemp = Math.round(res.main.temp * 10)/10;
+      setWeather([...weatherSrc, weaterTemp]);
+    });
+  },[])
 
   return(
     <>
