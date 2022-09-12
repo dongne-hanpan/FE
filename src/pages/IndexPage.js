@@ -7,7 +7,6 @@ import { setLocal } from '../shared/axios_d/local';
 
 //temp
 import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
-import { addRegionAndSports } from '../shared/redux_d/modules/userSlice';
 
 
 const IndexPage = () => {

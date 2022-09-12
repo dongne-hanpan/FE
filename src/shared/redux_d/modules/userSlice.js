@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postWithoutCookie } from '../../axios_d/axios';
 import { deleteCookie } from '../../axios_d/cookie';
 
-import me from '../../../asset/profileMe.png';
 
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
@@ -54,7 +53,7 @@ const userSlice = createSlice({
           nickname: data.nickname,
           profileImage: data.profileImage,
         };
-        state.userData = {...state.userData,...newUserData};
+        state.userData = newUserData;
         console.log(state.userData);
       } else{
         alert('로그인 실패했습니다');
