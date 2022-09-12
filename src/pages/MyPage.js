@@ -11,12 +11,23 @@ import { clearUser } from '../shared/redux_d/modules/userSlice';
 // tmp
 import profile from '../asset/defaultprofile.jpg';
 import dummyMyMatch from '../dummyData/dummyMyMatch';
+import { getLocal } from '../shared/axios_d/local';
+import { loadMyMatchThunk } from '../shared/redux_d/modules/matchSlice';
 
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const regionAndSports = getLocal('regionAndSports');
+  const sports = regionAndSports.sports;
+  //match 받아오기
+  useEffect(() => {
+    console.log('get my matches!!!');
+    const additionalUrl = `/${sports}`;
+    dispatch(loadMyMatchThunk(additionalUrl));
+  },[]);
+
   useEffect(() => {
     if(!userData.username){
       navigate('/')
