@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
@@ -13,7 +13,6 @@ import dummyOptionValues from '../../dummyData/dummyOptionValues';
 
 const MatchWrite = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
   const matchDateRef = useRef(null);
   const matchDescRef = useRef(null);
   const intakeRef = useRef(null);

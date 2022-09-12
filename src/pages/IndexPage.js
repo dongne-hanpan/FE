@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ReuseBtn from '../components/y_reusable/ReuseBtn';
@@ -11,7 +10,6 @@ import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
 
 const IndexPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [region, setRegion] = useState(null);
   const [sports, setSports] = useState(null);
   const [hoverSports, setHoverSports] = useState(null);
