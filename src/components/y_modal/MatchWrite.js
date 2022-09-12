@@ -15,6 +15,7 @@ const MatchWrite = () => {
   const userData = useSelector((state) => state.user.userData);
   const matchDateRef = useRef(null);
   const matchDescRef = useRef(null);
+  const intakeRef = useRef(null);
   const [place, setPlace] = useState(null);
   //이전 날짜 불가능하게 만들기
   useEffect(() => {
@@ -28,12 +29,17 @@ const MatchWrite = () => {
   }
   const makeMatch = () => {
     const matchDateValue = matchDateRef.current.value.split('T');
+    const intakeValue = intakeRef.current.value;
     if(!matchDateValue){
       console.log('날짜를 선택해주세요');
       return
     }
     if(!place){
       console.log('장소를 선택해주세요');
+      return
+    }
+    if(intakeValue === null || intakeValue <2 || intakeValue >6){
+      console.log('모집 인원을 확인해주세요');
       return
     }
     const matchDay = matchDateValue[0];
@@ -45,6 +51,7 @@ const MatchWrite = () => {
       matchPlace: place,
       contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
       writer: userData.username
+      max_user: intakeValue,
     }
     dispatch(makeMatchThunk(matchMakeData));
     dispatch(setDialogue({dialType: 'confirmWrite'}))
@@ -55,13 +62,10 @@ const MatchWrite = () => {
   return(
     <ModalWriteComp>
       <InputTitleBox>
-        <InputTitle>일자 및 시간</InputTitle>
+        <InputTitle>일자, 시간, 장소</InputTitle>
       </InputTitleBox>
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} />
 
-      <InputTitleBox>
-        <InputTitle>장소</InputTitle>
-      </InputTitleBox>
       <PlaceSection>
         <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
           {dummyOptionValues.map((each) => 
@@ -77,7 +81,11 @@ const MatchWrite = () => {
       <InputTitleBox>
         <InputTitle>하고싶은 말</InputTitle>
       </InputTitleBox>
-      <ReuseTextarea injRef={matchDescRef} height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
+      <ReuseTextarea injRef={matchDescRef} height={90} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
+      <InputTitleBox>
+        <InputTitleSmall>모집 인원</InputTitleSmall>
+        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'ex) 6, (최대 인원: 6 명)'}/>
+      </InputTitleBox>
       <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
   )
@@ -97,14 +105,11 @@ const InputTitleBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 `
 const InputTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_18};
   font-weight: ${({theme}) => theme.fontWeight.medium};
-  & span{
-    display: none;
-  }
 `
 const PlaceSection = styled.div`
   position: relative;
@@ -131,12 +136,22 @@ const PlaceOption = styled.option.attrs(({address}) => ({
 `
 const PlaceMap = styled.div`
   width: 100%;
-  height: 200px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: ${({theme}) => theme.colors.skyblue};
   border-radius: 0.5rem;
+  margin-bottom: 12px;
+`
+const InputTitleSmall = styled.div`
+  width: 280px;
+  height: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 14px;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `
