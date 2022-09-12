@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 import ReuseTextarea from '../y_reusable/ReuseTextarea';
+import { getLocal } from '../../shared/axios_d/local';
 import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux_d/modules/matchSlice';
 //temp
@@ -44,6 +45,9 @@ const MatchWrite = () => {
     }
     const matchDay = matchDateValue[0];
     const matchTime = matchDateValue[1];
+    const regionAndSports = getLocal('regionAndSports');
+    const sports = regionAndSports.sports;
+    const regionId = regionAndSports.regionId;
 
     const matchMakeData = {
       matchDay: matchDay,

@@ -8,7 +8,7 @@ import { loadMatchThunk } from '../shared/redux_d/modules/matchSlice';
 
 // tmp
 import dummyMatch from '../dummyData/dummyMatch';
-import { dummySports, dummyRegion } from '../dummyData/dummyIndex';
+import { dummySports } from '../dummyData/dummyIndex';
 import { getLocal } from '../shared/axios_d/local';
 
 const SportsPage = () => {
@@ -16,19 +16,13 @@ const SportsPage = () => {
   const userData = useSelector((state) => state.user.userData);
   const regionAndSports = getLocal('regionAndSports');
   const sports = regionAndSports.sports;
-  const region = regionAndSports.region;
+  const regionId = regionAndSports.regionId;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
 
   //match 받아오기
   useEffect(() => {
     console.log('get matches!!!');
-    let regionNum = null;
-    dummyRegion.map((each) => {
-      if(each.region === region){
-        regionNum = each.regionId
-      }
-    });
-    const additionalUrl = `/${regionNum}/${sports}`;
+    const additionalUrl = `/${regionId}/${sports}`;
     dispatch(loadMatchThunk(additionalUrl));
   },[])
 
