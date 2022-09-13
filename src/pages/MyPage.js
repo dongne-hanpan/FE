@@ -20,11 +20,11 @@ const MyPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const regionAndSports = getLocal('regionAndSports');
-  const sports = regionAndSports.sports;
+  const sportsEn = regionAndSports.sportsEn;
   //match 받아오기
   useEffect(() => {
     console.log('get my matches!!!');
-    const additionalUrl = `/${sports}`;
+    const additionalUrl = `/${sportsEn}`;
     dispatch(loadMyMatchThunk(additionalUrl));
   },[]);
 

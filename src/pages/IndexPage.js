@@ -5,7 +5,7 @@ import ReuseBtn from '../components/y_reusable/ReuseBtn';
 import { setLocal } from '../shared/axios_d/local';
 
 //temp
-import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
+import { dummyRegion, dummySports, sportsConverter } from '../dummyData/dummyIndex';
 
 
 const IndexPage = () => {
@@ -39,10 +39,12 @@ const IndexPage = () => {
       alert('스포츠를 선택해주세요');
       return
     }
+    const sportsEn = sportsConverter(sports);
     const regionAndSports = {
       regionId: region[0],
       region: region[1],
-      sports: sports
+      sports: sports,
+      sportsEn: sportsEn
     }
     //새로고침 버그 해결 위해 localstorage에 저장
     setLocal('regionAndSports', regionAndSports);

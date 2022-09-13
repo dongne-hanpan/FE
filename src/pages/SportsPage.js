@@ -16,13 +16,14 @@ const SportsPage = () => {
   const userData = useSelector((state) => state.user.userData);
   const regionAndSports = getLocal('regionAndSports');
   const sports = regionAndSports.sports;
+  const sportsEn = regionAndSports.sportsEn;
   const regionId = regionAndSports.regionId;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
 
   //match 받아오기
   useEffect(() => {
     console.log('get matches!!!');
-    const additionalUrl = `/${regionId}/${sports}`;
+    const additionalUrl = `/${regionId}/${sportsEn}`;
     dispatch(loadMatchThunk(additionalUrl));
   },[])
 
