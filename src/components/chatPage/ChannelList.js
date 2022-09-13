@@ -9,9 +9,11 @@ import styled from "styled-components";
 
 const ChannelList = () => {
   const [modalToggel, setModlaToggle] = useState(false);
-  const params = useParams().channel_id;
+  const params = useParams().match_id;
+  // const paramsRegion = useParams().region;
+  // const paramsSports = useParams().sports;
 
-  const [channels, setChannels] = useState([]);
+  const [matchs, setMatchs] = useState([]);
 
   const closeModal = () => {
     setModlaToggle(false);
@@ -23,10 +25,12 @@ const ChannelList = () => {
   useEffect(() => {
     console.log(sessionStorage.getItem("token"));
     // console.log("채널 정보 불러오기", params);
+    // // console.log("채널 정보 불러오기", params);
+    // ChatAPI.getChatRoom(paramsRegion,paramsSports)
     ChatAPI.getChatRoom()
       .then((res) => {
         // console.log("전체 채널 리스트: ", res.data);
-        setChannels(res.data);
+        setMatchs(res.data);
       })
       .catch((error) => {
         console.log("채널리스트 조회 실패", error);
@@ -35,30 +39,30 @@ const ChannelList = () => {
 
   return (
     <ChannelListWrapper>
-      {channels.map((channel) => (
+      {matchs.map((match) => (
         <div
-          key={channel.channel_id}
+          key={match.match_id}
           onClick={() => {
-            navigate(`/channel/${channel.channel_id}`);
+            navigate(`/chat/${match.match_id}`);
           }}
         >
-          <ChannelIcon>{channel.channelName[0]}</ChannelIcon>
+          <ChannelIcon>{match.matchName[0]}</ChannelIcon>
         </div>
       ))}
-      {/* <PlusIcon
+      <PlusIcon
         onClick={() => {
           setModlaToggle(true);
         }}
       >
         <FiPlus></FiPlus>
-      </PlusIcon> */}
+      </PlusIcon>
 
       <Modal visible={modalToggel} closeModal={closeModal}>
         <ChannelCreator
           visible={modalToggel}
           closeModal={closeModal}
-          channels={channels}
-          setChannels={setChannels}
+          matchs={matchs}
+          setMatchs={setMatchs}
         ></ChannelCreator>
       </Modal>
     </ChannelListWrapper>
@@ -86,7 +90,7 @@ const ChannelIcon = styled.div`
   align-items: center;
 
   border-radius: 10px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   color: white;
   cursor: pointer;

@@ -5,15 +5,17 @@ import styled from "styled-components";
 
 
 const ChannelCreator = ({ visible, closeModal, channels, setChannels }) => {
-  const [channelName, channelNameHandler, setChannelName] = useInput();
+  const [matchName, matchNameHandler, setMatchName] = useInput();
+  const [matchDate, matchDateHandler, setMatchDate] = useInput();
   const [description, descriptionHandler, setDescription] = useInput();
 
   const submitForm = {
-    channelName: channelName,
+    matchName: matchName,
+    matchDate: matchDate,
     description: description,
   };
   const onSubmit = async () => {
-    if (channelName === "" || description === "") {
+    if (matchName === "" || matchDate === ""|| description === "") {
       alert("빈칸없이 작성해주세요");
       return;
     } else {
@@ -27,14 +29,16 @@ const ChannelCreator = ({ visible, closeModal, channels, setChannels }) => {
         .catch((error) => {
           console.log("채널생성 실패", error);
         });
-      setChannelName("");
+      setMatchName("");
+      setMatchDate("");
       setDescription("");
       closeModal();
     }
   };
   useEffect(() => {
     // 모달 닫으면 값 초기화
-    setChannelName("");
+    setMatchName("");
+    setMatchDate("");
     setDescription("");
   }, [visible]);
 
@@ -42,16 +46,23 @@ const ChannelCreator = ({ visible, closeModal, channels, setChannels }) => {
     <ChannelCreatorWrapper>
       <TextBox>
         <Text fontSize={"24px"} fontWeight={"700"}>
-          새 채널을 생성하세요
+          새로운 매치를 생성하세요
         </Text>
       </TextBox>
       <ChannelInputBox>
-        <Text>채널 이름</Text>
+        <Text>매치 이름</Text>
         <ChannelInput
           type="text"
-          value={channelName}
-          onChange={channelNameHandler}
-          placeholder={"채널이름"}
+          value={matchName}
+          onChange={matchNameHandler}
+          placeholder={"매치 이름"}
+        />
+        <Text>날짜</Text>
+        <ChannelInput
+          type="text"
+          value={matchDate}
+          onChange={matchDateHandler}
+          placeholder={"매치 날짜"}
         />
         <Text>채널 설명</Text>
         <ChannelInput
@@ -62,7 +73,7 @@ const ChannelCreator = ({ visible, closeModal, channels, setChannels }) => {
         />
       </ChannelInputBox>
       <ButtonBox>
-        <SubmitButton onClick={onSubmit}>생성</SubmitButton>
+        <SubmitButton onClick={onSubmit}>게시하기</SubmitButton>
       </ButtonBox>
     </ChannelCreatorWrapper>
   );
@@ -77,6 +88,7 @@ const ChannelCreatorWrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 30px;
+  background-color: white;
 `;
 
 const TextBox = styled.div`
@@ -112,7 +124,7 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 10px;
   background-color: ${(props) => props.theme.palette.blue};
-  width: 65px;
+  width: 80px;
   height: 40px;
   color: white;
   font-size: 16px;

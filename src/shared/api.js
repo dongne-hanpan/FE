@@ -3,30 +3,30 @@ axios.defaults.withCredentials = true;
 
 const token = sessionStorage.getItem("token");
 const api = axios.create({
-  baseURL: "http://15.165.158.16/",
+  baseURL: "http://3.38.191.6",
 });
 
 export const apis = {
   //user
 
-  login: (id, pw) => api.post("/auth/login", { username: id, password: pw }),
+  login: (id, pw) => api.post("/api/auth/login", { username: id, password: pw }),
   logout: () =>
-    api.delete("auth/logout", {
+    api.delete("/api/auth/logout", {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     }),
   signup: (id, nickname, pw, pwcheck) =>
-    api.post("/auth/signup", {
+    api.post("/api/auth/signup", {
       username: id,
       nickname: nickname,
       password: pw,
       passwordCheck: pwcheck,
     }),
 
-  idcheck: (email) => api.get(`user/idCheck/${email}`),
+  idcheck: (username) => api.get(`user/username/${username}`),
 
-  nicknamecheck: (nickname) => api.get(`user/nicknameCheck/${nickname}`),
+  nicknamecheck: (nickname) => api.get(`user/nickname/${nickname}`),
 
   islogin: () =>
     api.get("/api/isLogin", {
@@ -45,14 +45,22 @@ export const apis = {
 
 export const ChatAPI = {
   // 채널 목록 조회
-  getChatRoom: () =>
-    api.get("/api/channel/list", {
+  // getChatRoom: (region, sports) =>
+  //   api.get(`/api/match/list/${region}/${sports}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+  //     },
+  //   }),
+    getChatRoom: () =>
+    api.get(`/api/match/list/1/bowling`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     }),
 
-  // 채널 추가하기
+
+
+  // 매치 추가하기
   addChatRoom: (room) =>
     api.post("/api/channel", room, {
       headers: {
@@ -61,23 +69,23 @@ export const ChatAPI = {
     }),
 
   // 채널 삭제하기
-  exitChatRoom: (channel_id) =>
-    api.delete(`/api/channel/exit/${channel_id}`, {
+  exitChatRoom: (match_id) =>
+    api.delete(`/api/match/delete/${match_id}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     }),
 
   // 채널 접속하기
-  enterRoom: (channel_id) =>
-    api.get(`/entry/${channel_id}`, {
+  enterRoom: (match_id) =>
+    api.get(`/entry/${match_id}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     }),
 
-  getUserList: (channel_id) =>
-    api.get(`/api/channel/userlist/${channel_id}`, {
+  getUserList: (match_id) =>
+    api.get(`/api/channel/userlist/${match_id}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
@@ -97,10 +105,10 @@ export const ChatAPI = {
     ),
 
   // 채팅 메세지 가져오기
-  // getMessage: (channel_id) =>
-  //   api.get(`/message/${channel_id}`, {
-  //     headers: {
-  //       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-  //     },
-  //   }),
+  getMessage: (match_id) =>
+    api.get(`/chat/message/${match_id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    }),
 };

@@ -8,9 +8,9 @@ const ChattingTitle = () => {
         <MatchDate>2022.08.29</MatchDate>
         <MatchTime> 12:00~13:00</MatchTime>
         <UserProfiles>
-          <ReuseProfile imgSrc={profile}></ReuseProfile>
-          <ReuseProfile imgSrc={profile}></ReuseProfile>
-          <ReuseProfile imgSrc={profile}></ReuseProfile>
+          <ReuseProfile imgSrc={profile}></ReuseProfile> <p>영동</p>
+          <ReuseProfile imgSrc={profile}></ReuseProfile> <p>영동</p>
+          <ReuseProfile imgSrc={profile}></ReuseProfile> <p>영동</p>
         </UserProfiles>
     </ChannelTitleWrapper>
   );
@@ -19,7 +19,7 @@ const ChattingTitle = () => {
 
 
 const ChannelTitleWrapper = styled.header`
-  width: 570px;
+  width: 790px;
   height: 110px;
   border-bottom: 0.1px solid grey;
   background-color: ${(props) => props.theme.palette.deep_blue};

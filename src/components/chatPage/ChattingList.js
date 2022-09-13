@@ -15,13 +15,13 @@ const ChattingList = () => {
   const username = window.localStorage.getItem("username");
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
-  const params = useParams().channel_id;
+  const params = useParams().match_id;
   const headers = {
     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
   };
 
   // 엔드포인트
-  let sock = new SockJS(`http://15.165.158.16/socket`);
+  let sock = new SockJS(`http://3.38.191.6/ws/chat`);
   let client = StompJS.over(sock);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ChattingList = () => {
   }, [params]);
 
   useEffect(() => {
-    axios.get(`http://15.165.158.16/entry/${params}`, headers).then((res) => {
+    axios.get(`http://3.38.191.6/api/match/enter/${params}`, headers).then((res) => {
       console.log("서버에 전체 채팅 목록 요청", res.data.list);
       setMessageList([...res.data.list]);
     });
@@ -53,7 +53,7 @@ const ChattingList = () => {
   const onConnected = () => {
     console.log("연결됨");
     client.subscribe(
-      `/sub/message/${params}`,
+      `/queue/match/${params}`,
       (message) => {
         // console.log("연결 성공?!", message);
         if (message.body) {
@@ -77,7 +77,7 @@ const ChattingList = () => {
 
   const sendMessage = () => {
     client.send(
-      `/pub/message/${params}`,
+      `/app/chat/${params}`,
       headers,
       JSON.stringify({
         // channel_Id: parseInt(params),

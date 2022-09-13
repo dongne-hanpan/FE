@@ -17,6 +17,7 @@ function App() {
           <Route path='/' element={<IndexPage />} />
           <Route path='/:sports' element={<SportsPage />} />
           <Route path='/chat' element={<ChatPage />} />
+          <Route path='/chat/:match_id' element={<ChatPage />} />
         </Routes>
         {/* <ModalTemplate /> */}
       </Router>

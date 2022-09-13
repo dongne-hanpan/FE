@@ -40,7 +40,7 @@ const ChannelHeaderWrapper = styled.header`
 `;
 
 const LogoutButton = styled.button`
-  width: 70px;
+  width: 80px;
   height: 40px;
   background-color: inherit;
   border: none;
