@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearModal, setModal } from '../../shared/redux_d/modules/modalSlice';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../y_reusable/ReuseWeather';
@@ -9,7 +9,7 @@ import ReuseReserved from '../y_reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';
-import sun from '../../asset/sun.png';
+import sun from '../../asset/weather/sunny.png';
 import profile from '../../asset/defaultprofile.jpg';
 
 // tmp
@@ -57,7 +57,7 @@ const Header = () => {
           {userData.username ? 
           <ReuseReserved matches={2} marginPx={2}/> : <></>
           }
-          <ReuseWeather imgSrc={sun} />
+          <ReuseWeather />
         </UserElse>
       </HeaderUserSection>
     </HeaderComp>
