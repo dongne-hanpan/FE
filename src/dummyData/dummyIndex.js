@@ -42,3 +42,18 @@ export const dummySports = [
   {sportsId: 4, sports: '탁구', sportsImage: pingpong},
   {sportsId: 5, sports: '달리기', sportsImage: running},
 ]
+export const sportsConverter = (sports) => {
+  if(sports === '볼링'){
+    return 'bowling';
+  } else if(sports === '테니스'){
+    return 'tennis';
+  } else if(sports === '배드민턴'){
+    return 'badminton';
+  } else if(sports === '풋살'){
+    return 'football';
+  } else if(sports === '탁구'){
+    return 'pingpong';
+  } else if(sports === '달리기'){
+    return 'run';
+  }
+}
