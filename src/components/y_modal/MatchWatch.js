@@ -1,42 +1,74 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
+import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseTemperature from '../y_reusable/ReuseTemperature';
-
-import you from '../../asset/profileYou.png'
 import ReuseBadge from '../y_reusable/ReuseBadge';
 
-const MatchWatch = () => {
+import you from '../../asset/profileYou.png'
 
+const MatchWatch = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const modalData = useSelector((state) => state.modal.modalData);
+  const copyPlaceDetail = async() => {
+    const placeDetail = modalData.matchPlaceDetail;
+    await navigator.clipboard.writeText(placeDetail);
+    alert('주소가 복사되었습니다');
+  }
+  const contactToHost = () => {
+    const applyData = {
+      matchId: null,
+      username: userData.username,
+      userLevel: userData.userLevel,
+      userTemperature: userData.userTemperature,
+    };
+    dispatch(contactMatchThunk(applyData));
+    dispatch(setDialogue({dialType: 'confirmApply'}));
+  };
   return(
     <ModalWatchComp>
       <MatchInfo>
-        <div>
-          <div className="matchDate">2022.08.27</div>
-          <div className="matchTime">11:00 (토)</div>
-          <div className="matchPlace">
-            <div className="place">한숲볼링센터<span className="placeIcon">i</span></div>
-            <div className='placeDetail'>서울 동작구 여의대방로 250 대림쇼핑타운 3층 309호 <span>복사하기</span></div>
-          </div>
-        </div>
-        <div className="matchHost">
-            <ReuseProfile imgSrc={you} content={'영 준'} imgSize={80} contentSize={'var(--font-16)'}/>
-            <ReuseBadge level={'초급'} />
-          </div>
+        <MatchDateTimePlace>
+          <MatchDay>{modalData.matchDay}</MatchDay>
+          <MatchTime>{modalData.matchTime}</MatchTime>
+          <MatchPlace>
+            <Place>{modalData.matchPlace}
+            <PlaceIcon>info
+              <PlaceDetail>{modalData.matchPlaceDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
+            </PlaceIcon>
+            </Place>
+          </MatchPlace>
+        </MatchDateTimePlace>
+        <MatchHost>
+            <ReuseProfile imgSrc={you} content={modalData.hostNickname} imgSize={80} contentSize={16}/>
+            <ReuseBadge bdgType={'rank'} content={modalData.hostLevel} />
+          </MatchHost>
       </MatchInfo>
-      <hr />
+      <SplitHoriz />
       <Matchadditional>
-        <div className="matchDesc">
-
-          <p>주말에 함께 볼링 치실 분들 찾습니다. 남녀 무관합니다.</p>
-        </div>
-        <ReuseTemperature tempType={'personal'} temp={69} />
+        <MatchDesc>
+          <MatchDescContent>{modalData.matchDesc}</MatchDescContent>
+        </MatchDesc>
+        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.hostTemp} />
       </Matchadditional>
 
       <MatchContact>
-        <div className='matchIntake'>모집 인원: <span>3</span>/4 명</div>
-        <ReuseBtn styleType={'stretch'} content={'연락하기'} />
+        <MatchIntake>
+          모집 인원: 
+          <MatchIntakeNum isFull={modalData.matchIntakeCnt === modalData.matchIntakeFull}>
+            {modalData.matchIntakeCnt}
+          </MatchIntakeNum>
+          /{modalData.matchIntakeFull} 명
+        </MatchIntake>
+        {
+          modalData.hostNickname !== userData.nickname ?
+          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={contactToHost} />
+          :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
+        }
       </MatchContact>
     </ModalWatchComp>
   )
@@ -50,11 +82,6 @@ const ModalWatchComp = styled.section`
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
-  & hr{
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 30px;
-  }
 `
 
 const MatchInfo = styled.div`
@@ -63,41 +90,70 @@ const MatchInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  .matchDate{
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: var(--font-40);
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`
+const MatchHost = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`
+const MatchDateTimePlace = styled.div`
+`
+const MatchDay = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: ${({theme}) => theme.fontSize.font_40};
+`
+const MatchTime = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: ${({theme}) => theme.fontSize.font_26};
+`
+const MatchPlace = styled.div`
+  width: 100%;
+  display: flex;
+  font-size: ${({theme}) => theme.fontSize.font_32};
+`
+const Place = styled.div`
+`
+const PlaceIcon = styled.span`
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 2rem;
+  margin-left: 7px;
+  background-color: ${({theme}) => theme.colors.background_light};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const PlaceDetail = styled.div`
+  position: absolute;
+  top: -2px;
+  left: 0px;
+  width: 200px;
+  min-height: 40px;
+  display: none;
+  padding: 10px;
+  border-radius: 0.5rem;
+  background-color: ${({theme}) => theme.colors.background_light};
+  ${PlaceIcon}:hover &{
+    display: inline;
+    font-size: ${({theme}) => theme.fontSize.font_12};
   }
-  .matchTime{
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: var(--font-26);
-  }
-  .matchPlace{
-    width: 100%;
-    display: flex;
-    font-size: var(--font-32);
-    .placeIcon{
-      margin-left: 14px;
-      font-size: var(--font-12);
-      cursor: pointer;
-    }
-    .placeDetail{
-      display: none;
-    }
-    .placeIcon:hover .placeDetail{
-      display: flex;
-      font-size: var(--font-14);
-    }
-  }
-  .matchHost{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-  }
+`
+const CopyBtn = styled.span`
+  margin: 0px 6px;
+  color: ${({theme}) => theme.colors.core};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  cursor: pointer;
+`
+const SplitHoriz = styled.hr`
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 30px;
 `
 const Matchadditional = styled.div`
   width: 100%;
@@ -105,31 +161,35 @@ const Matchadditional = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 40px;
-  .matchDesc{
-    width: 240px;
-    padding: 10px 0px;
-    background-color: var(--color-background-light);
-    border-radius: 1rem;
+`
+const MatchDesc = styled.div`
+  width: 240px;
+  padding: 10px 0px;
+  background-color: ${({theme}) => theme.colors.background_light};
+  border-radius: 1rem;
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
+  &:hover{
+    filter: drop-shadow(4px 2px 1px ${({theme}) => theme.colors.gray});
+    transition: all 0.4s ease-in-out;
   }
-  & p{
-    font-size: var(--font-14);
-    padding: 0px 20px;
-    line-height: 20px;
-  }
+`
+const MatchDescContent = styled.p`
+  font-size: ${({theme}) => theme.fontSize.font_14};
+  padding: 0px 20px;
+  line-height: 20px;
 `
 const MatchContact = styled.div`
   width: 100%;
   display: flex;
-  .matchIntake{
-    width: 400px;
-    display: flex;
-    align-items: center;
-    font-size: var(--font-18);
-    font-weight: 700;
-    & span{
-      margin-left: 10px;
-      color: var(--color-gray);
-    }
-  }
-
+`
+const MatchIntake = styled.div`
+  width: 400px;
+  display: flex;
+  align-items: center;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`
+const MatchIntakeNum = styled.span`
+  margin-left: 10px;
+  color: ${({isFull, theme}) => isFull ? theme.colors.black : theme.colors.gray};
 `

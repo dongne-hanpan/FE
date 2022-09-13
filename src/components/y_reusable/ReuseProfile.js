@@ -1,11 +1,17 @@
 import React from 'react';
-import styled,{ css } from 'styled-components';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setModal } from '../../shared/redux_d/modules/modalSlice';
 
 
-const ReuseProfile = ({imgSize, imgSrc, clickEvent, content, contentSize}) => {
+const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
+  const dispatch = useDispatch()
+  const showUserDetail = () => {
+    dispatch(setModal({modalType: 'userWatch'}))
+  }
   return(
-    <ProfileComp imgSize={imgSize} onClick={clickEvent}>
-      <img src={imgSrc} alt='profile' />
+    <ProfileComp direc={direc} onClick={clickEvent ? clickEvent: showUserDetail}>
+      <Profile imgSize={imgSize} src={imgSrc} alt='profile' />
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>
       : <></>
@@ -18,44 +24,24 @@ export default ReuseProfile;
 
 
 const ProfileComp = styled.button`
-  min-width: 40px;
-  max-width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0px 10px;
   border: none;
   outline: none;
   cursor: pointer;
   background-color: transparent;
-  & img{
-    border-radius: 5rem;
-    ${({imgSize}) =>
-    imgSize ? 
-    css`
-      width: ${imgSize}px;
-      height: ${imgSize}px;
-      margin-bottom: 20px;
-      `:
-      css`
-        width: 40px;
-        height: 40px;
-        margin-bottom: 4px;
-      `
-    }
-  }
+  margin-right: ${({direc}) => direc === 'horiz' ? 8:0}px;
+  margin-bottom: ${({direc}) => direc === 'vertic' ? 6:0}px;
 `
-
+const Profile = styled.img`
+  border-radius: 10rem;
+  width: ${({imgSize}) => imgSize ? imgSize : 40}px;
+  height: ${({imgSize}) => imgSize ? imgSize : 40}px;
+`
 const ProfileContent = styled.div`
-  ${({contentSize}) => contentSize ? 
-  css`
-    font-size: ${contentSize};
-    font-weight: 700;
-  `:
-  css`
-    font-size: var(--font-12);
-    font-weight: 500;
-  `
-  }
+  margin-top: ${({contentSize, theme}) => contentSize ? (contentSize - parseInt(contentSize/3)) : 4}px;
+  font-size: ${({contentSize, theme}) => contentSize ? contentSize+'px' : theme.fontSize.font_12};
+  font-weight: ${({contentSize, theme}) => contentSize ? theme.fontWeight.bold : theme.fontWeight.medium};
 `

@@ -1,41 +1,64 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import MatchCard from '../components/sportsPage/MatchCard';
-
-// tmp
-import sun from '../asset/sun.png';
-import you from '../asset/profileYou.png';
-import ReuseRank from '../components/y_reusable/ReuseRank';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
 
+// tmp
+import you from '../asset/profileYou.png';
+import dummyMatch from '../dummyData/dummyMatch';
+import { dummySports } from '../dummyData/dummyIndex';
+
+
 const SportsPage = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const sports = userData.sports;
+  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+
+  const doMatchWrite = () => {
+    if(userData.username){
+      console.log('write!!');
+      dispatch(setModal({modalType: 'matchWrite'}))
+    }else{
+      dispatch(setDialogue({dialType: 'confirmLogin'}))
+    }
+  }
+  const filtering = () => {
+    console.log('나중에 구현할 필터링')
+  }
   return(
     <MainPage>
       <SportsAndRank>
-        <ReuseProfile imgSrc={sun} imgSize={'220'} />
-        <article>
-          <ReuseTemperature tempType={'rank'} userProfile={you} username={'성 원'} temp={69}/>
-          <div className="rankSection">
-            <ReuseRank type={'avg'} content={'85'} userProfile={you} username={'성 원'}/>
-            <ReuseRank type={'cnt'} content={'69'} userProfile={you} username={'성 원'}/>
-          </div>
-        </article>
+        <SportsImg src={matchsports.sportsImage} alt={sports} />
+        {/* <RankArticle>
+          <ReuseTemperature type={'rank'} type2={'score'} userProfile={you} username={'영 동'} data={85}/>
+          <ReuseTemperature type={'rank'} type2={'count'} userProfile={you} username={'성 원'} data={10}/>
+          <ReuseTemperature type={'rank'} type2={'temper'} userProfile={you} username={'동 윤'} data={69}/>
+        </RankArticle> */}
       </SportsAndRank>
 
       <MatchContainer>
         <MatchContainerHeader>
-          <span>동네 한 판?</span>
-          <div>profile 컨테이너</div>
+          <MatchContainerHeaderTitle>{sports}, 동네 한 판?</MatchContainerHeaderTitle>
+          <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <CircleBtns>
-          <button><div>필</div></button>
-          <button><div>+</div></button>
+          <CircleBtn onClick={filtering}>
+            <CircleBtnContent>필</CircleBtnContent>
+          </CircleBtn>
+          <CircleBtn onClick={doMatchWrite}>
+            <CircleBtnContent>+</CircleBtnContent>
+          </CircleBtn>
         </CircleBtns>
-        <ul>
-          <MatchCard />
-          <MatchCard />
-        </ul>
+        <MatchContainerBody>
+          {dummyMatch? dummyMatch.map((each) => 
+            <MatchCard key={each.id} data={each} />
+          ):<></>}
+        </MatchContainerBody>
       </MatchContainer>
     </MainPage>
   )
@@ -44,30 +67,31 @@ const SportsPage = () => {
 export default SportsPage;
 
 const MainPage = styled.main`
-  // width: 100vw;
-  height: 90vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  & ul{
-    padding: 0px;
+  padding-top: 30px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 const SportsAndRank = styled.section`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  // justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
-  & article{
-    display: flex;
-  }
-  .rankSection{
-    height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-left: 10px;
-  }
+`
+const SportsImg = styled.img`
+  width: 200px;
+  height: auto;
+  border-radius: 2rem 1rem 1rem 0rem;
+`
+const RankArticle = styled.article`
+  display: flex;
 `
 const MatchContainer = styled.section`
   width: 700px;
@@ -80,33 +104,33 @@ const MatchContainerHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  & span{
-    font-size: var(--font-32);
-    font-weight: 700;
-  }
-  & div{
-    display: flex;
-  }
 `
-
+const MatchContainerHeaderTitle = styled.h2`
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`
+const MatchContainerHeaderUsers = styled.div`
+  display: flex;
+`
+const MatchContainerBody = styled.ul`
+  padding: 0px;
+`
 const CircleBtns = styled.div`
   position: absolute;
   right: -60px;
   top: 70px;
-  & button{
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    border-radius: 2rem;
-    background-color: var(--color-skyblue);
-    & div{
-      font-size: var(--font-20);
-      font-weight: 700;
-    }
-  }
 `
-
-
+const CircleBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 2rem;
+  background-color: ${({theme}) => theme.colors.skyblue};
+`
+const CircleBtnContent = styled.div`
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`

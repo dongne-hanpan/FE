@@ -4,29 +4,49 @@ import Progress from '../sportsPage/Progress';
 import ReuseProfile from './ReuseProfile';
 
 
-const ReuseTemperature = ({tempType,username, userProfile, temp}) => {
-  return(
-
-
-    <TemperatureComp tempType={tempType}>
-      {tempType === 'rank' ? 
-      <div className="rankName">동네 한판 <br/> 매너 왕</div>
-      : 
-      <div className="rankName">매너 온도</div>
+const ReuseTemperature = ({type, type2, data, userProfile, username}) => {
+  const titleRouter = () => {
+    if(type === 'rank'){
+      if(type2 === 'score'){
+        return `우리 동네 점수 왕`
+      } else if(type2 === 'count'){
+        return `우리 동네 매치 왕`
+      } else if(type2 === 'temper'){
+        return `우리 동네 매너 왕`
       }
-      <Progress data={temp} />
-      <div className="rankInfo">
-        {userProfile ? 
-        <ReuseProfile imgSrc={userProfile} content={username}/>
-        :<></>
-        }
-        <div className="temperture">{temp} 도</div>
-      </div>
+    } else if (type === 'personal'){
+      if(type2 === 'score'){
+        return `평균 점수`
+      } else if(type2 === 'count'){
+        return `매치 수`
+      } else if(type2 === 'temper'){
+        return `매너 온도`
+      }
+    }
+  }
+  const unitRouter = () => {
+      if(type2 === 'score'){
+        return `점`
+      } else if(type2 === 'count'){
+        return `회`
+      } else if(type2 === 'temper'){
+        return `도`
+      }
+  }
+  return(
+    <TemperatureComp type={type}>
+      <RankName>{titleRouter()}</RankName>
+      <Progress data={data} />
+      <RankInfo>
+        {userProfile ? <ReuseProfile imgSrc={userProfile} content={username} />: <></>}
+        <Temperture type={type}>{data}{unitRouter()}</Temperture>
+      </RankInfo>
     </TemperatureComp>
   )
-}
+};
 
 export default ReuseTemperature;
+
 
 const TemperatureComp = styled.div`
   position: relative;
@@ -36,27 +56,28 @@ const TemperatureComp = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: ${({tempType}) => tempType === 'rank' ? '10px 20px' :'20px'};
+  padding: ${({type}) => type === 'rank' ? '10px 20px' :'20px'};
+  margin-left: 6px;
   border-radius: 1rem;
-  background-color: var(--color-background-light);
-  filter: drop-shadow(0px 0px 0px var(--color-gray));
-  .rankName{
-    font-size: var(--font-16);
-    font-weight: 500;
-    text-align: center;
-    margin-bottom: 4px;
-  }
-  .rankInfo{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .temperture{
-      font-size: ${({tempType}) => tempType === 'rank' ? 'var(--font-14)' :'var(--font-16)'};
-      font-weight: 500;
-    }
-  }
+  background-color: ${({theme}) => theme.colors.background_light};
+  filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
   &:hover{
-    filter: drop-shadow(4px 2px 1px var(--color-gray));
+    filter: drop-shadow(4px 2px 1px ${({theme}) => theme.colors.gray});
     transition: all 0.4s ease-in-out;
   }
+`
+const RankName = styled.div`
+  font-size: ${({theme}) => theme.fontSize.font_14};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+  text-align: center;
+  margin-bottom: 4px;
+`
+const RankInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const Temperture = styled.div`
+  font-size: ${({type, theme}) => type === 'rank' ? theme.fontSize.font_14 : theme.fontSize.font_16};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
 `

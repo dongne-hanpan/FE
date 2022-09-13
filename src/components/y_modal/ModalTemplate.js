@@ -1,26 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearModal, setDialogue } from '../../shared/redux_d/modules/modalSlice';
 import ReuseBtn from '../y_reusable/ReuseBtn';
-import Deco from './Deco';
+import Deco from '../univ/Deco';
 import Login from '../y_login/Login';
 import Signup from '../y_login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
+import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {
+  const dispatch = useDispatch();
+  const modalData = useSelector((state) => state.modal.modalData);
+  const removeModal = (e) => {
+    if(e.target.ariaLabel === 'modalToggle'){
+      if(modalData.modalType === 'matchWrite'){
+        dispatch(setDialogue({dialType: 'confirmRemove'}));
+      } else{
+        dispatch(clearModal());
+      }
+    }
+  }
+
+  const modalRouter = () => {
+    if(modalData.modalType === 'login'){
+      return <Login />
+    } else if(modalData.modalType === 'signup'){
+      return <Signup />
+    } else if(modalData.modalType === 'matchWrite'){
+      return <MatchWrite />
+    } else if(modalData.modalType === 'matchWatch'){
+      return <MatchWatch />
+    } else if(modalData.modalType === 'userWatch'){
+      return <UserWatch />
+    } 
+  }
 
   return(
-    <ModalComp>
+    <ModalComp aria-label='modalToggle' onClick={removeModal}>
       <ModalOutBtn>
-        <ReuseBtn content={'X'} />
+        <ReuseBtn name={'modalToggle'} styleType={'shrink'} content={'X'} clickEvent={removeModal} />
       </ModalOutBtn>
       <ModalSection>
         <Deco />
-        {/* <Signup /> */}
-        {/* <Login /> */}
-        {/* <MatchWrite /> */}
-        <MatchWatch />
+        {modalRouter()}
       </ModalSection>
     </ModalComp>
   )
@@ -39,7 +64,7 @@ const ModalComp = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-dark);
+  background-color: ${({theme}) => theme.colors.dark};
 `
 const ModalOutBtn = styled.div`
   position: absolute;
@@ -55,5 +80,5 @@ const ModalSection = styled.div`
   align-items: center;
   padding: 20px;
   border-radius: 1rem;
-  background-color: var(--color-background);
+  background-color: ${({theme}) => theme.colors.background};
 `

@@ -1,27 +1,56 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../y_reusable/ReuseBtn';
 import ReuseInput from '../y_reusable/ReuseInput';
 import ReuseTextarea from '../y_reusable/ReuseTextarea';
-
+import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
+import { makeMatchThunk } from '../../shared/redux_d/modules/matchSlice';
 //temp
-const dummyOptionValues = [
-  { value:'장소 선택', address: "default" },
-  { value:'한숲볼링센터', address: "서울 동작구 여의대방로 250 대림쇼핑타운 3층 309호" },
-  { value:'성대볼링센타', address: "서울 동작구 상도로 102 성대시장 3층" },
-  { value:'보라매볼링장', address: "서울 동작구 보라매로5가길 16 아카데미 타워 7층" }
-]
+import dummyOptionValues from '../../dummyData/dummyOptionValues';
+
 
 const MatchWrite = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
   const matchDateRef = useRef(null);
+  const matchDescRef = useRef(null);
+  const [place, setPlace] = useState(null);
+  //이전 날짜 불가능하게 만들기
   useEffect(() => {
     matchDateRef.current.min = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
     .toISOString()
     .slice(0, -8);
   },[]);
+
   const selectChangeHandler = (e) => {
-    console.log(e.target.value)
+    setPlace(e.target.value);
   }
+  const makeMatch = () => {
+    const matchDateValue = matchDateRef.current.value.split('T');
+    if(!matchDateValue){
+      console.log('날짜를 선택해주세요');
+      return
+    }
+    if(!place){
+      console.log('장소를 선택해주세요');
+      return
+    }
+    const matchDay = matchDateValue[0];
+    const matchTime = matchDateValue[1];
+
+    const matchMakeData = {
+      matchDay: matchDay,
+      matchTime: matchTime,
+      matchPlace: place,
+      contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
+      writer: userData.username
+    }
+    dispatch(makeMatchThunk(matchMakeData));
+    dispatch(setDialogue({dialType: 'confirmWrite'}))
+  }
+  // const getMatches = () => {
+  // }
 
   return(
     <ModalWriteComp>
@@ -34,28 +63,22 @@ const MatchWrite = () => {
         <InputTitle>장소</InputTitle>
       </InputTitleBox>
       <PlaceSection>
-        <select className="selectBox" onChange={selectChangeHandler}>
+        <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
           {dummyOptionValues.map((each) => 
-            each.address === 'default' ?
-            <option key={each.value} value={each.value} disabled>
+            <PlaceOption key={each.value} value={each.value} address={each.address}>
               {each.value}
-            </option>
-              :
-            <option key={each.value} value={each.value}>
-              {each.value}
-            </option>
+            </PlaceOption>
           )}
-        </select>
-        <div className='map'>
+        </PlaceSelect>
+        <PlaceMap>
           <div>네이버 지도</div>
-        </div>
+        </PlaceMap>
       </PlaceSection>
       <InputTitleBox>
         <InputTitle>하고싶은 말</InputTitle>
       </InputTitleBox>
-      <ReuseTextarea height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
-
-      <ReuseBtn styleType={'stretch'} content={'게시하기'} />
+      <ReuseTextarea injRef={matchDescRef} height={100} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
+      <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
   )
 };
@@ -77,8 +100,8 @@ const InputTitleBox = styled.div`
   margin-bottom: 10px;
 `
 const InputTitle = styled.div`
-  font-size: var(--font-18);
-  font-weight: 500;
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
   & span{
     display: none;
   }
@@ -90,28 +113,30 @@ const PlaceSection = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-bottom: 10px;
-  & select{
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    height: 40px;
-    padding: 0px 10px;
-    border: none;
-    border-radius: 0.5rem;
-    & option{
-      height: 40px;
-      padding: 0px 20px;
-    }
-  }
-  .map{
-    width: 100%;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--color-skyblue);
-    border-radius: 0.5rem;
-    margin-bottom: 14px;
-  }
+`
+const PlaceSelect = styled.select`
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  height: 40px;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 0.5rem;
+`
+const PlaceOption = styled.option.attrs(({address}) => ({
+    disabled : address === 'default' ? true : false,
+  }))`
+  height: 40px;
+  padding: 0px 20px;
+`
+const PlaceMap = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({theme}) => theme.colors.skyblue};
+  border-radius: 0.5rem;
+  margin-bottom: 14px;
 `
