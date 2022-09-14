@@ -13,7 +13,8 @@ export default ReuseTextarea;
 const TextareaComp = styled.textarea`
   width: 100%;
   height: ${({height}) => height || 80}px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   margin-bottom: 14px;
   border-radius: 0.5rem;
+  background-color: ${({theme}) => theme.colors.background_light};
 `
