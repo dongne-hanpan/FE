@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ReuseBtn from '../components/y_reusable/ReuseBtn';
+import { setLocal } from '../shared/axios_d/local';
 
 //temp
-import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
-import { addRegionAndSports } from '../shared/redux_d/modules/userSlice';
+import { dummyRegion, dummySports, sportsConverter } from '../dummyData/dummyIndex';
 
 
 const IndexPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [region, setRegion] = useState(null);
   const [sports, setSports] = useState(null);
   const [hoverSports, setHoverSports] = useState(null);
 
   const selectChangeHandler = (e) => {
-    setRegion(e.target.value);
+    const regionArray = e.target.value.split(',');
+    const regionId = regionArray[0];
+    const selectRegion = regionArray[1];
+    setRegion([regionId, selectRegion]);
   };
   const selectSports = (e) => {
     const closeBtn = e.target.closest('button');
@@ -38,20 +39,24 @@ const IndexPage = () => {
       alert('스포츠를 선택해주세요');
       return
     }
+    const sportsEn = sportsConverter(sports);
     const regionAndSports = {
-      region: region,
-      sports: sports
+      regionId: region[0],
+      region: region[1],
+      sports: sports,
+      sportsEn: sportsEn
     }
-    dispatch(addRegionAndSports(regionAndSports));
-    navigate(`/${region}/${sports}`);
+    //새로고침 버그 해결 위해 localstorage에 저장
+    setLocal('regionAndSports', regionAndSports);
+    navigate(`/${region[1]}/${sports}`);
   }
   return (
     <IndexComp>
       <RegionComp>
-        <RegionDropbox region={region} onChange={selectChangeHandler}>
+        <RegionDropbox region={region? region[1]: null} onChange={selectChangeHandler}>
           <RegionOption>지역을 선택하세요</RegionOption>
           {dummyRegion.map((each) => 
-            <RegionOption key={each.regionId}>{each.region}</RegionOption>
+            <RegionOption key={each.regionId} value={[each.regionId,each.region]}>{each.region}</RegionOption>
           )}
         </RegionDropbox>
       </RegionComp>

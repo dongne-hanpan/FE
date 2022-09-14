@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
-import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import MatchCard from '../components/sportsPage/MatchCard';
 import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
+import { loadMatchThunk } from '../shared/redux_d/modules/matchSlice';
 
 // tmp
-import you from '../asset/profileYou.png';
 import dummyMatch from '../dummyData/dummyMatch';
 import { dummySports } from '../dummyData/dummyIndex';
-
+import { getLocal } from '../shared/axios_d/local';
 
 const SportsPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const sports = userData.sports;
+  const regionAndSports = getLocal('regionAndSports');
+  const sports = regionAndSports.sports;
+  const sportsEn = regionAndSports.sportsEn;
+  const regionId = regionAndSports.regionId;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+
+  //match 받아오기
+  useEffect(() => {
+    console.log('get matches!!!');
+    const additionalUrl = `/${regionId}/${sportsEn}`;
+    dispatch(loadMatchThunk(additionalUrl));
+  },[])
 
   const doMatchWrite = () => {
     if(userData.username){
