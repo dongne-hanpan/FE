@@ -29,7 +29,7 @@ const ChannelList = () => {
     // ChatAPI.getChatRoom(paramsRegion,paramsSports)
     ChatAPI.getChatRoom()
       .then((res) => {
-        // console.log("전체 채널 리스트: ", res.data);
+        console.log("전체 채널 리스트: ", res.data);
         setMatchs(res.data);
       })
       .catch((error) => {
@@ -46,7 +46,7 @@ const ChannelList = () => {
             navigate(`/chat/${match.match_id}`);
           }}
         >
-          <ChannelIcon>{match.matchName[0]}</ChannelIcon>
+          <ChannelIcon>{match.place[0]}</ChannelIcon>
         </div>
       ))}
       <PlusIcon
@@ -94,7 +94,7 @@ const ChannelIcon = styled.div`
   font-weight: 700;
   color: white;
   cursor: pointer;
-  background-color: ${(props) => props.theme.palette.dark_grey};
+  background-color: "#8ACCE4";
 `;
 const PlusIcon = styled(ChannelIcon)`
   font-size: 32px;

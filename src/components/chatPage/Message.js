@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const Message = ({ message, nickname, myMessage }) => {
+const Message = ({ message, sender, myMessage }) => {
   return (
     <MessageLayout myMessage={myMessage}>
       <MessageWrapper>
-        <Nickname>{nickname}</Nickname>
+        <Sender>{sender}</Sender>
         <MessageText>{message}</MessageText>
       </MessageWrapper>
     </MessageLayout>
@@ -29,9 +29,9 @@ const MessageWrapper = styled.div`
   gap: 8px;
 `;
 
-const Nickname = styled.span`
+const Sender = styled.span`
   font-size: 16px;
-  color: ${(props) => props.theme.palette.purple};
+  color: "#ffcf91";
 `;
 const MessageText = styled.span`
   font-size: 12px;

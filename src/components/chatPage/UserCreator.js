@@ -6,9 +6,9 @@ import { useParams } from "react-router";
 
 const UserCreator = ({ visible, closeModal, userData, setUserData }) => {
   const [username, usernameHandler, setUsername] = useInput();
-  const params = useParams().channel_id;
+  const params = useParams().match_id;
   const submitForm = {
-    channel_id: params, // Router연결 후 Params로 수정
+    match_id: params, // Router연결 후 Params로 수정
     username: username,
   };
   const onSubmit = async () => {
@@ -43,12 +43,12 @@ const UserCreator = ({ visible, closeModal, userData, setUserData }) => {
         </Text>
       </TextBox>
       <ChannelInputBox>
-        <Text>추가할 이메일</Text>
+        <Text>초대할 유저</Text>
         <ChannelInput
           type="text"
           value={username}
           onChange={usernameHandler}
-          placeholder={"초대할 유저 이메일"}
+          placeholder={"초대할 유저 아이디"}
         />
       </ChannelInputBox>
       <ButtonBox>
@@ -74,8 +74,8 @@ const TextBox = styled.div`
   flex-direction: column;
 `;
 const Text = styled.span`
-  font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
-  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : "500")};
+  font-size: 16px;
+  font-weight: 500;
 `;
 
 const ChannelInputBox = styled.div`
@@ -89,7 +89,7 @@ const ChannelInput = styled.input`
   width: 100%;
   height: 30px;
   :focus {
-    outline-color: ${(props) => props.theme.palette.purple};
+    outline-color: "#ffa2a2";
   }
 `;
 
@@ -101,7 +101,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   border: none;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.palette.purple};
+  background-color: "#ffa2a2";
   width: 65px;
   height: 40px;
   color: white;

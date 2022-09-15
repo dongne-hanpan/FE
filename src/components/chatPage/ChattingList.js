@@ -10,14 +10,16 @@ import SockJS from "sockjs-client";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Message from "./Message";
+import { getCookie } from "../../shared/axios_d/cookie";
 
 const ChattingList = () => {
-  const username = window.localStorage.getItem("username");
+  const sender = window.localStorage.getItem("sender");
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const params = useParams().match_id;
   const headers = {
-    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    Authorization: `Bearer ${getCookie("mytoken")}`,
   };
 
   // 엔드포인트
@@ -37,15 +39,15 @@ const ChattingList = () => {
   }, [params]);
 
   useEffect(() => {
-    axios.get(`http://3.38.191.6/api/match/enter/${params}`, headers).then((res) => {
-      console.log("서버에 전체 채팅 목록 요청", res.data.list);
-      setMessageList([...res.data.list]);
+    axios.get(`http://3.38.191.6/chat/message/${params}`, headers).then((res) => {
+      console.log("서버에 전체 채팅 목록 요청", res.data);
+      setMessageList([...res.data]);
     });
   }, []);
 
   const connect = () => {
     client.connect(headers, onConnected, onError);
-    console.log("채팅방 연결");
+    // console.log("채팅방 연결");
   };
 
   // console.log("채팅 데이터 리스트", messageList);
@@ -80,7 +82,8 @@ const ChattingList = () => {
       `/app/chat/${params}`,
       headers,
       JSON.stringify({
-        // channel_Id: parseInt(params),
+        match_id: parseInt(params),
+        // user_id: "test1234",
         message: message,
       })
     );
@@ -90,12 +93,12 @@ const ChattingList = () => {
   return (
     <ChattingListWrapper>
       <MessageListWrapper>
-        {messageList.map((message, index) => (
+        {messageList.slice(0).reverse().map((message, params) => (
           <Message
-            key={index}
+            key={params}
             message={message.message}
-            nickname={message.nickname}
-            myMessage={message.username === username ? true : false}
+            sender={message.sender}
+            myMessage={message.sender === sender ? true : false}
           />
         ))}
       </MessageListWrapper>
@@ -157,7 +160,7 @@ const InputBox = styled.textarea`
   resize: none;
   :focus {
     outline: none;
-    outline-color: ${(props) => props.theme.palette.blue};
+    outline-color:  "#8ACCE4";
   }
 `;
 

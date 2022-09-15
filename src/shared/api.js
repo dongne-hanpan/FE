@@ -1,3 +1,4 @@
+import { getCookie } from "./axios_d/cookie";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
@@ -13,7 +14,8 @@ export const apis = {
   logout: () =>
     api.delete("/api/auth/logout", {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
   signup: (id, nickname, pw, pwcheck) =>
@@ -31,14 +33,16 @@ export const apis = {
   islogin: () =>
     api.get("/api/isLogin", {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
   getAllUser: () =>
     api.get("/api/users", {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 };
@@ -54,7 +58,8 @@ export const ChatAPI = {
     getChatRoom: () =>
     api.get(`/api/match/list/1/bowling`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
@@ -64,7 +69,8 @@ export const ChatAPI = {
   addChatRoom: (room) =>
     api.post("/api/channel", room, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
@@ -72,7 +78,8 @@ export const ChatAPI = {
   exitChatRoom: (match_id) =>
     api.delete(`/api/match/delete/${match_id}`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
@@ -80,14 +87,16 @@ export const ChatAPI = {
   enterRoom: (match_id) =>
     api.get(`/entry/${match_id}`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
   getUserList: (match_id) =>
     api.get(`/api/channel/userlist/${match_id}`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 
@@ -99,7 +108,8 @@ export const ChatAPI = {
       form,
       {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${getCookie("mytoken")}`,
         },
       }
     ),
@@ -108,7 +118,8 @@ export const ChatAPI = {
   getMessage: (match_id) =>
     api.get(`/chat/message/${match_id}`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${getCookie("mytoken")}`,
       },
     }),
 };

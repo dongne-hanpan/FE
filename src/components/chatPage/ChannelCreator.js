@@ -96,8 +96,8 @@ const TextBox = styled.div`
   flex-direction: column;
 `;
 const Text = styled.span`
-  font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
-  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : "500")};
+  font-size: 16px;
+  font-weight: 500;
 `;
 
 const ChannelInputBox = styled.div`
@@ -111,7 +111,7 @@ const ChannelInput = styled.input`
   width: 100%;
   height: 30px;
   :focus {
-    outline-color: ${(props) => props.theme.palette.blue};
+    outline-color: "#8ACCE4";
   }
 `;
 
@@ -123,7 +123,7 @@ const ButtonBox = styled.div`
 const SubmitButton = styled.button`
   border: none;
   border-radius: 10px;
-  background-color: ${(props) => props.theme.palette.blue};
+  background-color: "#8ACCE4";
   width: 80px;
   height: 40px;
   color: white;

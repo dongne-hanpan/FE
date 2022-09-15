@@ -39,7 +39,7 @@ const MainPageWrapper = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.palette.ibory};
+  background-color: "#0FFFCF1";
   position:relative;
   left:33%;
 `;
@@ -55,7 +55,7 @@ const MenuWrapper = styled.div`
   height: 100%;
   border-right: 0.1px solid grey;
   display: flex;
-  background-color: ${(props) => props.theme.palette.blue};
+  background-color: "#8ACCE4";
 `;
 const ChattingWrapper = styled.div`
   width: 100%;

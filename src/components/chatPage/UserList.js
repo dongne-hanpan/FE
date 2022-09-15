@@ -10,7 +10,8 @@ import styled from "styled-components";
 
 const UserList = () => {
   const [modalToggel, setModlaToggle] = useState(false);
-  const params = useParams().channel_id;
+  const params = useParams().match_id;
+  const [matchs, setMatchs] = useState([]);
   const navigate = useNavigate();
   const closeModal = () => {
     setModlaToggle(false);
@@ -29,16 +30,16 @@ const UserList = () => {
       });
   };
 
-  // [GET] /api/users/{channel_id}
+  // [GET] /api/users/{match_id}
   useEffect(() => {
     // params 있을때만 유저데이터 가져오기
     if (params) {
-      ChatAPI.getUserList(params)
+      ChatAPI.getChatRoom(params)
         .then((res) => {
           setUserData(res.data);
         })
         .catch((error) => {
-          console.log("유저리스트 조회 실패", error);
+          console.log("채팅방 리스트 조회 실패", error);
         });
     }
   }, [params]);
@@ -46,9 +47,21 @@ const UserList = () => {
   return (
     <UserListWrapper>
       <ChannelInfo>
-        유저 목록
+        채팅방 목록
         <FiLogOut onClick={exitChannel} />
       </ChannelInfo>
+      <ChannelListWrapper>
+      {matchs.map((match) => (
+        <div
+          key={match.match_id}
+          onClick={() => {
+            navigate(`/chat/${match.match_id}`);
+          }}
+        >
+          <ChannelIcon>{match.place[0]}</ChannelIcon>
+        </div>
+      ))}
+      </ChannelListWrapper>
       {userData.map((user) => (
         <UserContainer key={user.username}>
           <UserProfileImageBox>
@@ -59,7 +72,7 @@ const UserList = () => {
           {user.username}
         </UserContainer>
       ))}
-      <UserContainer>
+      {/* <UserContainer>
         <PlusIconBox
           onClick={() => {
             setModlaToggle(true);
@@ -76,7 +89,7 @@ const UserList = () => {
           userData={userData}
           setUserData={setUserData}
         ></UserCreator>
-      </Modal>
+      </Modal> */}
     </UserListWrapper>
   );
 };
@@ -90,6 +103,24 @@ const UserListWrapper = styled.section`
   flex-direction: column;
   gap: 5px;
 `;
+const ChannelListWrapper = styled.section`
+
+`;
+
+const ChannelIcon = styled.div`
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  background-color: "#8ACCE4";
+`;
 const ChannelInfo = styled.div`
   width: 100%;
   height: 60px;
@@ -99,8 +130,9 @@ const ChannelInfo = styled.div`
   padding: 15px;
   border-bottom: 0.1px solid grey;
   color: white;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
+  background-color: #8ACCE4;
 `;
 const UserContainer = styled.div`
   width: 100%;
@@ -111,6 +143,7 @@ const UserContainer = styled.div`
   align-items: center;
   font-size: 18px;
   color: white;
+  background-color: #8ACCE4;
 `;
 
 const UserProfileImageBox = styled.div`
@@ -118,7 +151,7 @@ const UserProfileImageBox = styled.div`
   height: 35px;
   border-radius: 10px;
   margin-right: 20px;
-  background-color: white;
+  background-color: white;#8ACCE4
   cursor: pointer;
 `;
 const UserProfileImage = styled.img`

@@ -50,16 +50,15 @@ const GlobalStyle = createGlobalStyle`
 `
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<<<<<<< HEAD
-    <ThemeProvider theme={theme}>
-        <App />
-    </ThemeProvider>
-=======
+
+    // <ThemeProvider theme={theme}>
+    //     <App />
+    // </ThemeProvider>
+
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <GlobalStyle />
             <App />
         </ThemeProvider>
     </Provider>
->>>>>>> dev
 );

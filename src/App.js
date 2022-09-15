@@ -23,7 +23,6 @@ function App() {
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/chat' element={<ChatPage />} />
           <Route path='/chat/:match_id' element={<ChatPage />} />
-        </Routes>
         {/* <ModalTemplate /> */}
           <Route path='/:region/:sports' element={<SportsPage />} />
         </Routes>
