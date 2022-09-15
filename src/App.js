@@ -5,7 +5,7 @@ import Header from './components/univ/Header';
 import IndexPage from './pages/IndexPage'
 import MyPage from './pages/MyPage';
 import SportsPage from './pages/SportsPage';
-import ChatPage from './pages/ChatPage';
+import ChatPage from './pages/ChatPage_y';
 import ModalTemplate from './components/y_modal/ModalTemplate';
 import DialTemplate from './components/y_dialogue/DialTemplate';
 

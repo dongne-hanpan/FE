@@ -9,7 +9,7 @@ import snow from '../../asset/weather/snow.png';
 import thunder from '../../asset/weather/thunder.png';
 
 
-const ReuseWeather = () => {
+const ReuseWeather = ({ color }) => {
   // 800은 clear
   // 800~는 구름
   // 700대는 흐림
@@ -47,8 +47,8 @@ const ReuseWeather = () => {
     {weather.length !== 0 ? 
       <WeatherComp>
         <WeatherImg src={weather[0]} alt="weather emoji"/>
-        <WeatherContent>{weather[1]}</WeatherContent>
-        <WeatherContent>{weather[2]} 도</WeatherContent>
+        <WeatherContent color={color}>{weather[1]}</WeatherContent>
+        <WeatherContent color={color}>{weather[2]} 도</WeatherContent>
       </WeatherComp>
     :<></>}
     </>
@@ -69,7 +69,7 @@ const WeatherImg = styled.img`
   margin-bottom: 15px;
 `
 const WeatherContent = styled.div`
-  color: ${({theme}) => theme.colors.background};
+  color: ${({color, theme}) => color === 'black' ? theme.colors.black : theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `
 
