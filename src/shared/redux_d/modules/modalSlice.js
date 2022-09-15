@@ -5,6 +5,24 @@ const modalSlice = createSlice({
   name: "modalSlice",
   initialState: {
     modalData: {
+      // modalType: 'matchResult',
+      // matchDay: '2022.09.15',
+      // matchTime: '11시',
+      // matchPlace: '동작 볼링장',
+      // participants: [
+      //   {
+      //     id:0,
+      //     nickname: 'young',
+      //   },
+      //   {
+      //     id:1,
+      //     nickname: 'dong',
+      //   },
+      //   {
+      //     id:2,
+      //     nickname: 'jun',
+      //   },
+      // ]
     },
     dialogueData:
     {}
@@ -22,6 +40,9 @@ const modalSlice = createSlice({
     // }
     // {
     //   dialType: 'confirmApply',
+    // }
+    // {
+    //   dialType: 'confirmResult',
     // }
   },
   reducers:{
