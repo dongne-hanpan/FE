@@ -22,6 +22,7 @@ const InputComp = styled.input`
   padding: 0px 20px;
   margin-bottom: 14px;
   border-radius: 0.5rem;
+  background-color: ${({theme}) => theme.colors.background_light}
 `
 
 
