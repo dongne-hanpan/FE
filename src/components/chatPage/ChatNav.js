@@ -1,24 +1,23 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import ReuseProfile from '../y_reusable/ReuseProfile';
 import ReuseWeather from '../y_reusable/ReuseWeather';
-
-//tmp
-import me from '../../asset/profileMe.png';
-import dummyChatList from '../../dummyData/dummyChatList';
 import ChatBox from './ChatBox';
 
 
-const ChatNav = () => {
+const ChatNav = ({chatListData}) => {
+  const userData = useSelector((state) => state.user.userData);
+
   return(
     <ChatNavComp>
       <ChatNavHead>
-        <ReuseProfile imgSrc={me} imgSize={60} content={'sparta13'} contentSize={14} />
+        <ReuseProfile imgSrc={userData.profileImage} imgSize={60} content={'sparta13'} contentSize={14} />
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>
-        {dummyChatList.map((each) => 
-          <ChatBox key={each.id} data={each} />
+        {chatListData.map((each) => 
+          <ChatBox key={each.chatId} data={each} />
         )}
       </ChatNavContainer>
     </ChatNavComp>
