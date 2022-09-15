@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const ReuseTextarea = ({injRef, height, placeholderValue}) => {
+const ReuseTextarea = ({injRef, injClass, height, placeholderValue}) => {
   return(
-    <TextareaComp ref={injRef} height={height} placeholder={placeholderValue} />
+    <TextareaComp ref={injRef} className={injClass} height={height} placeholder={placeholderValue} />
   )
 };
 

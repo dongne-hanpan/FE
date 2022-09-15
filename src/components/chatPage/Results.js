@@ -11,11 +11,11 @@ const Result = ({data}) => {
       <InputTitleBox>
         <InputTitle>{data.nickname} 님과의 매치는 어땠나요?</InputTitle>
       </InputTitleBox>
-      <ReuseTextarea className="review" height={90} placeholderValue={`${data.nickname}님과의 매치 후기를 남겨주세요`} />
+      <ReuseTextarea injClass={"review"} height={90} placeholderValue={`${data.nickname}님과의 매치 후기를 남겨주세요`} />
       <InputTitleBox>
         <InputTitle>{data.nickname} 님의 매너는 어땠나요?</InputTitle>
       </InputTitleBox>
-      <ReuseInput className="manner" injType={'number'} placeholderValue={'10점 만점 (숫자 만 표기) '} />
+      <ReuseInput injClass={"manner"} injType={'number'} placeholderValue={'10점 만점 (숫자 만 표기) '} />
     </>
   );
 };
