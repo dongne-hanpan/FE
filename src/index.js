@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import App from './App';
+
+// import theme from "./shared/themeStyle";
+// import { ThemeProvider } from "styled-components";
+
 import theme from './shared/y_css/theme';
 import store from './shared/redux_d/configure';
+
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -45,6 +50,11 @@ const GlobalStyle = createGlobalStyle`
 `
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+
+    // <ThemeProvider theme={theme}>
+    //     <App />
+    // </ThemeProvider>
+
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <GlobalStyle />
