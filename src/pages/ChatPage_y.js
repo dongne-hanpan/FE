@@ -14,11 +14,14 @@ const ChatPage = () => {
   const {pathname} = useLocation();
   const nowChatId = pathname.split('/')[2];
 
+
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  //내가 속해있는 채팅방 리스트 요청하는 API (만들어야 함)
   const chatListData = dummyChatList;
+  //채팅방 데이터 요청하는 API (만들어야 함)
   const chatData = dummyChatDatas[nowChatId];
-  
+
   //userdata 없으면 돌아가
   const navigate = useNavigate();
   useEffect(() => {
@@ -82,8 +85,8 @@ const ChatPage = () => {
             <ChatPlace>{chatData.matchPlace}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
-            {chatData.participants.map((each) => 
-            <ReuseProfile key={each.participantId} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
+            {chatData.reservedPeople.map((each) => 
+            <ReuseProfile key={each.reservedId} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
             )}
           </ChatPartici>
         </ChatHead>
@@ -97,10 +100,10 @@ const ChatPage = () => {
         <ChatInput>
           <ChatInputBtns>
             <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
-            { chatData.hostNickname === userData.nickname ?
+            {/* { chatData.hostNickname === userData.nickname ?
               <BtnReserve onClick={reserve}> 예약 확정 </BtnReserve>
               :<></>
-            }
+            } */}
             <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
           </ChatInputBtns>
           <ChatInputTalks>

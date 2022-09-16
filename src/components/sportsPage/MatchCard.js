@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
 import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
@@ -10,7 +11,7 @@ import ReuseBtn from '../y_reusable/ReuseBtn';
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-
+  
   const showMatch = (e) => {
     if(e.target.ariaLabel !== 'contactBtn'){
       const matchData = {
@@ -21,14 +22,17 @@ const MatchCard = ({data}) => {
     }
   }
   const contactToHost = () => {
-    const applyData = {
-      matchId: null,
-      username: userData.username,
-      userLevel: userData.userLevel,
-      userTemperature: userData.userTemperature,
-    };
+    // const applyData = {
+    //   matchId: null,
+    //   username: userData.username,
+    //   userLevel: userData.userLevel,
+    //   userTemperature: userData.userTemperature,
+    // };
     // dispatch(contactMatchThunk(applyData));
-    dispatch(setDialogue({dialType: 'confirmApply'}));
+
+    // 신청하고 알림받아서 수락하는 과정 생략
+    // 바로 chatRoom에 입장하기
+    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.id}));
   };
 
   return(
