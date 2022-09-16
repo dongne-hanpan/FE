@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postWithoutCookie } from '../../axios_d/axios';
 import { deleteCookie } from '../../axios_d/cookie';
 
-import me from '../../../asset/profileMe.png';
 
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
@@ -34,11 +33,6 @@ const userSlice = createSlice({
     },
   },
   reducers: {
-    addRegionAndSports: (state, action) => {
-      const regionAndSports = action.payload;
-      state.userData = {...state.userData, ...regionAndSports};
-      console.log(state.userData);
-    },
     clearUser: (state, action) => {
       deleteCookie("mytoken");
       state.userData = {};
@@ -59,7 +53,7 @@ const userSlice = createSlice({
           nickname: data.nickname,
           profileImage: data.profileImage,
         };
-        state.userData = {...state.userData,...newUserData};
+        state.userData = newUserData;
         console.log(state.userData);
       } else{
         alert('로그인 실패했습니다');
@@ -68,5 +62,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { addRegionAndSports, clearUser } = userSlice.actions;
+export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;

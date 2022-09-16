@@ -8,6 +8,7 @@ import Login from '../y_login/Login';
 import Signup from '../y_login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
+import MatchResult from './MatchResult';
 import UserWatch from './UserWatch';
 
 
@@ -16,7 +17,7 @@ const ModalTemplate = () => {
   const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
-      if(modalData.modalType === 'matchWrite'){
+      if(modalData.modalType === 'matchWrite' || modalData.modalType === 'matchResult'){
         dispatch(setDialogue({dialType: 'confirmRemove'}));
       } else{
         dispatch(clearModal());
@@ -33,9 +34,11 @@ const ModalTemplate = () => {
       return <MatchWrite />
     } else if(modalData.modalType === 'matchWatch'){
       return <MatchWatch />
+    } else if(modalData.modalType === 'matchResult'){
+      return <MatchResult />
     } else if(modalData.modalType === 'userWatch'){
       return <UserWatch />
-    } 
+    }
   }
 
   return(

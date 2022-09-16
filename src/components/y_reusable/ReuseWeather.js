@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getWeather } from '../../shared/weather';
 import sunny from '../../asset/weather/sunny.png';
@@ -9,7 +9,7 @@ import snow from '../../asset/weather/snow.png';
 import thunder from '../../asset/weather/thunder.png';
 
 
-const ReuseWeather = () => {
+const ReuseWeather = ({ color }) => {
   // 800은 clear
   // 800~는 구름
   // 700대는 흐림
@@ -33,20 +33,22 @@ const ReuseWeather = () => {
   }
   //날씨 관련
   const [weather,setWeather] = useState([]);
-  getWeather().then((res) => {
-    const weatherId = res.weather[0].id;
-    const weatherSrc = weatherRouter(weatherId);
-    const weaterTemp = Math.round(res.main.temp * 10)/10;
-    setWeather([...weatherSrc, weaterTemp]);
-  });
+  useEffect(() => {
+    getWeather().then((res) => {
+      const weatherId = res.weather[0].id;
+      const weatherSrc = weatherRouter(weatherId);
+      const weaterTemp = Math.round(res.main.temp * 10)/10;
+      setWeather([...weatherSrc, weaterTemp]);
+    });
+  },[])
 
   return(
     <>
     {weather.length !== 0 ? 
       <WeatherComp>
         <WeatherImg src={weather[0]} alt="weather emoji"/>
-        <WeatherContent>{weather[1]}</WeatherContent>
-        <WeatherContent>{weather[2]} 도</WeatherContent>
+        <WeatherContent color={color}>{weather[1]}</WeatherContent>
+        <WeatherContent color={color}>{weather[2]} 도</WeatherContent>
       </WeatherComp>
     :<></>}
     </>
@@ -67,7 +69,7 @@ const WeatherImg = styled.img`
   margin-bottom: 15px;
 `
 const WeatherContent = styled.div`
-  color: ${({theme}) => theme.colors.background};
+  color: ${({color, theme}) => color === 'black' ? theme.colors.black : theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `
 

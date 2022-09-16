@@ -8,6 +8,9 @@ import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
 import DialConfLogin from './DialConfLogin';
 import { clearAll, clearDialogue } from '../../shared/redux_d/modules/modalSlice';
+import DialConfResult from './DialConfResult';
+import DialDenyResult from './DialDenyResult';
+import DialReserveWho from './DialReserveWho';
 
 
 const DialTemplate = () => {
@@ -16,7 +19,7 @@ const DialTemplate = () => {
   const removeDial = (e) => {
     if(e.target.ariaLabel === 'dialToggle'){
       if(dialData.dialType !== 'confirmRemove'){
-        if(dialData.dialType === 'confirmWrite'){
+        if(dialData.dialType === 'confirmWrite' || dialData.dialType === 'confirmResult'){
           dispatch(clearAll());
         } else{
           dispatch(clearDialogue());
@@ -36,6 +39,12 @@ const DialTemplate = () => {
       return <DialConfWrite />
     } else if(dialData.dialType === 'confirmApply'){
       return <DialConfApply />
+    } else if(dialData.dialType === 'confirmResult'){
+      return <DialConfResult />
+    } else if(dialData.dialType === 'denyResult'){
+      return <DialDenyResult />
+    } else if(dialData.dialType === 'reserveWho'){
+      return <DialReserveWho />
     }
   }
 

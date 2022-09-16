@@ -23,6 +23,9 @@ const modalSlice = createSlice({
     // {
     //   dialType: 'confirmApply',
     // }
+    // {
+    //   dialType: 'confirmResult',
+    // }
   },
   reducers:{
     setModal: (state, action) => {
