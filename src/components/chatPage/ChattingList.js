@@ -19,7 +19,8 @@ const ChattingList = () => {
   const params = useParams().match_id;
   const headers = {
     // Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    Authorization: `Bearer ${getCookie("mytoken")}`,
+    "Content-Type": "application/json", 
+    "Authorization": `Bearer ${getCookie("mytoken")}`,
   };
 
   // 엔드포인트
@@ -32,14 +33,14 @@ const ChattingList = () => {
       connect();
       return () => {
         client.disconnect();
-        window.location.reload();
+        // window.location.reload();
       };
     }
     return client.disconnect();
   }, [params]);
 
   useEffect(() => {
-    axios.get(`http://3.38.191.6/chat/message/${params}`, headers).then((res) => {
+    axios.get(`http://3.38.191.6/chat/message/${params}`, {headers}).then((res) => {
       console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
@@ -59,12 +60,15 @@ const ChattingList = () => {
       (message) => {
         // console.log("연결 성공?!", message);
         if (message.body) {
+          axios.get(`http://3.38.191.6/chat/message/${params}`, {headers}).then((res) => {
+          console.log("서버에 전체 채팅 목록 요청", res.data);
           const new_Data = JSON.parse(message.body);
-          console.log("new_Data", new_Data.message);
-          // messageList.push(new_Data);
-          console.log(messageList);
-          setMessageList([...messageList, new_Data]);
-          window.location.reload();
+          // console.log("new_Data", new_Data);
+          // // messageList.push(new_Data);
+          // console.log(res.data);
+          setMessageList([...res.data]);
+        });
+          // window.location.reload();
         } else {
           alert("메세지가 없습니다.");
         }
@@ -88,7 +92,7 @@ const ChattingList = () => {
       })
     );
     setMessage("");
-    window.location.reload();
+    // window.location.reload();
   };
   return (
     <ChattingListWrapper>
