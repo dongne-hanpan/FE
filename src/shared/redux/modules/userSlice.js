@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postWithoutCookie } from '../../axios/axios';
-import { deleteCookie } from '../../axios/cookie';
+import { getWithCookie, postWithoutCookie } from '../../axios/axios';
+import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
 export const loginUserThunk = createAsyncThunk(
@@ -21,6 +21,14 @@ export const signupUserThunk = createAsyncThunk(
     }
   }
 );
+export const logoutUserThunk = createAsyncThunk(
+  "user/logoutUserThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/logout", cookie);
+    return res;
+  }
+);
 
 const userSlice = createSlice({
   name: "userSlice",
@@ -33,10 +41,6 @@ const userSlice = createSlice({
     },
   },
   reducers: {
-    clearUser: (state, action) => {
-      deleteCookie("mytoken");
-      state.userData = {};
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
@@ -59,8 +63,12 @@ const userSlice = createSlice({
         alert('로그인 실패했습니다');
       }
     });
+    builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
+      console.log('logout completed');
+      deleteCookie("mytoken");
+      state.userData = {};
+    });
   }
 });
 
-export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;

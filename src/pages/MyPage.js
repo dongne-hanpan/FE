@@ -6,13 +6,13 @@ import ReuseProfile from '../components/reusable/ReuseProfile';
 import ReuseTemperature from '../components/reusable/ReuseTemperature';
 import ReuseBadge from '../components/reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
-import { clearUser } from '../shared/redux/modules/userSlice';
+import { getLocal } from '../shared/axios/local';
+import { logoutUserThunk } from '../shared/redux/modules/userSlice';
+import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 
 // tmp
 import profile from '../asset/defaultprofile.jpg';
 import dummyMyMatch from '../dummyData/dummyMyMatch';
-import { getLocal } from '../shared/axios/local';
-import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 
 
 const MyPage = () => {
@@ -34,7 +34,7 @@ const MyPage = () => {
     }
   },[userData])
   const doLogout = () => {
-    dispatch(clearUser());
+    dispatch(logoutUserThunk());
   }
   return(
     <MainPage>
