@@ -1,22 +1,16 @@
 import { useParams } from "react-router";
 import styled from "styled-components";
-import ChannelHeader from "../components/chatPage/ChannelHeader";
+import ChattingTitle from "../components/chatPage/ChattingTitle";
 import ChannelList from "../components/chatPage/ChannelList";
 import ChattingList from "../components/chatPage/ChattingList";
-import ChattingTitle from "../components/chatPage/ChattingTitle";
 import UserList from "../components/chatPage/UserList";
-
-
-import Modal from "../components/chatPage/elements/Modal";
-import ChannelCreator from "../components/chatPage/ChannelCreator";
-import Button from "@material-ui/core/Button";
 
 const ChatPage = () => {
   const params = useParams().match_id;
+  console.log(params)
   return (
     <MainPageWrapper>
-      {/* <ChannelHeader></ChannelHeader> */}
-      <ChattingTitle></ChattingTitle>
+      <ChattingTitle />
       <BodyWrapper>
         <MenuWrapper>
           <ChannelList />
