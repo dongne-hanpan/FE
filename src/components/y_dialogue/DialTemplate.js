@@ -9,6 +9,8 @@ import DialConfApply from './DialConfApply';
 import DialConfLogin from './DialConfLogin';
 import { clearAll, clearDialogue } from '../../shared/redux_d/modules/modalSlice';
 import DialConfResult from './DialConfResult';
+import DialDenyResult from './DialDenyResult';
+import DialReserveWho from './DialReserveWho';
 
 
 const DialTemplate = () => {
@@ -39,6 +41,10 @@ const DialTemplate = () => {
       return <DialConfApply />
     } else if(dialData.dialType === 'confirmResult'){
       return <DialConfResult />
+    } else if(dialData.dialType === 'denyResult'){
+      return <DialDenyResult />
+    } else if(dialData.dialType === 'reserveWho'){
+      return <DialReserveWho />
     }
   }
 

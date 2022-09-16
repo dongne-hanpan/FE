@@ -1,44 +1,111 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ChatContent from '../components/chatPage/ChatContent';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/y_reusable/ReuseProfile';
 import ReuseTextarea from '../components/y_reusable/ReuseTextarea';
+import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
 
-import { dummyPartici,dummyContents } from '../dummyData/dummyPartici';
+import { dummyChatList, dummyChatDatas } from '../dummyData/dummyChat';
 
 const ChatPage = () => {
+  const {pathname} = useLocation();
+  const nowChatId = pathname.split('/')[2];
+
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const chatListData = dummyChatList;
+  const chatData = dummyChatDatas[nowChatId];
+  
+  //userdata 없으면 돌아가
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(!userData.username){
+      navigate('/')
+    }
+  },[userData])
+
+  const writeResult = () => {
+    if(chatData.status === 'reserved'){
+      const modalResultData = {
+        modalType: 'matchResult',
+        matchDay: chatData.matchDay,
+        matchTime: chatData.matchTime,
+        matchPlace: chatData.matchPlace,
+        reservedPeople: chatData.reservedPeople
+      }
+      dispatch(setModal(modalResultData));
+    } else{
+      console.log('hyy');
+      const dialDenyResult = {
+        dialType: 'denyResult'
+      };
+      dispatch(setDialogue(dialDenyResult));
+    }
+  }
+
+  const reserve = () => {
+    if(chatData.status === 'recruit'){
+      const dialReserveWhoData = {
+        dialType: 'reserveWho',
+        participants: chatData.participants
+      };
+      dispatch(setDialogue(dialReserveWhoData))
+    }
+  }
+
+  const leaveChatRoom = () => {
+    if(chatData.hostNickname === userData.nickname){
+      console.log('host out and remove this room');
+    } else{
+      console.log('just leave one person');
+    }
+  }
+
+  const chatRef = useRef(null);
+  const saySomething = () => {
+    const chatRefValue = chatRef.current.value;
+    // 채팅 보내기
+    console.log(chatRefValue);
+
+    chatRef.current.value = '';
+  }
   return (
     <MainPage>
-      <ChatNav />
+      <ChatNav chatListData = {chatListData}/>
       <ChatNow>
         <ChatHead>
           <ChatInfo>
-            <ChatDate>2022.08.09<ChatTime>12:00</ChatTime></ChatDate>
-            <ChatPlace>동작 볼링장</ChatPlace>
+            <ChatDate>{chatData.matchDay}<ChatTime>{chatData.matchTime}</ChatTime></ChatDate>
+            <ChatPlace>{chatData.matchPlace}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
-            {dummyPartici.map((each) => 
-            <ReuseProfile key={each.id} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
+            {chatData.participants.map((each) => 
+            <ReuseProfile key={each.participantId} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
             )}
           </ChatPartici>
         </ChatHead>
 
         <ChatContainer>
-          {dummyContents.map((each) => 
+          {chatData.chatContents.map((each) => 
           <ChatContent key={each.id} data={each}/>
           )}
         </ChatContainer>
 
         <ChatInput>
           <ChatInputBtns>
-            <BtnResult> 결과 입력 </BtnResult>
-            <BtnReserve> 예약 확정 </BtnReserve>
-            <BtnOut> 나가기 </BtnOut>
+            <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
+            { chatData.hostNickname === userData.nickname ?
+              <BtnReserve onClick={reserve}> 예약 확정 </BtnReserve>
+              :<></>
+            }
+            <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
           </ChatInputBtns>
           <ChatInputTalks>
-            <ReuseTextarea height={100} />
-            <ButtonBox> 전송 </ButtonBox>
+            <ReuseTextarea injRef={chatRef} height={100} />
+            <ButtonBox onClick={saySomething}> 전송 </ButtonBox>
           </ChatInputTalks>
         </ChatInput>
 

@@ -21,7 +21,7 @@ function App() {
         <Routes>
           <Route path='/' element={<IndexPage />} />
           <Route path='/mypage' element={<MyPage />} />
-          <Route path='/chat' element={<ChatPage />} />
+          <Route path='/chat/:chatId' element={<ChatPage />} />
           <Route path='/:region/:sports' element={<SportsPage />} />
         </Routes>
         {modalData.modalType ? <ModalTemplate />:<></>}
