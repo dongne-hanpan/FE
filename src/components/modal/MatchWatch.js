@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
-import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
@@ -19,15 +19,20 @@ const MatchWatch = () => {
     await navigator.clipboard.writeText(placeDetail);
     alert('주소가 복사되었습니다');
   }
+  const checkParticipant = () => {
+    const userListInMatch = modalData.userListInMatch;
+    for(let i=0; i<userListInMatch.length; i++){
+      if(userListInMatch[i].nickname === userData.nickname){
+        return true;
+      }
+    }
+    return false;
+  }
   const contactToHost = () => {
-    const applyData = {
-      matchId: null,
-      username: userData.username,
-      userLevel: userData.userLevel,
-      userTemperature: userData.userTemperature,
-    };
-    dispatch(contactMatchThunk(applyData));
-    dispatch(setDialogue({dialType: 'confirmApply'}));
+    if(!checkParticipant){
+      dispatch(enterMatchThunk(modalData.match_id));
+    }
+    dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
   };
   return(
     <ModalWatchComp>

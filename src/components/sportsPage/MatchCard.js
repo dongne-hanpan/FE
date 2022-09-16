@@ -1,8 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBadge from '../reusable/ReuseBadge';
 import ReuseBtn from '../reusable/ReuseBtn';
@@ -10,7 +9,7 @@ import ReuseBtn from '../reusable/ReuseBtn';
 
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
-  
+  const userData = useSelector((state) => state.user.userData);
   const showMatch = (e) => {
     if(e.target.ariaLabel !== 'contactBtn'){
       const matchData = {
@@ -20,18 +19,21 @@ const MatchCard = ({data}) => {
       dispatch(setModal(matchData))
     }
   }
+  const checkParticipant = () => {
+    const userListInMatch = data.userListInMatch;
+    for(let i=0; i<userListInMatch.length; i++){
+      if(userListInMatch[i].nickname === userData.nickname){
+        return true;
+      }
+    }
+    return false;
+  }
   const contactToHost = () => {
-    // const applyData = {
-    //   matchId: null,
-    //   username: userData.username,
-    //   userLevel: userData.userLevel,
-    //   userTemperature: userData.userTemperature,
-    // };
-    // dispatch(contactMatchThunk(applyData));
-
     // 신청하고 알림받아서 수락하는 과정 생략
-    // 바로 chatRoom에 입장하기
-    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.id}));
+    if(!checkParticipant){
+      dispatch(enterMatchThunk(data.match_id));
+    }
+    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
   };
 
   return(
