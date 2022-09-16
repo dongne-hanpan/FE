@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import red from '../../asset/red.png'
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 const HeaderAlerm = ({alermType, checked, content}) => {
   return(

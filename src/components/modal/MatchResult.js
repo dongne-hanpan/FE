@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { submitResultThunk } from '../../shared/redux_d/modules/chatSlice';
+import { submitResultThunk } from '../../shared/redux/modules/chatSlice';
 import Result from '../chatPage/Results';
-import ReuseBtn from '../y_reusable/ReuseBtn';
-import ReuseInput from '../y_reusable/ReuseInput';
-import {getLocal} from '../../shared/axios_d/local';
+import ReuseBtn from '../reusable/ReuseBtn';
+import ReuseInput from '../reusable/ReuseInput';
+import {getLocal} from '../../shared/axios/local';
 
 
 const MatchResult = () => {

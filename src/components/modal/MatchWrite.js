@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
-import ReuseInput from '../y_reusable/ReuseInput';
-import ReuseTextarea from '../y_reusable/ReuseTextarea';
-import { getLocal } from '../../shared/axios_d/local';
-import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
-import { makeMatchThunk } from '../../shared/redux_d/modules/matchSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import ReuseInput from '../reusable/ReuseInput';
+import ReuseTextarea from '../reusable/ReuseTextarea';
+import { getLocal } from '../../shared/axios/local';
+import { setDialogue } from '../../shared/redux/modules/modalSlice';
+import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
 //temp
 import dummyOptionValues from '../../dummyData/dummyOptionValues';
 

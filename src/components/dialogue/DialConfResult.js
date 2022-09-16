@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch } from 'react-redux';
-import { clearAll} from '../../shared/redux_d/modules/modalSlice';
+import { clearAll} from '../../shared/redux/modules/modalSlice';
 
 
-const DialConfWrite = ({dialData}) => {
+const DialConfResult = ({dialData}) => {
   const dispatch = useDispatch();
   const cancel = () => {
     dispatch(clearAll());
@@ -13,8 +13,8 @@ const DialConfWrite = ({dialData}) => {
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 작성 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>마이페이지에서 확인 가능합니다</DialMessageExtra>
+        <DialMessageTitle>🎉 결과 입력 완료 🎉</DialMessageTitle>
+        <DialMessageExtra> 감사합니다 </DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -23,7 +23,7 @@ const DialConfWrite = ({dialData}) => {
   )
 };
 
-export default DialConfWrite;
+export default DialConfResult;
 
 
 const DialMessages = styled.div`

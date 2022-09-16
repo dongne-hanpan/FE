@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAll} from '../../shared/redux_d/modules/modalSlice';
-import ReuseInput from '../y_reusable/ReuseInput';
+import { clearAll} from '../../shared/redux/modules/modalSlice';
 
 
 const DialReserveWho = () => {

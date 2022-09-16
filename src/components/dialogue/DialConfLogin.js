@@ -1,29 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
 import { useDispatch } from 'react-redux';
-import { clearDialogue, setModal } from '../../shared/redux_d/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import { clearDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 
-const DialConfSignup = ({dialData}) => {
+const DialConfLogin = ({dialData}) => {
   const dispatch = useDispatch();
   const cancel = () => {
     dispatch(clearDialogue());
-    dispatch(setModal({modalType: 'login'}))
+  }
+  const showLogin = () => {
+    dispatch(setModal({modalType: 'login'}));
+    dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 회원가입 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>감사합니다</DialMessageExtra>
+        <DialMessageTitle>⚠️ 로그인이 필요합니다 ⚠️</DialMessageTitle>
+        <DialMessageExtra>지금 로그인 하시겠습니까?</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
+        <ReuseBtn styleType={'normal'} content={'로그인 하기'} clickEvent={showLogin} />
+        <ReuseBtn styleType={'danger'} content={'취소'} clickEvent={cancel} />
       </DialBtns>
     </>
   )
 };
 
-export default DialConfSignup;
+export default DialConfLogin;
 
 const DialMessages = styled.div`
   width: 100%;
@@ -45,4 +49,6 @@ const DialMessageTitle = styled.div`
 const DialBtns = styled.div`
   width: 100%;
   height: 50px;
+  display: flex;
+  justify-content: space-around;
 `

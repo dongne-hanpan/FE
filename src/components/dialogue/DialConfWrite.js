@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch } from 'react-redux';
-import { clearAll} from '../../shared/redux_d/modules/modalSlice';
+import { clearAll} from '../../shared/redux/modules/modalSlice';
 
 
-const DialDenyResult = () => {
+const DialConfWrite = ({dialData}) => {
   const dispatch = useDispatch();
   const cancel = () => {
     dispatch(clearAll());
@@ -13,8 +13,8 @@ const DialDenyResult = () => {
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🚫 결과 입력 불가 🚫</DialMessageTitle>
-        <DialMessageExtra>결과 입력은 예약확정이 된 이후에 가능합니다</DialMessageExtra>
+        <DialMessageTitle>🎉 작성 완료 🎉</DialMessageTitle>
+        <DialMessageExtra>마이페이지에서 확인 가능합니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -23,7 +23,7 @@ const DialDenyResult = () => {
   )
 };
 
-export default DialDenyResult;
+export default DialConfWrite;
 
 
 const DialMessages = styled.div`
@@ -39,7 +39,7 @@ const DialMessageTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-const DialMessageExtra = styled.div`
+  const DialMessageExtra = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `

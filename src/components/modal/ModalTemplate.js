@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearModal, setDialogue } from '../../shared/redux_d/modules/modalSlice';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 import Deco from '../univ/Deco';
-import Login from '../y_login/Login';
-import Signup from '../y_login/Signup';
+import Login from '../login/Login';
+import Signup from '../login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
 import MatchResult from './MatchResult';

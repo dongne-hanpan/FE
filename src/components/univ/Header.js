@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { setModal } from '../../shared/redux_d/modules/modalSlice';
-import ReuseProfile from '../y_reusable/ReuseProfile';
+import { setModal } from '../../shared/redux/modules/modalSlice';
+import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
-import ReuseWeather from '../y_reusable/ReuseWeather';
-import ReuseReserved from '../y_reusable/ReuseReserved';
+import ReuseWeather from '../reusable/ReuseWeather';
+import ReuseReserved from '../reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';

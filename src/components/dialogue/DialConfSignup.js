@@ -1,24 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import ReuseBtn from '../y_reusable/ReuseBtn';
-import { clearAll} from '../../shared/redux_d/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import { useDispatch } from 'react-redux';
+import { clearDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 
-
-const DialConfApply = () => {
+const DialConfSignup = ({dialData}) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const dialData = useSelector((state) => state.modal.dialogueData);
   const cancel = () => {
-    navigate(`/chat/${dialData.matchId}`)
-    dispatch(clearAll());
+    dispatch(clearDialogue());
+    dispatch(setModal({modalType: 'login'}))
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 신청 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>신청이 수락되면 채팅방에 초대됩니다</DialMessageExtra>
+        <DialMessageTitle>🎉 회원가입 완료 🎉</DialMessageTitle>
+        <DialMessageExtra>감사합니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -27,8 +23,7 @@ const DialConfApply = () => {
   )
 };
 
-export default DialConfApply;
-
+export default DialConfSignup;
 
 const DialMessages = styled.div`
   width: 100%;
@@ -43,7 +38,7 @@ const DialMessageTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-const DialMessageExtra = styled.div`
+  const DialMessageExtra = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `

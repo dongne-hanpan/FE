@@ -7,7 +7,7 @@ import DialConfSignup from './DialConfSignup';
 import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
 import DialConfLogin from './DialConfLogin';
-import { clearAll, clearDialogue } from '../../shared/redux_d/modules/modalSlice';
+import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
 import DialConfResult from './DialConfResult';
 import DialDenyResult from './DialDenyResult';
 import DialReserveWho from './DialReserveWho';
@@ -73,11 +73,7 @@ const DialComp = styled.div`
   align-items: center;
   background-color: ${({theme}) => theme.colors.dark};
 `
-const DialOutBtn = styled.div`
-  position: absolute;
-  top: 30px;
-  right: 50px;
-`
+
 const DialSection = styled.div`
   position: relative;
   width: 350px;

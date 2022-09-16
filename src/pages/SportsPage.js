@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDialogue, setModal } from '../shared/redux_d/modules/modalSlice';
+import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import MatchCard from '../components/sportsPage/MatchCard';
-import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
-import { loadMatchThunk } from '../shared/redux_d/modules/matchSlice';
+import ReuseTemperature from '../components/reusable/ReuseTemperature';
+import { loadMatchThunk } from '../shared/redux/modules/matchSlice';
 
 // tmp
 import dummyMatch from '../dummyData/dummyMatch';
 import { dummySports } from '../dummyData/dummyIndex';
-import { getLocal } from '../shared/axios_d/local';
+import { getLocal } from '../shared/axios/local';
 
 const SportsPage = () => {
   const dispatch = useDispatch();

@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseProfile from '../components/y_reusable/ReuseProfile';
-import ReuseTemperature from '../components/y_reusable/ReuseTemperature';
-import ReuseBadge from '../components/y_reusable/ReuseBadge';
+import ReuseProfile from '../components/reusable/ReuseProfile';
+import ReuseTemperature from '../components/reusable/ReuseTemperature';
+import ReuseBadge from '../components/reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
-import { clearUser } from '../shared/redux_d/modules/userSlice';
+import { clearUser } from '../shared/redux/modules/userSlice';
 
 // tmp
 import profile from '../asset/defaultprofile.jpg';
 import dummyMyMatch from '../dummyData/dummyMyMatch';
-import { getLocal } from '../shared/axios_d/local';
-import { loadMyMatchThunk } from '../shared/redux_d/modules/matchSlice';
+import { getLocal } from '../shared/axios/local';
+import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 
 
 const MyPage = () => {

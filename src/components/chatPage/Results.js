@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import ReuseInput from '../y_reusable/ReuseInput';
-import ReuseTextarea from '../y_reusable/ReuseTextarea';
+import ReuseInput from '../reusable/ReuseInput';
+import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
 const Result = ({data}) => {

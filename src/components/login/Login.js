@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearModal, setModal } from '../../shared/redux_d/modules/modalSlice';
-import ReuseBtn from '../y_reusable/ReuseBtn';
-import ReuseInput from '../y_reusable/ReuseInput';
+import { clearModal, setModal } from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import ReuseInput from '../reusable/ReuseInput';
 //temp
 import logo from '../../asset/logo.png';
-import { loginUserThunk } from '../../shared/redux_d/modules/userSlice';
+import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();

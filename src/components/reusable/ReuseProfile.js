@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setModal } from '../../shared/redux_d/modules/modalSlice';
+import { setModal } from '../../shared/redux/modules/modalSlice';
 
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {

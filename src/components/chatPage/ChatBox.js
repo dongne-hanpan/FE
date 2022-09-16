@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import ReuseProfile from '../y_reusable/ReuseProfile';
+import ReuseProfile from '../reusable/ReuseProfile';
 
 // tmp
 import defaultProfile from '../../asset/defaultprofile.jpg';

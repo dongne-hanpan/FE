@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
-import { setDialogue, setModal } from '../../shared/redux_d/modules/modalSlice';
-import ReuseBadge from '../y_reusable/ReuseBadge';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import ReuseBadge from '../reusable/ReuseBadge';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const MatchCard = ({data}) => {

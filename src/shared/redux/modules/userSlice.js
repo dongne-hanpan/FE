@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postWithoutCookie } from '../../axios_d/axios';
-import { deleteCookie } from '../../axios_d/cookie';
+import { postWithoutCookie } from '../../axios/axios';
+import { deleteCookie } from '../../axios/cookie';
 
 
 export const loginUserThunk = createAsyncThunk(

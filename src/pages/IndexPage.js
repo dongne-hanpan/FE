@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ReuseBtn from '../components/y_reusable/ReuseBtn';
-import { setLocal } from '../shared/axios_d/local';
+import ReuseBtn from '../components/reusable/ReuseBtn';
+import { setLocal } from '../shared/axios/local';
 
 //temp
 import { dummyRegion, dummySports, sportsConverter } from '../dummyData/dummyIndex';

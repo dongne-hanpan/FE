@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseProfile from '../y_reusable/ReuseProfile';
-import ReuseBadge from '../y_reusable/ReuseBadge';
-import ReuseTemperature from '../y_reusable/ReuseTemperature';
-import ReuseBtn from '../y_reusable/ReuseBtn';
+import ReuseProfile from '../reusable/ReuseProfile';
+import ReuseBadge from '../reusable/ReuseBadge';
+import ReuseTemperature from '../reusable/ReuseTemperature';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 // tmp
 import dummyUserDetail from '../../dummyData/dummyUserDetail';
@@ -94,12 +94,4 @@ const UserRank = styled.article`
   height: 240px;
   display: flex;
   justify-content: center;
-`
-const RankVertical = styled.div`
-  flex-grow:1;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 10px;
 `

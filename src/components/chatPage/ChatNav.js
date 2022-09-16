@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import ReuseProfile from '../y_reusable/ReuseProfile';
-import ReuseWeather from '../y_reusable/ReuseWeather';
+import ReuseProfile from '../reusable/ReuseProfile';
+import ReuseWeather from '../reusable/ReuseWeather';
 import ChatBox from './ChatBox';
 
 

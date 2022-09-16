@@ -4,11 +4,8 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import App from './App';
 
-// import theme from "./shared/themeStyle";
-// import { ThemeProvider } from "styled-components";
-
-import theme from './shared/y_css/theme';
-import store from './shared/redux_d/configure';
+import theme from './shared/css/theme';
+import store from './shared/redux/configure';
 
 
 const GlobalStyle = createGlobalStyle`

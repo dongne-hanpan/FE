@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDialogue } from '../../shared/redux_d/modules/modalSlice';
-import { contactMatchThunk } from '../../shared/redux_d/modules/matchSlice';
-import ReuseBtn from '../y_reusable/ReuseBtn';
-import ReuseProfile from '../y_reusable/ReuseProfile';
-import ReuseTemperature from '../y_reusable/ReuseTemperature';
-import ReuseBadge from '../y_reusable/ReuseBadge';
+import { setDialogue } from '../../shared/redux/modules/modalSlice';
+import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import ReuseProfile from '../reusable/ReuseProfile';
+import ReuseTemperature from '../reusable/ReuseTemperature';
+import ReuseBadge from '../reusable/ReuseBadge';
 
 import you from '../../asset/profileYou.png'
 

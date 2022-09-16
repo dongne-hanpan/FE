@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteWithCookie, getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios_d/axios';
-import { getCookie } from '../../axios_d/cookie';
+import { deleteWithCookie, getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
+import { getCookie } from '../../axios/cookie';
 
 
 export const loadMatchThunk = createAsyncThunk(

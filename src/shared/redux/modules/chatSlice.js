@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postWithCookie, postWithoutCookie } from '../../axios_d/axios';
-import { deleteCookie, getCookie } from '../../axios_d/cookie';
+import { postWithCookie, postWithoutCookie } from '../../axios/axios';
+import { deleteCookie, getCookie } from '../../axios/cookie';
 
 
 export const leaveChatThunk = createAsyncThunk(
@@ -15,6 +15,7 @@ export const submitResultThunk = createAsyncThunk(
   async (sports,result_data) => {
     const cookie = getCookie('mytoken');
     const res = await postWithCookie(`/api/${sports}/result`, result_data, cookie);
+    return res;
   }
 )
 
