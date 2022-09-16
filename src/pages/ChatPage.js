@@ -1,26 +1,20 @@
-import { useParams } from "react-router";
 import styled from "styled-components";
-import ChattingTitle from "../components/chatPage/ChattingTitle";
+import UserList from "../components/chatPage/UserList";
 import ChannelList from "../components/chatPage/ChannelList";
 import ChattingList from "../components/chatPage/ChattingList";
-import UserList from "../components/chatPage/UserList";
 
 const ChatPage = () => {
-  const params = useParams().match_id;
-  console.log(params)
+  const params = 1;
   return (
     <MainPageWrapper>
-      <ChattingTitle />
       <BodyWrapper>
         <MenuWrapper>
           <ChannelList />
           {params ? <UserList /> : null}
         </MenuWrapper>
-        {params ? (
-          <ChattingWrapper>
-            <ChattingList></ChattingList>
-          </ChattingWrapper>
-        ) : null}
+        <ChattingWrapper>
+          {params ? <ChattingList /> : null}
+        </ChattingWrapper>
       </BodyWrapper>
     </MainPageWrapper>
   );
