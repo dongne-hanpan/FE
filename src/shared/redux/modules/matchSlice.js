@@ -63,7 +63,6 @@ const matchSlice = createSlice({
   },
   extraReducers:(builder) => {
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.matches = action.payload;
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {

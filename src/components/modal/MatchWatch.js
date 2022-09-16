@@ -8,7 +8,7 @@ import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
 import ReuseBadge from '../reusable/ReuseBadge';
 
-import you from '../../asset/profileYou.png'
+import profile from '../../asset/defaultprofile.jpg';
 
 const MatchWatch = () => {
   const dispatch = useDispatch();
@@ -33,27 +33,27 @@ const MatchWatch = () => {
     <ModalWatchComp>
       <MatchInfo>
         <MatchDateTimePlace>
-          <MatchDay>{modalData.matchDay}</MatchDay>
-          <MatchTime>{modalData.matchTime}</MatchTime>
+          <MatchDay>{modalData.date}</MatchDay>
+          <MatchTime>{modalData.time}</MatchTime>
           <MatchPlace>
-            <Place>{modalData.matchPlace}
+            <Place>{modalData.place}
             <PlaceIcon>info
-              <PlaceDetail>{modalData.matchPlaceDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
+              <PlaceDetail>{modalData.placeDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
             </PlaceIcon>
             </Place>
           </MatchPlace>
         </MatchDateTimePlace>
         <MatchHost>
-            <ReuseProfile imgSrc={you} content={modalData.hostNickname} imgSize={80} contentSize={16}/>
-            <ReuseBadge bdgType={'rank'} content={modalData.hostLevel} />
+            <ReuseProfile imgSrc={modalData.profileImage_HOST ? modalData.profileImage_HOST :profile} content={modalData.writer} imgSize={80} contentSize={16}/>
+            <ReuseBadge bdgType={'rank'} content={modalData.level_HOST} />
           </MatchHost>
       </MatchInfo>
       <SplitHoriz />
       <Matchadditional>
         <MatchDesc>
-          <MatchDescContent>{modalData.matchDesc}</MatchDescContent>
+          <MatchDescContent>{modalData.contents}</MatchDescContent>
         </MatchDesc>
-        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.hostTemp} />
+        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.mannerPoint_HOST} />
       </Matchadditional>
 
       <MatchContact>

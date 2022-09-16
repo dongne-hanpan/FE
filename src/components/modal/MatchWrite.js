@@ -17,6 +17,9 @@ const MatchWrite = () => {
   const matchDescRef = useRef(null);
   const intakeRef = useRef(null);
   const [place, setPlace] = useState(null);
+  const regionAndSports = getLocal('regionAndSports');
+  const sportsEn = regionAndSports.sportsEn;
+  
   //이전 날짜 불가능하게 만들기
   useEffect(() => {
     matchDateRef.current.min = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
@@ -50,16 +53,15 @@ const MatchWrite = () => {
     const selectPlaceArray = place.split(',');
 
     const matchMakeData = {
-      sports: sports,
-      region: regionId,
-      matchState: 'recruit',
+      sports: sportsEn,
+      region: parseInt(regionId),
+      matchStatus: 'recruit',
       date: matchDay,
       time: matchTime,
       place: selectPlaceArray[0],
       placeDetail: selectPlaceArray[1],
       contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
-      max_user: intakeValue,
-      now_user: 1
+      matchIntakeFull: intakeValue,
     }
     console.log(matchMakeData);
     dispatch(makeMatchThunk(matchMakeData));
