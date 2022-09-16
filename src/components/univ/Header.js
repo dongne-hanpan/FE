@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { refreshUserThunk } from '../../shared/redux/modules/userSlice';
 import { setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
@@ -9,17 +11,25 @@ import ReuseReserved from '../reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';
-import sun from '../../asset/weather/sunny.png';
 import profile from '../../asset/defaultprofile.jpg';
 
 // tmp
 import dummyAlerm from '../../dummyData/dummyAlerm';
-import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const navigate = useNavigate();
+
+  //새로고침 등으로 userData 값 사라지면, 
+  useEffect(() => {
+    if(userData.username === undefined){
+      dispatch(refreshUserThunk());
+    }else{
+      console.log(userData);
+    }
+  },[userData])
+
 
   const goMyPage = () => {
     if(userData.username){

@@ -21,6 +21,14 @@ export const signupUserThunk = createAsyncThunk(
     }
   }
 );
+export const refreshUserThunk = createAsyncThunk(
+  "user/refreshtUserThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/refresh", cookie);
+    return res;
+  }
+);
 export const logoutUserThunk = createAsyncThunk(
   "user/logoutUserThunk",
   async () => {
@@ -62,6 +70,16 @@ const userSlice = createSlice({
       } else{
         alert('로그인 실패했습니다');
       }
+    });
+    builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
+        console.log('refresh completed');
+        const data = action.payload;
+        const newUserData = {
+          username: data.username,
+          nickname: data.nickname,
+          profileImage: data.profileImage,
+        };
+        state.userData = newUserData;
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
       console.log('logout completed');
