@@ -12,6 +12,7 @@ import ReuseReserved from '../reusable/ReuseReserved';
 //temp
 import logo from '../../asset/logo.png';
 import profile from '../../asset/defaultprofile.jpg';
+import { getCookie } from '../../shared/axios/cookie';
 
 // tmp
 import dummyAlerm from '../../dummyData/dummyAlerm';
@@ -23,7 +24,8 @@ const Header = () => {
 
   //새로고침 등으로 userData 값 사라지면, 
   useEffect(() => {
-    if(userData.username === undefined){
+    const cookie = getCookie('mytoken');
+    if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
     }else{
       console.log(userData);
