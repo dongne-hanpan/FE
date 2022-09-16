@@ -1,10 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postWithCookie, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, postWithCookie, postWithoutCookie } from '../../axios/axios';
 import { deleteCookie, getCookie } from '../../axios/cookie';
 
+export const getChatDataThunk = createAsyncThunk(
+  "chat/getChatDataThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie(`/api/match/chatroom/${match_id}`,cookie);
+    console.log(res);
+    return res;
+  }
+)
 
 export const leaveChatThunk = createAsyncThunk(
-  "user/loginUserThunk",
+  "chat/leaveChatThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/login", user_data);
     return res;
@@ -24,7 +33,6 @@ const chatSlice = createSlice({
   initialState: {
     chatList:[],
     nowChatData:{
-
     }
   },
   reducers: {
@@ -34,10 +42,14 @@ const chatSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getChatDataThunk.fulfilled, (state,action) => {
+      console.log('get chatData completed');
+      state.nowChatData = action.payload;
+    });
     builder.addCase(submitResultThunk.fulfilled, (state,action) => {
       console.log('result submit completed');
       console.log(action.payload);
-    })
+    });
   }
 });
 

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ChatBox from './ChatBox';
+//tmp
+import profile from '../../asset/defaultprofile.jpg';
 
 
 const ChatNav = ({chatListData}) => {
@@ -12,7 +14,7 @@ const ChatNav = ({chatListData}) => {
   return(
     <ChatNavComp>
       <ChatNavHead>
-        <ReuseProfile imgSrc={userData.profileImage} imgSize={60} content={'sparta13'} contentSize={14} />
+        <ReuseProfile imgSrc={userData.profileImage ? userData.profileImage : profile} imgSize={60} content={'sparta13'} contentSize={14} />
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>
