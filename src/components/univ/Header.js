@@ -32,6 +32,9 @@ const Header = () => {
     }
   },[userData])
 
+  const goIndexPage = () => {
+    navigate('/');
+  }
 
   const goMyPage = () => {
     if(userData.username){
@@ -43,7 +46,7 @@ const Header = () => {
   return(
     <HeaderComp>
       <HeaderLogoSection>
-        <HeaderLogo src={logo} alt="dongne_logo" />
+        <HeaderLogo src={logo} alt="dongne_logo" onClick={goIndexPage} />
       </HeaderLogoSection>
 
       <HeaderAlermSection>
