@@ -57,7 +57,7 @@ const MatchCard = ({data}) => {
         </MatchIntake>
         {data.matchStatus === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={'연락하기'} clickEvent={contactToHost} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
         }
       </MatchBtns>
     </MatchComp>
