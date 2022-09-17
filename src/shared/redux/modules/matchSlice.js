@@ -55,6 +55,7 @@ const matchSlice = createSlice({
     matches: [
       
     ],
+    elseData:{}
   },
   reducers:{
     setModal: (state, action) => {
@@ -66,8 +67,11 @@ const matchSlice = createSlice({
       state.matches = action.payload;
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.matches = action.payload;
+      const {matchList, ...rest} = action.payload;
+      console.log(rest);
+      console.log(matchList);
+      state.elseData = rest;
+      state.matches = matchList;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');

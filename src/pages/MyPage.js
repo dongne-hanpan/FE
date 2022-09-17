@@ -19,6 +19,8 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const myMatchList = useSelector((state) => state.match.matches);
+  const myPageData = useSelector((state) => state.match.elseData);
   const regionAndSports = getLocal('regionAndSports');
   const sportsEn = regionAndSports.sportsEn;
   //match 받아오기
@@ -46,9 +48,9 @@ const MyPage = () => {
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
-          <ReuseTemperature type={'personal'} type2={'score'} data={85}/>
-          <ReuseTemperature type={'personal'} type2={'count'} data={18}/>
-          <ReuseTemperature type={'personal'} type2={'temper'} data={69}/>
+          <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score}/>
+          <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount}/>
+          <ReuseTemperature type={'personal'} type2={'temper'} data={myPageData.mannerPoint}/>
         </RankArticle>
       </SportsAndRank>
 
@@ -58,8 +60,8 @@ const MyPage = () => {
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <MatchContainerBody>
-          {dummyMyMatch? dummyMyMatch.map((each) => 
-            <MatchCard key={each.id} data={each} />
+          {myMatchList? myMatchList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
           ):<></>}
         </MatchContainerBody>
       </MatchContainer>
