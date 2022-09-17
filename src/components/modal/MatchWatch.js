@@ -71,7 +71,7 @@ const MatchWatch = () => {
         </MatchIntake>
         {
           modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={contactToHost} />
+          <ReuseBtn styleType={'stretch'} content={checkParticipant ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
           :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
         }
       </MatchContact>
