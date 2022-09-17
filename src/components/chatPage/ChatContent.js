@@ -4,24 +4,26 @@ import ReuseProfile from '../reusable/ReuseProfile';
 
 // tmp
 import defaultProfile from '../../asset/defaultprofile.jpg';
+import { useSelector } from 'react-redux';
 
 
 function ChatContent({data}) {
+  const userData = useSelector((state) => state.user.userData);
   return (
-    <ChatContentComp isMe={data.isMe}>
-      {data.isMe ? 
+    <ChatContentComp isMe={data.sender !== userData.nickname}>
+      {data.sender !== userData.nickname ? 
       <>
       <ChatUser>
         <ReuseProfile imgSrc={data.profileImage ? data.profileImage: defaultProfile} imgSize={30}/>
       </ChatUser>
       <ChatNameAndContent>
-        <ChatNickname>{data.nickname}</ChatNickname>
-        <Chat>{data.content}</Chat>
+        <ChatNickname>{data.sender}</ChatNickname>
+        <Chat>{data.message}</Chat>
       </ChatNameAndContent>
       </>
       :
       <Chat>
-        {data.content}
+        {data.message}
       </Chat>
       }
     </ChatContentComp>

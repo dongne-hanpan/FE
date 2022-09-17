@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import ChatContent from './ChatContent';
@@ -7,7 +7,6 @@ import ChatContent from './ChatContent';
 import StompJS from "stompjs";
 import SockJS from "sockjs-client";
 import axios from "axios";
-import Message from "./Message";
 import { getCookie } from "../../shared/axios/cookie";
 import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +16,6 @@ import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
 const ChatContainer = ({chatContents}) => {
-  const sender = window.localStorage.getItem("sender");
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const params = useParams().match_id;
@@ -25,7 +23,7 @@ const ChatContainer = ({chatContents}) => {
     "Content-Type": "application/json", 
     "Authorization": `Bearer ${getCookie("mytoken")}`,
   };
-  const BASE_URL = "http://3.38.191.6";
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   //나 이제 채팅 쓸꺼야
   let sock = new SockJS(`${BASE_URL}/ws/chat`);
@@ -78,7 +76,6 @@ const ChatContainer = ({chatContents}) => {
   const dispatch = useDispatch();
   const chatData = dummyChatDatas[params];
   const userData = useSelector((state) => state.user.userData);
-  const chatRef = useRef(null);
 
   const writeResult = () => {
     if(chatData.status === 'reserved'){
@@ -123,7 +120,6 @@ const ChatContainer = ({chatContents}) => {
       headers,
       JSON.stringify({
         match_id: parseInt(params),
-        user_id: "test1234",
         message: message,
       })
     );
@@ -133,17 +129,9 @@ const ChatContainer = ({chatContents}) => {
   return(
     <>
     <ChatContainerComp>
-        {messageList.map((message, params) => (
-          <Message
-            key={params}
-            message={message.message}
-            sender={message.sender}
-            myMessage={message.sender === sender ? true : false}
-          />
+        {messageList.map((each, params) => (
+          <ChatContent key={params} data={each} />
         ))}
-      {/* {chatContents.map((each) => 
-      <ChatContent key={each.id} data={each}/>
-      )} */}
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
