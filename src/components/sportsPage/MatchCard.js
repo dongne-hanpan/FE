@@ -30,7 +30,7 @@ const MatchCard = ({data}) => {
   }
   const contactToHost = () => {
     // 신청하고 알림받아서 수락하는 과정 생략
-    if(!checkParticipant){
+    if(checkParticipant() === false){
       dispatch(enterMatchThunk(data.match_id));
     }
     dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
@@ -57,7 +57,7 @@ const MatchCard = ({data}) => {
         </MatchIntake>
         {data.matchStatus === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
         }
       </MatchBtns>
     </MatchComp>

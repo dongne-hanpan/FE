@@ -29,7 +29,7 @@ const MatchWatch = () => {
     return false;
   }
   const contactToHost = () => {
-    if(!checkParticipant){
+    if(!checkParticipant() === false){
       dispatch(enterMatchThunk(modalData.match_id));
     }
     dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
@@ -71,7 +71,7 @@ const MatchWatch = () => {
         </MatchIntake>
         {
           modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={checkParticipant ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
+          <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
           :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
         }
       </MatchContact>
