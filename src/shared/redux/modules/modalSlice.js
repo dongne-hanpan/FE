@@ -4,28 +4,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const modalSlice = createSlice({
   name: "modalSlice",
   initialState: {
-    modalData: {
-    },
-    dialogueData:
-    {}
-    // {
-    //   dialType: 'confirmRemove',
-    // }
-    // {
-    //   dialType: 'confirmSignup',
-    // }
-    // {
-    //   dialType: 'confirmLogin',
-    // }
-    // {
-    //   dialType: 'confirmWrite',
-    // }
-    // {
-    //   dialType: 'confirmApply',
-    // }
-    // {
-    //   dialType: 'confirmResult',
-    // }
+    modalData: {},
+    dialogueData:{}
   },
   reducers:{
     setModal: (state, action) => {
@@ -44,7 +24,7 @@ const modalSlice = createSlice({
       state.modalData = {};
       state.dialogueData = {};
     }
-  }
+  },
 });
 
 export const { setModal, clearModal } = modalSlice.actions;
