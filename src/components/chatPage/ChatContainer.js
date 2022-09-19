@@ -15,7 +15,7 @@ import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
-const ChatContainer = ({chatContents}) => {
+const ChatContainer = ({chatStatus, chatContents}) => {
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const params = useParams().match_id;
@@ -70,25 +70,24 @@ const ChatContainer = ({chatContents}) => {
       console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
-  }, []);
+  }, [params]);
 
   //메세지 보내기 관련
   const dispatch = useDispatch();
-  const chatData = dummyChatDatas[params];
+  const chatData = useSelector((state) => state.chat.nowChatData);
   const userData = useSelector((state) => state.user.userData);
 
   const writeResult = () => {
-    if(chatData.status === 'reserved'){
+    if(chatStatus === 'recruit'){
       const modalResultData = {
         modalType: 'matchResult',
-        matchDay: chatData.matchDay,
-        matchTime: chatData.matchTime,
-        matchPlace: chatData.matchPlace,
-        reservedPeople: chatData.reservedPeople
+        matchDay: chatData.date,
+        matchTime: chatData.time,
+        matchPlace: chatData.place,
+        reservedPeople: chatData.userListInMatch
       }
       dispatch(setModal(modalResultData));
     } else{
-      console.log('hyy');
       const dialDenyResult = {
         dialType: 'denyResult'
       };
@@ -97,7 +96,7 @@ const ChatContainer = ({chatContents}) => {
   }
 
   const reserve = () => {
-    if(chatData.status === 'recruit'){
+    if(chatStatus === 'recruit'){
       const dialReserveWhoData = {
         dialType: 'reserveWho',
         participants: chatData.participants

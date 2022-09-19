@@ -50,7 +50,7 @@ const ChatPage = () => {
           </ChatPartici>
         </ChatHead>
 
-        <ChatContainer chatContents={chatData.chatContents} />
+        <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
       </ChatNow>
     </MainPage>
   )
