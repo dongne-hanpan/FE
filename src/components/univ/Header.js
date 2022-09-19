@@ -66,7 +66,7 @@ const Header = () => {
             :'로그인 해주세요'
             }
           </UserGreetNormal>
-          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} clickEvent={goMyPage} />
+          <ReuseProfile imgSize={30} imgSrc={userData.profileImage} clickEvent={goMyPage} />
         </UserGreet>
         <UserElse>
           {userData.username ? 

@@ -22,7 +22,7 @@ const ChatNav = () => {
   return(
     <ChatNavComp>
       <ChatNavHead>
-        <ReuseProfile imgSrc={userData.profileImage ? userData.profileImage : profile} imgSize={60} content={userData.nickname} contentSize={14} />
+        <ReuseProfile imgSrc={userData.profileImage} imgSize={60} content={userData.nickname} contentSize={14} />
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>

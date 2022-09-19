@@ -14,7 +14,7 @@ function ChatContent({data}) {
       {data.sender !== userData.nickname ? 
       <>
       <ChatUser>
-        <ReuseProfile imgSrc={data.profileImage ? data.profileImage: defaultProfile} imgSize={30}/>
+        <ReuseProfile imgSrc={data.profileImage} imgSize={30}/>
       </ChatUser>
       <ChatNameAndContent>
         <ChatNickname>{data.sender}</ChatNickname>

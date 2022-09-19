@@ -8,8 +8,6 @@ import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
 import ReuseBadge from '../reusable/ReuseBadge';
 
-import profile from '../../asset/defaultprofile.jpg';
-
 const MatchWatch = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
@@ -49,7 +47,7 @@ const MatchWatch = () => {
           </MatchPlace>
         </MatchDateTimePlace>
         <MatchHost>
-            <ReuseProfile imgSrc={modalData.profileImage_HOST ? modalData.profileImage_HOST :profile} content={modalData.writer} imgSize={80} contentSize={16}/>
+            <ReuseProfile imgSrc={modalData.profileImage_HOST} content={modalData.writer} imgSize={80} contentSize={16}/>
             <ReuseBadge bdgType={'rank'} content={modalData.level_HOST} />
           </MatchHost>
       </MatchInfo>

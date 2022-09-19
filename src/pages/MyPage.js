@@ -41,7 +41,7 @@ const MyPage = () => {
   return(
     <MainPage>
       <SportsAndRank>
-        <ReuseProfile imgSrc={userData.profileImage ? userData.profileImage : profile} imgSize={'220'} />
+        <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>

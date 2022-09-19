@@ -40,7 +40,7 @@ const ChatPage = () => {
           </ChatInfo>
           <ChatPartici>
             {chatData.userListInMatch ? chatData.userListInMatch.map((each,params) => 
-            <ReuseProfile key={params} direc={'horiz'} imgSrc={each.profileImage ? each.profileImage : profile} imgSize={30} content={each.nickname} />
+            <ReuseProfile key={params} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
             ):<></>}
           </ChatPartici>
         </ChatHead>
