@@ -1,6 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { getMyChatListThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ChatBox from './ChatBox';
@@ -8,8 +9,15 @@ import ChatBox from './ChatBox';
 import profile from '../../asset/defaultprofile.jpg';
 
 
-const ChatNav = ({chatListData}) => {
+const ChatNav = () => {
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const myChatList = useSelector((state) => state.chat.chatList);
+  console.log(myChatList);
+
+  useEffect(() => {
+    dispatch(getMyChatListThunk())
+  },[])
 
   return(
     <ChatNavComp>
@@ -18,7 +26,7 @@ const ChatNav = ({chatListData}) => {
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>
-        {chatListData.map((each) => 
+        {myChatList.map((each) => 
           <ChatBox key={each.chatId} data={each} />
         )}
       </ChatNavContainer>
