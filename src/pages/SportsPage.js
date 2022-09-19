@@ -8,7 +8,6 @@ import { loadMatchThunk } from '../shared/redux/modules/matchSlice';
 import { getLocal } from '../shared/axios/local';
 
 // tmp
-// import dummyMatch from '../dummyData/dummyMatch';
 import { dummySports } from '../dummyData/dummyIndex';
 
 const SportsPage = () => {

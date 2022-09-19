@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { getChatDataThunk, getMyChatListThunk } from '../shared/redux/modules/chatSlice';
+import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
 
 //tmp
 import profile from '../asset/defaultprofile.jpg';

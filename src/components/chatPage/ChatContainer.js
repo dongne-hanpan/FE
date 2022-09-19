@@ -10,7 +10,6 @@ import axios from "axios";
 import { getCookie } from "../../shared/axios/cookie";
 import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
-import { dummyChatDatas } from '../../dummyData/dummyChat';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 
