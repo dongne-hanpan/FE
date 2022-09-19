@@ -9,10 +9,7 @@ import MatchCard from '../components/sportsPage/MatchCard';
 import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
-
-// tmp
-import profile from '../asset/defaultprofile.jpg';
-import dummyMyMatch from '../dummyData/dummyMyMatch';
+import { setModal } from '../shared/redux/modules/modalSlice';
 
 
 const MyPage = () => {
@@ -23,6 +20,7 @@ const MyPage = () => {
   const myPageData = useSelector((state) => state.match.elseData);
   const regionAndSports = getLocal('regionAndSports');
   const sportsEn = regionAndSports.sportsEn;
+  
   //match 받아오기
   useEffect(() => {
     console.log('get my matches!!!');
@@ -35,16 +33,21 @@ const MyPage = () => {
       navigate('/')
     }
   },[userData])
+
+  const showChageProfileModal = () => {
+    dispatch(setModal({modalType: 'changeProfile'}));
+  }
   const doLogout = () => {
     dispatch(logoutUserThunk());
   }
+  
   return(
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>

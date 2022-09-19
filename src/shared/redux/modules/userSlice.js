@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWithCookie, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
@@ -37,19 +37,21 @@ export const logoutUserThunk = createAsyncThunk(
     return res;
   }
 );
+export const updateProfileThunk = createAsyncThunk(
+  "match/updateProfileThunk",
+  async(image_data) => {
+    const cookie = getCookie('mytoken');
+    const res = await postWithCookieFormData(`/api/user/upload-image`, image_data, cookie);
+    return res;
+  }
+);
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
-    userData: {
-      // userId: 1,
-      // username: 'sparta12',
-      // nickname: '영동',
-      // profileImage: me
-    },
+    userData: {},
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
       console.log('signup completed');
@@ -85,6 +87,10 @@ const userSlice = createSlice({
       console.log('logout completed');
       deleteCookie("mytoken");
       state.userData = {};
+    });
+    builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
+      console.log('post image completed');
+      state.userData = {...state.userData, profileImage:action.payload}
     });
   }
 });
