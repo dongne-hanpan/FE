@@ -1,24 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import red from '../../asset/red.png'
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 
-const HeaderAlerm = ({alermType, checked, content}) => {
+const HeaderAlerm = ({data}) => {
+  const dispatch = useDispatch();
+  const { match_id, ...rest } = data;
+  const [isChecked, setIsChecked] = useState(false);
+
+  const checkApplicant = () => {
+    if(!isChecked){
+      setIsChecked(true)
+    }
+    dispatch(setModal({modalType: 'userWatch', userData: rest}))
+  }
+
+  const showPermitDial = (e) => {
+    if(e.target.ariaLabel === 'userDetail'){
+      return
+    }
+    dispatch(setDialogue({dialType: 'permit', data: data}))
+  }
   return(
-    <AlermComp>
+    <AlermComp onClick={showPermitDial}>
       <AlermImgBox>
-        {checked ? <AlermImg src={red} alt='checkToggle'/>: <></>}
+        {isChecked ? <></> : <AlermImg src={red} alt='checkToggle'/>}
       </AlermImgBox>
       <AlermMsg>
-        {content}
+        {data.nickname} 님의 매치 신청이 도착했습니다.
       </AlermMsg>
-      {alermType === 'choose' ? 
       <AlermBtnBox>
-        <ReuseBtn direc={'horiz'} styleType={'small'} content={'수락'} />
-        <ReuseBtn direc={'horiz'} styleType={'small'} content={'정보'} />
+        <ReuseBtn name={'userDetail'} direc={'horiz'} styleType={'small'} content={'정보'} clickEvent={checkApplicant} />
       </AlermBtnBox>
-      :<></>
-      }
     </AlermComp>
   )
 };

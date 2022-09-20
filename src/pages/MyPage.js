@@ -20,7 +20,6 @@ const MyPage = () => {
   const myPageData = useSelector((state) => state.match.elseData);
   const regionAndSports = getLocal('regionAndSports');
   const sportsEn = regionAndSports.sportsEn;
-  
   //match 받아오기
   useEffect(() => {
     console.log('get my matches!!!');
@@ -46,14 +45,14 @@ const MyPage = () => {
       <SportsAndRank>
         <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
         <UserBtns>
-          <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
+          <ReuseBadge direc={'verti'} bdgType={'rank'} content={myPageData.level} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
-          <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score}/>
-          <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount}/>
-          <ReuseTemperature type={'personal'} type2={'temper'} data={myPageData.mannerPoint}/>
+          <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score} />
+          <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount} />
+          <ReuseTemperature type={'personal'} type2={'temper'} data={myPageData.mannerPoint} />
         </RankArticle>
       </SportsAndRank>
 

@@ -1,7 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { contactHostThunk } from '../../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBadge from '../reusable/ReuseBadge';
 import ReuseBtn from '../reusable/ReuseBtn';
@@ -9,15 +10,17 @@ import ReuseBtn from '../reusable/ReuseBtn';
 
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((state) => state.user.userData);
   const showMatch = (e) => {
-    if(e.target.ariaLabel !== 'contactBtn'){
-      const matchData = {
-        modalType:'matchWatch',
-        ...data
-      }
-      dispatch(setModal(matchData))
+    if(e.target.ariaLabel === 'contactBtn' || e.target.ariaLabel === 'removeBtn'){
+      return
     }
+    const matchData = {
+      modalType:'matchWatch',
+      ...data
+    }
+    dispatch(setModal(matchData))
   }
   const checkParticipant = () => {
     const userListInMatch = data.userListInMatch;
@@ -31,10 +34,16 @@ const MatchCard = ({data}) => {
   const contactToHost = () => {
     // 신청하고 알림받아서 수락하는 과정 생략
     if(checkParticipant() === false){
-      dispatch(enterMatchThunk(data.match_id));
+      dispatch(contactHostThunk(data.match_id));
+      dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
+    }else{
+      navigate(`/chat/${data.match_id}`)
     }
-    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
   };
+
+  const removeMatch = () => {
+    dispatch(setDialogue({dialType: 'removeMatch', matchId: data.match_id}));
+  }
 
   return(
     <MatchComp matchStatus={data.matchStatus} onClick={showMatch}>
@@ -45,6 +54,11 @@ const MatchCard = ({data}) => {
           <MatchPlace>{data.place}</MatchPlace>
         </MatchDayTimePlace>
         {data.matchStatus !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.level_HOST} /> : <></>}
+        {data.writer === userData.nickname ?      
+        <BtnBox>
+          <ReuseBtn name={'removeBtn'} direc={'horiz'} styleType={'circle'} content={'삭'} clickEvent={removeMatch} />
+        </BtnBox>
+        : <></>}
       </MatchDate>
       <MatchBtns>
         <MatchIntake matchStatus={data.matchStatus}>
@@ -142,3 +156,7 @@ const MatchIntakeCnt = styled.span`
 const MatchIntakeFull = styled.span`
 `
 
+const BtnBox = styled.div`
+  display: flex;
+  margin-left: 6px;
+`
