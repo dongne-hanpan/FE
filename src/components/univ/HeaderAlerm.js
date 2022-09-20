@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import red from '../../asset/red.png'
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 
-const HeaderAlerm = ({alermType, checked, content}) => {
+const HeaderAlerm = ({data}) => {
+  const dispatch = useDispatch();
+  const showPermitDial = (e) => {
+    if(e.target.ariaLabel === 'userDetail'){
+      return
+    }
+    dispatch(setDialogue({dialType: 'permit', data: data}))
+  }
   return(
-    <AlermComp>
+    <AlermComp onClick={showPermitDial}>
       <AlermImgBox>
         {checked ? <AlermImg src={red} alt='checkToggle'/>: <></>}
       </AlermImgBox>

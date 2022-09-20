@@ -12,6 +12,7 @@ import DialConfResult from './DialConfResult';
 import DialDenyResult from './DialDenyResult';
 import DialReserveWho from './DialReserveWho';
 import DialRemoveMatch from './DialRemoveMatch';
+import DialPermit from './DialPermit';
 
 
 const DialTemplate = () => {
@@ -48,6 +49,8 @@ const DialTemplate = () => {
       return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){
       return <DialRemoveMatch />
+    } else if(dialData.dialType === 'permit'){
+      return <DialPermit />
     }
   }
 
