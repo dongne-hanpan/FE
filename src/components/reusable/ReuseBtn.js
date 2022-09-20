@@ -94,6 +94,23 @@ const BtnComp = styled.button`
         transition: all 0.2s ease-in-out;
       }
       `
+    }else if(styleType === 'circle'){
+      return css`
+      height: 25px;
+      width: 25px;
+      border: 2px solid ${theme.colors.gray};
+      color: ${theme.colors.darkgray};
+      border-radius: 1rem;
+      background-color: ${theme.colors.background};
+      opacity: 0.5;
+      &:hover{
+        opacity: 1;
+        border: 2px solid ${theme.colors.skyblue};
+        color: ${theme.colors.skyblue};
+        font-weight: ${theme.fontWeight.bold};
+        transition: all 0.2s ease-in-out;
+      }
+      `
     }
   }}
   `
