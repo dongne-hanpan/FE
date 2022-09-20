@@ -78,18 +78,18 @@ const BadgeComp = styled.div`
         `  
       }
     } else if(bdgType === 'btn'){
-      if(content === '프로필 편집' || content ==='로그 아웃'){
+      if( content ==='로그 아웃' || content === '채팅창 가기' || content === '마이 페이지'){
         return css`
         margin: 2px;
-        background-color: ${theme.colors.background};
-        border: 1px solid ${theme.colors.gray};
+        background-color: ${theme.colors.skyblue};
+        // border: 1px solid ${theme.colors.gray};
         cursor: pointer;
         `
-      } else if(content === '과거 매치'){
+      } else if(content === '프로필 편집'){
         return css`
         margin: 2px;
         color: ${theme.colors.background};
-        background-color: ${theme.colors.black};
+        background-color: ${theme.colors.orange};
         cursor: pointer;
         `  
       }
