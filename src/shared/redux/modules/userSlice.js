@@ -45,6 +45,14 @@ export const updateProfileThunk = createAsyncThunk(
     return res;
   }
 );
+export const getAlermThunk = createAsyncThunk(
+  "user/getAlermThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/match/request", cookie);
+    return res;
+  }
+);
 export const permitAlermThunk = createAsyncThunk(
   "user/permitAlermThunk",
   async (permitData) => {
@@ -102,6 +110,9 @@ const userSlice = createSlice({
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
       console.log('post image completed');
       state.userData = {...state.userData, profileImage:action.payload}
+    });
+    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
+      state.userAlerm = action.payload;
     });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       console.log('permit completed');
