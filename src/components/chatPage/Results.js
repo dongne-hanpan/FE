@@ -24,10 +24,11 @@ export default Result;
 
 const Sep = styled.div`
   width: 100%;
+  height: 20px;
   display: flex;
   justify-content: center;
   margin: 20px 0px;
-  overflow-x: hidden;
+  overflow: hidden;
 `
 const InputTitleBox = styled.div`
   width: 360px;

@@ -67,6 +67,10 @@ const chatSlice = createSlice({
       console.log('result submit completed');
       console.log(action.payload);
     });
+    builder.addCase(submitCommentThunk.fulfilled, (state,action) => {
+      console.log('result comment completed');
+      console.log(action.payload);
+    });
   }
 });
 
