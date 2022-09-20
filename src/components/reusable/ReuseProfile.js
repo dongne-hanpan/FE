@@ -7,11 +7,8 @@ import profile from '../../asset/defaultprofile.jpg';
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   const dispatch = useDispatch()
-  const showUserDetail = () => {
-    dispatch(setModal({modalType: 'userWatch'}))
-  }
   return(
-    <ProfileComp direc={direc} onClick={clickEvent ? clickEvent: showUserDetail}>
+    <ProfileComp direc={direc} onClick={clickEvent}>
       <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' />
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>

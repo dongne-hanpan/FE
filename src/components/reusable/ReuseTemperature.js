@@ -36,10 +36,10 @@ const ReuseTemperature = ({type, type2, data, userProfile, username}) => {
   return(
     <TemperatureComp type={type}>
       <RankName>{titleRouter()}</RankName>
-      <Progress data={data} />
+      <Progress data={data ? data: 0} />
       <RankInfo>
         {userProfile ? <ReuseProfile imgSrc={userProfile} content={username} />: <></>}
-        <Temperture type={type}>{data}{unitRouter()}</Temperture>
+        <Temperture type={type}>{ data ? data: 0 }{unitRouter()}</Temperture>
       </RankInfo>
     </TemperatureComp>
   )
