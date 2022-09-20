@@ -94,21 +94,11 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     }
   }
 
-  const reserve = () => {
-    if(chatStatus === 'recruit'){
-      const dialReserveWhoData = {
-        dialType: 'reserveWho',
-        participants: chatData.participants
-      };
-      dispatch(setDialogue(dialReserveWhoData))
-    }
-  }
-
   const leaveChatRoom = () => {
-    if(chatData.hostNickname === userData.nickname){
-      console.log('host out and remove this room');
+    if(chatData.writer === userData.nickname){
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: true}));
     } else{
-      console.log('just leave one person');
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: false}));
     }
   }
 
