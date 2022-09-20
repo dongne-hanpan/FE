@@ -81,9 +81,7 @@ const matchSlice = createSlice({
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');
-    });
-    builder.addCase(makeMatchThunk.rejected , (state, action) => {
-      console.log('make match failed');
+      state.matches = action.payload;
     });
     builder.addCase(updateMatchThunk.fulfilled, (state, action) => {
       console.log('update match completed');
