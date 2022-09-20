@@ -1,17 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearAll} from '../../shared/redux/modules/modalSlice';
+import { clearAll } from '../../shared/redux/modules/modalSlice';
 
 
 const DialConfApply = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const dialData = useSelector((state) => state.modal.dialogueData);
   const cancel = () => {
-    navigate(`/chat/${dialData.matchId}`)
     dispatch(clearAll());
   }
   return(

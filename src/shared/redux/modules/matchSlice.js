@@ -40,8 +40,8 @@ export const deleteMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const enterMatchThunk = createAsyncThunk(
-  "match/enterMatchThunk",
+export const contactHostThunk = createAsyncThunk(
+  "match/contactHostThunk",
   async(match_id) => {
     const cookie = getCookie('mytoken');
     const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
@@ -60,9 +60,7 @@ export const removeMatchThunk = createAsyncThunk(
 const matchSlice = createSlice({
   name: "matchSlice",
   initialState: {
-    matches: [
-      
-    ],
+    matches: [],
     elseData:{}
   },
   reducers:{
@@ -93,7 +91,7 @@ const matchSlice = createSlice({
     builder.addCase(deleteMatchThunk.fulfilled, (state, action) => {
       console.log('delete match completed');
     });
-    builder.addCase(enterMatchThunk.fulfilled, (state, action) => {
+    builder.addCase(contactHostThunk.fulfilled, (state, action) => {
       console.log('enter completed');
     });
     builder.addCase(removeMatchThunk.fulfilled, (state, action) => {

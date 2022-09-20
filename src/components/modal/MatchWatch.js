@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import { contactHostThunk } from '../../shared/redux/modules/matchSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
@@ -41,7 +41,7 @@ const MatchWatch = () => {
   }
   const contactToHost = () => {
     if(!checkParticipant() === false){
-      dispatch(enterMatchThunk(modalData.match_id));
+      dispatch(contactHostThunk(modalData.match_id));
     }
     dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
   };
