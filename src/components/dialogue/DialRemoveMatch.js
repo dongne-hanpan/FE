@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
-import { removeMatchThunk } from '../../shared/redux/modules/matchSlice';
 
 const DialRemoveMatch = () => {
   const dispatch = useDispatch();
@@ -11,15 +9,11 @@ const DialRemoveMatch = () => {
   const cancel = () => {
     dispatch(clearDialogue());
   }
-  const remove = () => {
-    dispatch(removeMatchThunk(dialData.matchId));
     dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>⚠️ 게시물을 삭제하시겠어요? ⚠️</DialMessageTitle>
-        <DialMessageExtra>삭제 시, 채팅방도 함께 삭제됩니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'danger'} content={'삭제'} clickEvent={remove} />
