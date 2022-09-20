@@ -48,6 +48,14 @@ export const enterMatchThunk = createAsyncThunk(
     return res;
   }
 );
+export const removeMatchThunk = createAsyncThunk(
+  "match/removeMatchThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await deleteWithCookie(`/api/match/delete/${match_id}`, cookie);
+    return res;
+  }
+);
 
 const matchSlice = createSlice({
   name: "matchSlice",
@@ -88,6 +96,9 @@ const matchSlice = createSlice({
     builder.addCase(enterMatchThunk.fulfilled, (state, action) => {
       console.log('enter completed');
     });
+    builder.addCase(removeMatchThunk.fulfilled, (state, action) => {
+      console.log('removeMatch completed');
+    })
   }
 });
 
