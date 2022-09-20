@@ -113,7 +113,6 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     );
     setMessage("");
   };
-  // console.log(messageList.slice(0).reverse());
   return(
     <>
     <ChatContainerComp>
@@ -124,10 +123,6 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     <ChatInput>
       <ChatInputBtns>
         <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
-        {/* { chatData.hostNickname === userData.nickname ?
-          <BtnReserve onClick={reserve}> 예약 확정 </BtnReserve>
-          :<></>
-        } */}
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
