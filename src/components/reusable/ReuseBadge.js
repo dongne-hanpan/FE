@@ -82,7 +82,6 @@ const BadgeComp = styled.div`
         return css`
         margin: 2px;
         background-color: ${theme.colors.skyblue};
-        // border: 1px solid ${theme.colors.gray};
         cursor: pointer;
         `
       } else if(content === '프로필 편집'){
