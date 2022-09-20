@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setModal } from '../../shared/redux/modules/modalSlice';
 
+import profile from '../../asset/defaultprofile.jpg';
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   const dispatch = useDispatch()
@@ -11,7 +12,7 @@ const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}
   }
   return(
     <ProfileComp direc={direc} onClick={clickEvent ? clickEvent: showUserDetail}>
-      <Profile imgSize={imgSize} src={imgSrc} alt='profile' />
+      <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' />
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>
       : <></>

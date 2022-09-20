@@ -1,21 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
-
-import { dummyChatList, dummyChatDatas } from '../dummyData/dummyChat';
 import ChatContainer from '../components/chatPage/ChatContainer';
+import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
+
+//tmp
+import profile from '../asset/defaultprofile.jpg';
+
 
 const ChatPage = () => {
-  const {pathname} = useLocation();
-  const nowChatId = pathname.split('/')[2];
+  const dispatch = useDispatch();
+  const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
-  //내가 속해있는 채팅방 리스트 요청하는 API (만들어야 함)
-  const chatListData = dummyChatList;
-  //채팅방 데이터 요청하는 API (만들어야 함)
-  const chatData = dummyChatDatas[nowChatId];
+  const chatData = useSelector((state) => state.chat.nowChatData);
+
+  useEffect(() => {
+    dispatch(getChatDataThunk(nowChatId))
+  },[nowChatId])
 
   //userdata 없으면 돌아가
   const navigate = useNavigate();
@@ -27,21 +31,21 @@ const ChatPage = () => {
 
   return (
     <MainPage>
-      <ChatNav chatListData = {chatListData}/>
+      <ChatNav />
       <ChatNow>
         <ChatHead>
           <ChatInfo>
-            <ChatDate>{chatData.matchDay}<ChatTime>{chatData.matchTime}</ChatTime></ChatDate>
-            <ChatPlace>{chatData.matchPlace}</ChatPlace>
+            <ChatDate>{chatData.date}<ChatTime>{chatData.time}</ChatTime></ChatDate>
+            <ChatPlace>{chatData.place}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
-            {chatData.reservedPeople.map((each) => 
-            <ReuseProfile key={each.reservedId} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
-            )}
+            {chatData.userListInMatch ? chatData.userListInMatch.map((each,params) => 
+            <ReuseProfile key={params} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
+            ):<></>}
           </ChatPartici>
         </ChatHead>
 
-        <ChatContainer chatContents={chatData.chatContents} />
+        <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
       </ChatNow>
     </MainPage>
   )

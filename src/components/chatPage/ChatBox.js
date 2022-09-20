@@ -1,29 +1,23 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ReuseProfile from '../reusable/ReuseProfile';
-
-// tmp
-import defaultProfile from '../../asset/defaultprofile.jpg';
 
 
 function ChatBox({data}) {
   const navigate = useNavigate();
-  const {pathname} = useLocation();
-  const nowChatId = pathname.split('/')[2];
+  const nowChatId = useParams().match_id;
 
   const moveToChatRoom = () => {
     navigate(`/chat/${data.chatId}`);
   }
   return (
     <ChatBoxComp isNow={parseInt(nowChatId) === data.chatId} onClick={moveToChatRoom}>
-      <ChatUser>
-        <ReuseProfile imgSrc={data.profileImage ? data.profileImage: defaultProfile} imgSize={30}/>
-        <ChatNickname>{data.nickname}</ChatNickname>
-      </ChatUser>
-      <ChatPreview isNow={parseInt(nowChatId) === data.chatId}>
-        {data.lastContent}
-      </ChatPreview>
+      <ChatInfo>
+        <ChatDate isNow={parseInt(nowChatId) === data.chatId}>{data.date}</ChatDate>
+        <ChatPlace isNow={parseInt(nowChatId) === data.chatId}>{data.place}</ChatPlace>
+      </ChatInfo>
+      <ReuseProfile imgSrc={data.profileImage} content={data.hostNickname} />
     </ChatBoxComp>
   );
 }
@@ -34,6 +28,9 @@ export default ChatBox;
 const ChatBoxComp = styled.div`
   width: 100%;
   height: 110px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
   margin-bottom: 10px;
   border: 2px solid ${({theme}) => theme.colors.skyblue};
@@ -41,17 +38,21 @@ const ChatBoxComp = styled.div`
   cursor: pointer;
   background-color: ${({isNow,theme}) => isNow ? theme.colors.skyblue:theme.colors.background};
 `
-const ChatUser = styled.div`
+
+const ChatInfo = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 12px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: left;
+`;
+const ChatDate = styled.div`
+  margin-bottom: 4px;
+  color: ${({theme, isNow}) => isNow ? theme.colors.background_light : theme.colors.black};
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight: ${({theme}) => theme.fontWeight.semi_bold};
 `
-const ChatNickname = styled.div`
-  margin-left: 6px;
-  font-size: ${({theme}) => theme.fontSize.font_15};
+const ChatPlace = styled.div`
+  color: ${({theme, isNow}) => isNow ? theme.colors.background : theme.colors.darkgray};
+  font-size: ${({theme}) => theme.fontSize.font_14};
   font-weight: ${({theme}) => theme.fontWeight.medium};
-`
-const ChatPreview = styled.div`
-  color: ${({isNow,theme}) => isNow ? theme.colors.background : theme.colors.black};
-  font-size: ${({theme}) => theme.fontSize.font_15}
 `

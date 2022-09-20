@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postWithoutCookie } from '../../axios/axios';
-import { deleteCookie } from '../../axios/cookie';
+import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
+import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
 export const loginUserThunk = createAsyncThunk(
@@ -21,23 +21,37 @@ export const signupUserThunk = createAsyncThunk(
     }
   }
 );
+export const refreshUserThunk = createAsyncThunk(
+  "user/refreshtUserThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/refresh", cookie);
+    return res;
+  }
+);
+export const logoutUserThunk = createAsyncThunk(
+  "user/logoutUserThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/logout", cookie);
+    return res;
+  }
+);
+export const updateProfileThunk = createAsyncThunk(
+  "match/updateProfileThunk",
+  async(image_data) => {
+    const cookie = getCookie('mytoken');
+    const res = await postWithCookieFormData(`/api/user/upload-image`, image_data, cookie);
+    return res;
+  }
+);
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
-    userData: {
-      // userId: 1,
-      // username: 'sparta12',
-      // nickname: '영동',
-      // profileImage: me
-    },
+    userData: {},
   },
-  reducers: {
-    clearUser: (state, action) => {
-      deleteCookie("mytoken");
-      state.userData = {};
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
       console.log('signup completed');
@@ -59,8 +73,26 @@ const userSlice = createSlice({
         alert('로그인 실패했습니다');
       }
     });
+    builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
+        console.log('refresh completed');
+        const data = action.payload;
+        const newUserData = {
+          username: data.username,
+          nickname: data.nickname,
+          profileImage: data.profileImage,
+        };
+        state.userData = newUserData;
+    });
+    builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
+      console.log('logout completed');
+      deleteCookie("mytoken");
+      state.userData = {};
+    });
+    builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
+      console.log('post image completed');
+      state.userData = {...state.userData, profileImage:action.payload}
+    });
   }
 });
 
-export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;

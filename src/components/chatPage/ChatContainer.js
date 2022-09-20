@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import ChatContent from './ChatContent';
@@ -7,17 +7,14 @@ import ChatContent from './ChatContent';
 import StompJS from "stompjs";
 import SockJS from "sockjs-client";
 import axios from "axios";
-import Message from "./Message";
 import { getCookie } from "../../shared/axios/cookie";
 import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
-import { dummyChatDatas } from '../../dummyData/dummyChat';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
-const ChatContainer = ({chatContents}) => {
-  const sender = window.localStorage.getItem("sender");
+const ChatContainer = ({chatStatus, chatContents}) => {
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const params = useParams().match_id;
@@ -25,7 +22,7 @@ const ChatContainer = ({chatContents}) => {
     "Content-Type": "application/json", 
     "Authorization": `Bearer ${getCookie("mytoken")}`,
   };
-  const BASE_URL = "http://3.38.191.6";
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   //나 이제 채팅 쓸꺼야
   let sock = new SockJS(`${BASE_URL}/ws/chat`);
@@ -72,26 +69,24 @@ const ChatContainer = ({chatContents}) => {
       console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
-  }, []);
+  }, [params]);
 
   //메세지 보내기 관련
   const dispatch = useDispatch();
-  const chatData = dummyChatDatas[params];
+  const chatData = useSelector((state) => state.chat.nowChatData);
   const userData = useSelector((state) => state.user.userData);
-  const chatRef = useRef(null);
 
   const writeResult = () => {
-    if(chatData.status === 'reserved'){
+    if(chatStatus === 'recruit'){
       const modalResultData = {
         modalType: 'matchResult',
-        matchDay: chatData.matchDay,
-        matchTime: chatData.matchTime,
-        matchPlace: chatData.matchPlace,
-        reservedPeople: chatData.reservedPeople
+        matchDay: chatData.date,
+        matchTime: chatData.time,
+        matchPlace: chatData.place,
+        reservedPeople: chatData.userListInMatch
       }
       dispatch(setModal(modalResultData));
     } else{
-      console.log('hyy');
       const dialDenyResult = {
         dialType: 'denyResult'
       };
@@ -100,7 +95,7 @@ const ChatContainer = ({chatContents}) => {
   }
 
   const reserve = () => {
-    if(chatData.status === 'recruit'){
+    if(chatStatus === 'recruit'){
       const dialReserveWhoData = {
         dialType: 'reserveWho',
         participants: chatData.participants
@@ -123,7 +118,6 @@ const ChatContainer = ({chatContents}) => {
       headers,
       JSON.stringify({
         match_id: parseInt(params),
-        user_id: "test1234",
         message: message,
       })
     );
@@ -133,17 +127,9 @@ const ChatContainer = ({chatContents}) => {
   return(
     <>
     <ChatContainerComp>
-        {messageList.map((message, params) => (
-          <Message
-            key={params}
-            message={message.message}
-            sender={message.sender}
-            myMessage={message.sender === sender ? true : false}
-          />
+        {messageList.map((each, params) => (
+          <ChatContent key={params} data={each} />
         ))}
-      {/* {chatContents.map((each) => 
-      <ChatContent key={each.id} data={each}/>
-      )} */}
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>

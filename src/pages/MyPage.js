@@ -6,21 +6,21 @@ import ReuseProfile from '../components/reusable/ReuseProfile';
 import ReuseTemperature from '../components/reusable/ReuseTemperature';
 import ReuseBadge from '../components/reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
-import { clearUser } from '../shared/redux/modules/userSlice';
-
-// tmp
-import profile from '../asset/defaultprofile.jpg';
-import dummyMyMatch from '../dummyData/dummyMyMatch';
 import { getLocal } from '../shared/axios/local';
+import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
+import { setModal } from '../shared/redux/modules/modalSlice';
 
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const myMatchList = useSelector((state) => state.match.matches);
+  const myPageData = useSelector((state) => state.match.elseData);
   const regionAndSports = getLocal('regionAndSports');
   const sportsEn = regionAndSports.sportsEn;
+  
   //match 받아오기
   useEffect(() => {
     console.log('get my matches!!!');
@@ -33,22 +33,27 @@ const MyPage = () => {
       navigate('/')
     }
   },[userData])
-  const doLogout = () => {
-    dispatch(clearUser());
+
+  const showChageProfileModal = () => {
+    dispatch(setModal({modalType: 'changeProfile'}));
   }
+  const doLogout = () => {
+    dispatch(logoutUserThunk());
+  }
+  
   return(
     <MainPage>
       <SportsAndRank>
-        <ReuseProfile imgSrc={userData.profileImage ? userData.profileImage : profile} imgSize={'220'} />
+        <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={'중급'}/>
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'}/>
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
-          <ReuseTemperature type={'personal'} type2={'score'} data={85}/>
-          <ReuseTemperature type={'personal'} type2={'count'} data={18}/>
-          <ReuseTemperature type={'personal'} type2={'temper'} data={69}/>
+          <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score}/>
+          <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount}/>
+          <ReuseTemperature type={'personal'} type2={'temper'} data={myPageData.mannerPoint}/>
         </RankArticle>
       </SportsAndRank>
 
@@ -58,8 +63,8 @@ const MyPage = () => {
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <MatchContainerBody>
-          {dummyMyMatch? dummyMyMatch.map((each) => 
-            <MatchCard key={each.id} data={each} />
+          {myMatchList? myMatchList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
           ):<></>}
         </MatchContainerBody>
       </MatchContainer>

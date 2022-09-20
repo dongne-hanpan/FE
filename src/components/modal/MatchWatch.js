@@ -2,13 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
-import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
 import ReuseBadge from '../reusable/ReuseBadge';
-
-import you from '../../asset/profileYou.png'
 
 const MatchWatch = () => {
   const dispatch = useDispatch();
@@ -19,41 +17,46 @@ const MatchWatch = () => {
     await navigator.clipboard.writeText(placeDetail);
     alert('주소가 복사되었습니다');
   }
+  const checkParticipant = () => {
+    const userListInMatch = modalData.userListInMatch;
+    for(let i=0; i<userListInMatch.length; i++){
+      if(userListInMatch[i].nickname === userData.nickname){
+        return true;
+      }
+    }
+    return false;
+  }
   const contactToHost = () => {
-    const applyData = {
-      matchId: null,
-      username: userData.username,
-      userLevel: userData.userLevel,
-      userTemperature: userData.userTemperature,
-    };
-    dispatch(contactMatchThunk(applyData));
-    dispatch(setDialogue({dialType: 'confirmApply'}));
+    if(!checkParticipant() === false){
+      dispatch(enterMatchThunk(modalData.match_id));
+    }
+    dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
   };
   return(
     <ModalWatchComp>
       <MatchInfo>
         <MatchDateTimePlace>
-          <MatchDay>{modalData.matchDay}</MatchDay>
-          <MatchTime>{modalData.matchTime}</MatchTime>
+          <MatchDay>{modalData.date}</MatchDay>
+          <MatchTime>{modalData.time}</MatchTime>
           <MatchPlace>
-            <Place>{modalData.matchPlace}
+            <Place>{modalData.place}
             <PlaceIcon>info
-              <PlaceDetail>{modalData.matchPlaceDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
+              <PlaceDetail>{modalData.placeDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
             </PlaceIcon>
             </Place>
           </MatchPlace>
         </MatchDateTimePlace>
         <MatchHost>
-            <ReuseProfile imgSrc={you} content={modalData.hostNickname} imgSize={80} contentSize={16}/>
-            <ReuseBadge bdgType={'rank'} content={modalData.hostLevel} />
+            <ReuseProfile imgSrc={modalData.profileImage_HOST} content={modalData.writer} imgSize={80} contentSize={16}/>
+            <ReuseBadge bdgType={'rank'} content={modalData.level_HOST} />
           </MatchHost>
       </MatchInfo>
       <SplitHoriz />
       <Matchadditional>
         <MatchDesc>
-          <MatchDescContent>{modalData.matchDesc}</MatchDescContent>
+          <MatchDescContent>{modalData.contents}</MatchDescContent>
         </MatchDesc>
-        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.hostTemp} />
+        <ReuseTemperature type={'personal'} type2={'temper'} data={modalData.mannerPoint_HOST} />
       </Matchadditional>
 
       <MatchContact>
@@ -66,7 +69,7 @@ const MatchWatch = () => {
         </MatchIntake>
         {
           modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={'연락하기'} clickEvent={contactToHost} />
+          <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
           :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
         }
       </MatchContact>

@@ -44,8 +44,8 @@ const MatchResult = () => {
   return(
     <ModalResultComp>
       <MatchDateTimePlace>
-        <MatchDay>{modalData.matchDay}<MatchTime>{modalData.matchTime}</MatchTime></MatchDay>
-        <MatchPlace>{modalData.matchPlace}</MatchPlace>
+        <MatchDay>{chatData.date}<MatchTime>{chatData.time}</MatchTime></MatchDay>
+        <MatchPlace>{chatData.place}</MatchPlace>
       </MatchDateTimePlace>
 
       <ResultFormContainer>

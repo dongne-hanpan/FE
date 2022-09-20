@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { refreshUserThunk } from '../../shared/redux/modules/userSlice';
 import { setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
@@ -9,17 +11,30 @@ import ReuseReserved from '../reusable/ReuseReserved';
 
 //temp
 import logo from '../../asset/logo.png';
-import sun from '../../asset/weather/sunny.png';
 import profile from '../../asset/defaultprofile.jpg';
+import { getCookie } from '../../shared/axios/cookie';
 
 // tmp
 import dummyAlerm from '../../dummyData/dummyAlerm';
-import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const navigate = useNavigate();
+
+  //새로고침 등으로 userData 값 사라지면, 
+  useEffect(() => {
+    const cookie = getCookie('mytoken');
+    if(userData.username === undefined && cookie){
+      dispatch(refreshUserThunk());
+    }else{
+      console.log(userData);
+    }
+  },[userData])
+
+  const goIndexPage = () => {
+    navigate('/');
+  }
 
   const goMyPage = () => {
     if(userData.username){
@@ -31,7 +46,7 @@ const Header = () => {
   return(
     <HeaderComp>
       <HeaderLogoSection>
-        <HeaderLogo src={logo} alt="dongne_logo" />
+        <HeaderLogo src={logo} alt="dongne_logo" onClick={goIndexPage} />
       </HeaderLogoSection>
 
       <HeaderAlermSection>
@@ -51,7 +66,7 @@ const Header = () => {
             :'로그인 해주세요'
             }
           </UserGreetNormal>
-          <ReuseProfile imgSize={30} imgSrc={userData.profileImage ? userData.profileImage : profile} clickEvent={goMyPage} />
+          <ReuseProfile imgSize={30} imgSrc={userData.profileImage} clickEvent={goMyPage} />
         </UserGreet>
         <UserElse>
           {userData.username ? 

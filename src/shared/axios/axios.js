@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const BASE_URL = process.env.REACT_APP_BASE_URL;
-const BASE_URL = "http://3.38.191.6";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
 export const getwithoutCookie = async(url) => {

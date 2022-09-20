@@ -7,13 +7,12 @@ import ReuseBtn from '../reusable/ReuseBtn';
 
 // tmp
 import dummyUserDetail from '../../dummyData/dummyUserDetail';
-import defaultProfile from '../../asset/defaultprofile.jpg';
 
 const UserWatch = () => {
   return(
     <UserWatchComp>
       <UserInfo>
-        <ReuseProfile imgSrc={dummyUserDetail.profileImage ? dummyUserDetail.profileImage :defaultProfile} imgSize={120}/>
+        <ReuseProfile imgSrc={dummyUserDetail.profileImage} imgSize={120}/>
         <UserInfoDetail>
           <NameAndBadge>
             <Name>{dummyUserDetail.nickname}</Name>
@@ -31,7 +30,7 @@ const UserWatch = () => {
       <UserFriends>
         {dummyUserDetail.friends.length !== 0 ?
           dummyUserDetail.friends.map((each) => 
-            <ReuseProfile key={each.nickname} direc={'horiz'} imgSrc={each.profileImage ? each.profileImage:defaultProfile} content={each.nickname}/>
+            <ReuseProfile key={each.nickname} direc={'horiz'} imgSrc={each.profileImage} content={each.nickname}/>
           ):<></>
         }
       </UserFriends>

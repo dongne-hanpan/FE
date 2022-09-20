@@ -32,6 +32,7 @@ const fontSize = {
   font_16: calcRem(16),
   font_15: calcRem(15),
   font_14: calcRem(14),
+  font_13: calcRem(13),
   font_12: calcRem(12),
 }
   /* Font weight */

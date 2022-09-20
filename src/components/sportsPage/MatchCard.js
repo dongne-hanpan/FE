@@ -1,8 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { contactMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBadge from '../reusable/ReuseBadge';
 import ReuseBtn from '../reusable/ReuseBtn';
@@ -11,7 +10,6 @@ import ReuseBtn from '../reusable/ReuseBtn';
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  
   const showMatch = (e) => {
     if(e.target.ariaLabel !== 'contactBtn'){
       const matchData = {
@@ -21,42 +19,45 @@ const MatchCard = ({data}) => {
       dispatch(setModal(matchData))
     }
   }
+  const checkParticipant = () => {
+    const userListInMatch = data.userListInMatch;
+    for(let i=0; i<userListInMatch.length; i++){
+      if(userListInMatch[i].nickname === userData.nickname){
+        return true;
+      }
+    }
+    return false;
+  }
   const contactToHost = () => {
-    // const applyData = {
-    //   matchId: null,
-    //   username: userData.username,
-    //   userLevel: userData.userLevel,
-    //   userTemperature: userData.userTemperature,
-    // };
-    // dispatch(contactMatchThunk(applyData));
-
     // 신청하고 알림받아서 수락하는 과정 생략
-    // 바로 chatRoom에 입장하기
-    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.id}));
+    if(checkParticipant() === false){
+      dispatch(enterMatchThunk(data.match_id));
+    }
+    dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
   };
 
   return(
-    <MatchComp matchState={data.matchState} onClick={showMatch}>
-      <MatchDate matchState={data.matchState}>
+    <MatchComp matchStatus={data.matchStatus} onClick={showMatch}>
+      <MatchDate matchStatus={data.matchStatus}>
         <MatchDayTimePlace>
-          <MatchDay>{data.matchDay}</MatchDay>
-          <MatchTime matchState={data.matchState}>{data.matchTime}</MatchTime>
-          <MatchPlace>{data.matchPlace}</MatchPlace>
+          <MatchDay>{data.date}</MatchDay>
+          <MatchTime matchStatus={data.matchStatus}>{data.time}</MatchTime>
+          <MatchPlace>{data.place}</MatchPlace>
         </MatchDayTimePlace>
-        {data.matchState !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.hostLevel} /> : <></>}
+        {data.matchStatus !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.level_HOST} /> : <></>}
       </MatchDate>
       <MatchBtns>
-        <MatchIntake matchState={data.matchState}>
+        <MatchIntake matchStatus={data.matchStatus}>
           <MatchIntakeCnt
-            matchState={data.matchState}
+            matchStatus={data.matchStatus}
             isFull={data.matchIntakeCnt === data.matchIntakeFull}>
             {data.matchIntakeCnt}
           </MatchIntakeCnt>/
           <MatchIntakeFull>{data.matchIntakeFull}</MatchIntakeFull> 명
         </MatchIntake>
-        {data.matchState === 'done' ? 
+        {data.matchStatus === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={'연락하기'} clickEvent={contactToHost} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
         }
       </MatchBtns>
     </MatchComp>
@@ -77,8 +78,8 @@ const MatchComp = styled.li`
   border-radius: 1rem;
   filter: drop-shadow(0px 0px 0px ${({theme}) => theme.colors.gray});
   background-color: ${({theme}) => theme.colors.background_light};
-  ${({matchState,theme}) => {
-    if(matchState === 'reserved'){
+  ${({matchStatus,theme}) => {
+    if(matchStatus === 'reserved'){
       return css`
       border: 2px solid ${theme.colors.skyblue};
       &:hover{
@@ -86,14 +87,14 @@ const MatchComp = styled.li`
         transition: filter 0.3s ease-in;
       }
       `
-    } else if(matchState === 'recruit'){
+    } else if(matchStatus === 'recruit'){
       return css`
       &:hover{
         filter: drop-shadow(8px 4px 2px ${theme.colors.gray});
         transition: filter 0.3s ease-in;
       }
       `
-    } else if(matchState === 'done'){
+    } else if(matchStatus === 'done'){
       return css`
       color: ${theme.colors.gray};
       `
@@ -118,7 +119,7 @@ const MatchDay = styled.span`
 const MatchTime = styled.span`
   margin-right: 10px;
   font-weight: ${({theme}) => theme.fontWeight.bold};
-  color: ${({matchState,theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.darkgray };
+  color: ${({matchStatus,theme}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.darkgray };
 `
 const MatchPlace = styled.span`
   margin-right: 10px;
@@ -127,16 +128,16 @@ const MatchPlace = styled.span`
 `
 const MatchBtns = styled.div`
   display: flex;
-  color: ${({matchState, theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.black}
+  color: ${({matchStatus, theme}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.black}
 `
 const MatchIntake = styled.div`
   margin-right: 14px;
-  color: ${({matchState, theme}) => matchState === 'done' ? theme.colors.gray : theme.colors.black};
+  color: ${({matchStatus, theme}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.black};
   font-size: ${({theme}) => theme.fontSize.font_20};
   font-weight:${({theme}) => theme.fontWeight.bold};
 `
 const MatchIntakeCnt = styled.span`
-  color: ${({matchState,isFull, theme}) => isFull&&(matchState !== 'done') ? theme.colors.black : theme.colors.gray};
+  color: ${({matchStatus,isFull, theme}) => isFull&&(matchStatus !== 'done') ? theme.colors.black : theme.colors.gray};
 `
 const MatchIntakeFull = styled.span`
 `

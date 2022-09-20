@@ -5,15 +5,15 @@ import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import MatchCard from '../components/sportsPage/MatchCard';
 import ReuseTemperature from '../components/reusable/ReuseTemperature';
 import { loadMatchThunk } from '../shared/redux/modules/matchSlice';
+import { getLocal } from '../shared/axios/local';
 
 // tmp
-import dummyMatch from '../dummyData/dummyMatch';
 import { dummySports } from '../dummyData/dummyIndex';
-import { getLocal } from '../shared/axios/local';
 
 const SportsPage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const matchList = useSelector((state) => state.match.matches);
   const regionAndSports = getLocal('regionAndSports');
   const sports = regionAndSports.sports;
   const sportsEn = regionAndSports.sportsEn;
@@ -38,6 +38,9 @@ const SportsPage = () => {
   const filtering = () => {
     console.log('나중에 구현할 필터링')
   }
+  useEffect(() => {
+    console.log(matchList);
+  },[matchList])
   return(
     <MainPage>
       <SportsAndRank>
@@ -63,8 +66,8 @@ const SportsPage = () => {
           </CircleBtn>
         </CircleBtns>
         <MatchContainerBody>
-          {dummyMatch? dummyMatch.map((each) => 
-            <MatchCard key={each.id} data={each} />
+          {matchList? matchList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
           ):<></>}
         </MatchContainerBody>
       </MatchContainer>

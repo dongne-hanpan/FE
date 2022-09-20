@@ -40,11 +40,11 @@ export const deleteMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const contactMatchThunk = createAsyncThunk(
-  "match/contactMatchThunk",
-  async(apply_data) => {
+export const enterMatchThunk = createAsyncThunk(
+  "match/enterMatchThunk",
+  async(match_id) => {
     const cookie = getCookie('mytoken');
-    const res = await postWithCookie("/api/match/contact", apply_data, cookie);
+    const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
     return res;
   }
 );
@@ -55,6 +55,7 @@ const matchSlice = createSlice({
     matches: [
       
     ],
+    elseData:{}
   },
   reducers:{
     setModal: (state, action) => {
@@ -63,12 +64,14 @@ const matchSlice = createSlice({
   },
   extraReducers:(builder) => {
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.matches = action.payload;
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.matches = action.payload;
+      const {matchList, ...rest} = action.payload;
+      console.log(rest);
+      console.log(matchList);
+      state.elseData = rest;
+      state.matches = matchList;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');
@@ -82,8 +85,8 @@ const matchSlice = createSlice({
     builder.addCase(deleteMatchThunk.fulfilled, (state, action) => {
       console.log('delete match completed');
     });
-    builder.addCase(contactMatchThunk.fulfilled, (state, action) => {
-      console.log('contact match completed');
+    builder.addCase(enterMatchThunk.fulfilled, (state, action) => {
+      console.log('enter completed');
     });
   }
 });
