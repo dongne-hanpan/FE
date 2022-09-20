@@ -18,6 +18,7 @@ const SportsPage = () => {
   const sports = regionAndSports.sports;
   const sportsEn = regionAndSports.sportsEn;
   const regionId = regionAndSports.regionId;
+  const region = regionAndSports.region;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
 
   //match 받아오기
@@ -54,7 +55,7 @@ const SportsPage = () => {
 
       <MatchContainer>
         <MatchContainerHeader>
-          <MatchContainerHeaderTitle>{sports}, 동네 한 판?</MatchContainerHeaderTitle>
+          <MatchContainerHeaderTitle>{region}, {sports} 한 판?</MatchContainerHeaderTitle>
           <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <CircleBtns>
