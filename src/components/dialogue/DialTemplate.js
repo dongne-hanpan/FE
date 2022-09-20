@@ -11,6 +11,7 @@ import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
 import DialConfResult from './DialConfResult';
 import DialDenyResult from './DialDenyResult';
 import DialReserveWho from './DialReserveWho';
+import DialRemoveMatch from './DialRemoveMatch';
 
 
 const DialTemplate = () => {
@@ -45,6 +46,8 @@ const DialTemplate = () => {
       return <DialDenyResult />
     } else if(dialData.dialType === 'reserveWho'){
       return <DialReserveWho />
+    } else if(dialData.dialType === 'removeMatch'){
+      return <DialRemoveMatch />
     }
   }
 

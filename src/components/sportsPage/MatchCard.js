@@ -11,13 +11,14 @@ const MatchCard = ({data}) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const showMatch = (e) => {
-    if(e.target.ariaLabel !== 'contactBtn'){
-      const matchData = {
-        modalType:'matchWatch',
-        ...data
-      }
-      dispatch(setModal(matchData))
+    if(e.target.ariaLabel === 'contactBtn' || e.target.ariaLabel === 'removeBtn'){
+      return
     }
+    const matchData = {
+      modalType:'matchWatch',
+      ...data
+    }
+    dispatch(setModal(matchData))
   }
   const checkParticipant = () => {
     const userListInMatch = data.userListInMatch;
@@ -36,6 +37,10 @@ const MatchCard = ({data}) => {
     dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
   };
 
+  const removeMatch = () => {
+    dispatch(setDialogue({dialType: 'removeMatch', matchId: data.match_id}));
+  }
+
   return(
     <MatchComp matchStatus={data.matchStatus} onClick={showMatch}>
       <MatchDate matchStatus={data.matchStatus}>
@@ -45,6 +50,11 @@ const MatchCard = ({data}) => {
           <MatchPlace>{data.place}</MatchPlace>
         </MatchDayTimePlace>
         {data.matchStatus !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.level_HOST} /> : <></>}
+        {data.writer === userData.nickname ?      
+        <BtnBox>
+          <ReuseBtn name={'removeBtn'} direc={'horiz'} styleType={'circle'} content={'삭'} clickEvent={removeMatch} />
+        </BtnBox>
+        : <></>}
       </MatchDate>
       <MatchBtns>
         <MatchIntake matchStatus={data.matchStatus}>
@@ -142,3 +152,7 @@ const MatchIntakeCnt = styled.span`
 const MatchIntakeFull = styled.span`
 `
 
+const BtnBox = styled.div`
+  display: flex;
+  margin-left: 6px;
+`
