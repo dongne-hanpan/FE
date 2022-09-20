@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { enterMatchThunk } from '../../shared/redux/modules/matchSlice';
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
@@ -12,6 +12,19 @@ const MatchWatch = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const modalData = useSelector((state) => state.modal.modalData);
+
+  const showUserDetail = () => {
+    const userDetailData = {
+      nickname: modalData.writer,
+      profileImage: modalData.profileImage_HOST,
+      userLevel: modalData.level_HOST,
+      averageScore: 0,
+      matchCount: 0,
+      mannerPoint: modalData.mannerPoint_HOST,
+    }
+    dispatch(setModal({modalType: 'userWatch', userData: userDetailData}))
+  }
+
   const copyPlaceDetail = async() => {
     const placeDetail = modalData.matchPlaceDetail;
     await navigator.clipboard.writeText(placeDetail);
@@ -47,7 +60,7 @@ const MatchWatch = () => {
           </MatchPlace>
         </MatchDateTimePlace>
         <MatchHost>
-            <ReuseProfile imgSrc={modalData.profileImage_HOST} content={modalData.writer} imgSize={80} contentSize={16}/>
+            <ReuseProfile imgSrc={modalData.profileImage_HOST} content={modalData.writer} imgSize={80} contentSize={16} clickEvent={showUserDetail} />
             <ReuseBadge bdgType={'rank'} content={modalData.level_HOST} />
           </MatchHost>
       </MatchInfo>
