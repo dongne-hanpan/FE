@@ -7,9 +7,6 @@ import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
 import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
 
-//tmp
-import profile from '../asset/defaultprofile.jpg';
-
 
 const ChatPage = () => {
   const dispatch = useDispatch();
@@ -35,7 +32,7 @@ const ChatPage = () => {
       <ChatNow>
         <ChatHead>
           <ChatInfo>
-            <ChatDate>{chatData.date}<ChatTime>{chatData.time}</ChatTime></ChatDate>
+            <ChatDate>{chatData.date}<ChatTime>{chatData.time ? chatData.time : '채팅방을 선택해주세요'}</ChatTime></ChatDate>
             <ChatPlace>{chatData.place}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
@@ -44,8 +41,9 @@ const ChatPage = () => {
             ):<></>}
           </ChatPartici>
         </ChatHead>
-
+        {nowChatId ? 
         <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
+        :<></>}
       </ChatNow>
     </MainPage>
   )

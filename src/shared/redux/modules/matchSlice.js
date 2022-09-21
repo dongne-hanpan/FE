@@ -33,26 +33,11 @@ export const updateMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const deleteMatchThunk = createAsyncThunk(
-  "match/deleteMatchThunk",
-  async() => {
-    const res = await deleteWithCookie("/api/match/delete");
-    return res;
-  }
-);
 export const contactHostThunk = createAsyncThunk(
   "match/contactHostThunk",
   async(match_id) => {
     const cookie = getCookie('mytoken');
     const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
-    return res;
-  }
-);
-export const removeMatchThunk = createAsyncThunk(
-  "match/removeMatchThunk",
-  async(match_id) => {
-    const cookie = getCookie('mytoken');
-    const res = await deleteWithCookie(`/api/match/delete/${match_id}`, cookie);
     return res;
   }
 );
@@ -86,15 +71,9 @@ const matchSlice = createSlice({
     builder.addCase(updateMatchThunk.fulfilled, (state, action) => {
       console.log('update match completed');
     });
-    builder.addCase(deleteMatchThunk.fulfilled, (state, action) => {
-      console.log('delete match completed');
-    });
     builder.addCase(contactHostThunk.fulfilled, (state, action) => {
       console.log('enter completed');
     });
-    builder.addCase(removeMatchThunk.fulfilled, (state, action) => {
-      console.log('removeMatch completed');
-    })
   }
 });
 

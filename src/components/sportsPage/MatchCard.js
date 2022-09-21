@@ -32,7 +32,6 @@ const MatchCard = ({data}) => {
     return false;
   }
   const contactToHost = () => {
-    // 신청하고 알림받아서 수락하는 과정 생략
     if(checkParticipant() === false){
       dispatch(contactHostThunk(data.match_id));
       dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
@@ -40,10 +39,6 @@ const MatchCard = ({data}) => {
       navigate(`/chat/${data.match_id}`)
     }
   };
-
-  const removeMatch = () => {
-    dispatch(setDialogue({dialType: 'removeMatch', matchId: data.match_id}));
-  }
 
   return(
     <MatchComp matchStatus={data.matchStatus} onClick={showMatch}>
@@ -54,11 +49,6 @@ const MatchCard = ({data}) => {
           <MatchPlace>{data.place}</MatchPlace>
         </MatchDayTimePlace>
         {data.matchStatus !== 'done' ? <ReuseBadge bdgType={'rank'} content={data.level_HOST} /> : <></>}
-        {data.writer === userData.nickname ?      
-        <BtnBox>
-          <ReuseBtn name={'removeBtn'} direc={'horiz'} styleType={'circle'} content={'삭'} clickEvent={removeMatch} />
-        </BtnBox>
-        : <></>}
       </MatchDate>
       <MatchBtns>
         <MatchIntake matchStatus={data.matchStatus}>

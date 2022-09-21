@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAlermThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { getAlermThunk, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
 import { setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseReserved from '../reusable/ReuseReserved';
+import ReuseBadge from '../reusable/ReuseBadge';
 
 //temp
 import logo from '../../asset/logo.png';
@@ -32,13 +33,18 @@ const Header = () => {
   const goIndexPage = () => {
     navigate('/');
   }
-
   const goMyPage = () => {
     if(userData.username){
       navigate('/mypage');
     } else{
       dispatch(setModal({modalType: 'login'}))
     }
+  }
+  const goChatPage = () => {
+    navigate('/chat');
+  }
+  const doLogout = () => {
+    dispatch(logoutUserThunk());
   }
   return(
     <HeaderComp>
@@ -67,7 +73,15 @@ const Header = () => {
         </UserGreet>
         <UserElse>
           {userData.username ? 
-          <ReuseReserved matches={2} marginPx={2}/> : <></>
+          <>
+            <UserBtns>
+              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'마이 페이지'} clickEvent={goMyPage} />
+              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
+              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
+            </UserBtns>
+            <ReuseReserved matches={2} marginPx={2}/> 
+          </>
+          : <></>
           }
           <ReuseWeather />
         </UserElse>
@@ -139,15 +153,20 @@ const UserGreetNormal = styled.div`
 const UserName = styled.span`
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-
 const UserElse = styled.div`
   height: 0px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   overflow-y: hidden;
+  transition: height 0.2s ease-in-out;
   ${HeaderComp}:hover &{
     height: 120px;
     transition: height 0.5s ease-in-out;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
+`
+const UserBtns = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 `

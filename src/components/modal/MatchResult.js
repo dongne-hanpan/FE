@@ -1,29 +1,28 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { submitResultThunk } from '../../shared/redux/modules/chatSlice';
+import { submitCommentThunk, submitResultThunk } from '../../shared/redux/modules/chatSlice';
 import Result from '../chatPage/Results';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
 import {getLocal} from '../../shared/axios/local';
+import { clearModal } from '../../shared/redux/modules/modalSlice';
 
 
 const MatchResult = () => {
   const dispatch = useDispatch();
   const modalData = useSelector((state) => state.modal.modalData);
-  const matchData = useSelector((state) => state.match.matchData);
-  const chatData = useSelector((state) => state.match.chatData);
+  const chatData = useSelector((state) => state.chat.nowChatData);
   const myScore = useRef(null);
   const regionAndSports = getLocal('regionAndSports');
   const sportsEn = regionAndSports.sportsEn;
-
-
+  
   const submitResult = () => {
     // 유효성 검사는 나중에
     // 나의 결과 입력
     const myScoreValue = myScore.current.value;
     const resultData = {
-      match_id: matchData.matchId,
+      match_id: chatData.match_id,
       myScore: myScoreValue
     }
     dispatch(submitResultThunk(sportsEn,resultData));
@@ -33,12 +32,14 @@ const MatchResult = () => {
     const manners = Array.from(document.getElementsByClassName('manner'));
     for(let i=0;i<reviews.length;i++){
       const reviewData = {
-        nickname: chatData.participants[i].nickname,
-        reviews: reviews[i].value,
-        score: manners[i].value
+        match_id: chatData.match_id,
+        nickname: chatData.userListInMatch[i+1].nickname,
+        comment: reviews[i].value,
+        mannerPoint: manners[i].value
       };
-      console.log(reviewData);
+      dispatch(submitCommentThunk(reviewData));
     }
+    dispatch(clearModal());
   }
   
   return(
@@ -54,10 +55,12 @@ const MatchResult = () => {
             <InputTitle>나의 점수</InputTitle>
           </InputTitleBox>
           <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
-          {modalData.reservedPeople.map((each) => 
-            <Result key={each.reservedId} data={each}/>
-          )}
-
+          {modalData.reservedPeople.map((each) => {
+            console.log(each);
+            if(each.nickname !== chatData.writer){
+              return <Result key={each.nickname} data={each}/>
+            }
+          })}
       </ResultFormContainer>
       <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
     </ModalResultComp>

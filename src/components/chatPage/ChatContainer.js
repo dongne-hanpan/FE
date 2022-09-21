@@ -94,21 +94,11 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     }
   }
 
-  const reserve = () => {
-    if(chatStatus === 'recruit'){
-      const dialReserveWhoData = {
-        dialType: 'reserveWho',
-        participants: chatData.participants
-      };
-      dispatch(setDialogue(dialReserveWhoData))
-    }
-  }
-
   const leaveChatRoom = () => {
-    if(chatData.hostNickname === userData.nickname){
-      console.log('host out and remove this room');
+    if(chatData.writer === userData.nickname){
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: true}));
     } else{
-      console.log('just leave one person');
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: false}));
     }
   }
 
@@ -123,7 +113,6 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     );
     setMessage("");
   };
-  // console.log(messageList.slice(0).reverse());
   return(
     <>
     <ChatContainerComp>
@@ -134,10 +123,6 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     <ChatInput>
       <ChatInputBtns>
         <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
-        {/* { chatData.hostNickname === userData.nickname ?
-          <BtnReserve onClick={reserve}> 예약 확정 </BtnReserve>
-          :<></>
-        } */}
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
