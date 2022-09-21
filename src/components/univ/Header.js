@@ -54,11 +54,11 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        {/* { userAlerm.length > 0 ? 
+        { userAlerm.length > 0 ? 
           userAlerm.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
-        } */}
+        }
       </HeaderAlermSection>
 
       <HeaderUserSection>
