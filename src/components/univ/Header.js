@@ -21,6 +21,7 @@ const Header = () => {
   const userAlerm = useSelector((state) => state.user.userAlerm);
   const navigate = useNavigate();
 
+  console.log(userAlerm);
   //새로고침 등으로 userData 값 사라지면, 
   useEffect(() => {
     const cookie = getCookie('mytoken');
@@ -53,11 +54,11 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        { userAlerm.length > 0 ? 
+        {/* { userAlerm.length > 0 ? 
           userAlerm.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
-        }
+        } */}
       </HeaderAlermSection>
 
       <HeaderUserSection>
