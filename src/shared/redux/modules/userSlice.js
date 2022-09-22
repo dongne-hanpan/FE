@@ -3,24 +3,20 @@ import { getWithCookie, postWithCookie, postWithCookieFormData, postWithoutCooki
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
+export const signupUserThunk = createAsyncThunk(
+  "user/signupUserThunk",
+  async (user_data) => {
+    const res = await postWithoutCookie("/api/auth/signup", user_data);
+  return res
+}
+);
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/login", user_data);
     return res;
   }
-);
-export const signupUserThunk = createAsyncThunk(
-  "user/signupUserThunk",
-  async (user_data) => {
-    const res = await postWithoutCookie("/api/auth/signup", user_data);
-    if(res.status === 201){
-      return res.data;
-    } else{
-      return res.data;
-    }
-  }
-);
+  );
 export const refreshUserThunk = createAsyncThunk(
   "user/refreshtUserThunk",
   async () => {
@@ -76,20 +72,19 @@ const userSlice = createSlice({
       console.log('signup completed');
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
-      if(action.payload.status !== 401){
-        console.log('login completed');
-        const data = action.payload;
-        const accessToken = data.accessToken;
-        document.cookie = `mytoken=${accessToken}; path=/;`;
-        const newUserData = {
-          username: data.username,
-          nickname: data.nickname,
-          profileImage: data.profileImage,
-        };
-        state.userData = newUserData;
-        console.log(state.userData);
-      } else{
+      if(action.payload.status === 401 || action.payload.status === 500){
         alert('로그인 실패했습니다');
+      }else{
+          console.log('login completed');
+          const data = action.payload;
+          const accessToken = data.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            username: data.username,
+            nickname: data.nickname,
+            profileImage: data.profileImage,
+          };
+          state.userData = newUserData;
       }
     });
     builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
