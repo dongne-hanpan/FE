@@ -107,8 +107,12 @@ const userSlice = createSlice({
       state.userData = {};
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
-      console.log('post image completed');
-      state.userData = {...state.userData, profileImage:action.payload}
+      if(action.payload.status === 500){
+        alert('프로필 사진 변경을 실패했습니다.')
+      } else{
+        console.log('post image completed');
+        state.userData = {...state.userData, profileImage:action.payload}
+      }
     });
     builder.addCase(getAlermThunk.fulfilled, (state, action) => {
       state.userAlerm = action.payload;
