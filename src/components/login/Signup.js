@@ -27,11 +27,25 @@ const Signup = () => {
     const pwConfirmValue = signupPwConfirmRef.current.value;
     //아이디, 닉네임 중복체크 여부 확인
     if(usernameErr !== 'success'){
-      console.log('아이디 중복체크 눌러라')
+      usernameMsg.current.innerText = '중복체크를 눌러주세요';
+      setUsernameErr('danger')
       return
     }
     if(nicknameErr !== 'success'){
-      console.log('유저네임 중복체크 눌러라')
+      nicknameMsg.current.innerText = '중복체크를 눌러주세요';
+      setNicknameErr('danger')
+      return
+    }
+    //중복체크 통과 했는데 바뀌었을 경우: username
+    if(usernameValue !== validUsername){
+      usernameMsg.current.innerText = '중복체크에 통과한 값과 다릅니다';
+      setUsernameErr('danger')
+      return
+    }
+    //중복체크 통과 했는데 바뀌었을 경우: nickname
+    if(nicknameValue !== validNickname){
+      nicknameMsg.current.innerText = '중복체크에 통과한 값과 다릅니다';
+      setNicknameErr('danger')
       return
     }
     //비밀번호 유효성 확인
@@ -87,6 +101,9 @@ const Signup = () => {
   const [pwErr, setPwErr] = useState('none');
   const [pwConfirmErr, setPwConfirmErr] = useState('none');
 
+  const [validUsername, setValidUsername] = useState(null);
+  const [validNickname, setValidNickname] = useState(null);
+
   const isValidUsername = (idValue) => {
     // var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
     var regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{6,12}$/;
@@ -113,7 +130,9 @@ const Signup = () => {
       const res = await getwithoutCookie(`/api/auth/username/${username}`);
       if(res){
         usernameMsg.current.innerText = '사용 가능한 아이디입니다';
-        setUsernameErr('success')
+        setUsernameErr('success');
+        setValidUsername(username);
+        
       } else {
         usernameMsg.current.innerText = '사용 중인 아이디입니다';
         setUsernameErr('danger')
@@ -133,6 +152,7 @@ const Signup = () => {
       if(res){
         nicknameMsg.current.innerText = '사용 가능한 닉네임입니다';
         setNicknameErr('success');
+        setValidNickname(nickname);
       }else{
         nicknameMsg.current.innerText = '사용 중인 닉네임입니다';
         setNicknameErr('danger');
