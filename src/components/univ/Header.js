@@ -21,7 +21,6 @@ const Header = () => {
   const userAlerm = useSelector((state) => state.user.userAlerm);
   const navigate = useNavigate();
 
-  console.log(userAlerm);
   //새로고침 등으로 userData 값 사라지면, 
   useEffect(() => {
     const cookie = getCookie('mytoken');
