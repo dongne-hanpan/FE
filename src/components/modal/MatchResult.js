@@ -11,11 +11,12 @@ import { clearModal } from '../../shared/redux/modules/modalSlice';
 
 const MatchResult = () => {
   const dispatch = useDispatch();
-  const modalData = useSelector((state) => state.modal.modalData);
+  const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
   const myScore = useRef(null);
-  const regionAndSports = getLocal('regionAndSports');
-  const sportsEn = regionAndSports.sportsEn;
+  const sportsEn = getLocal('sports').sportsEn;
+  const participantWithoutMe = chatData.userListInMatch.filter((each) => 
+  each.nickname !== userData.nickname);
   
   const submitResult = () => {
     // 유효성 검사는 나중에
@@ -33,7 +34,7 @@ const MatchResult = () => {
     for(let i=0;i<reviews.length;i++){
       const reviewData = {
         match_id: chatData.match_id,
-        nickname: chatData.userListInMatch[i+1].nickname,
+        nickname: participantWithoutMe[i].nickname,
         comment: reviews[i].value,
         mannerPoint: manners[i].value
       };
@@ -55,12 +56,9 @@ const MatchResult = () => {
             <InputTitle>나의 점수</InputTitle>
           </InputTitleBox>
           <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
-          {modalData.reservedPeople.map((each) => {
-            console.log(each);
-            if(each.nickname !== chatData.writer){
-              return <Result key={each.nickname} data={each}/>
-            }
-          })}
+          {participantWithoutMe.map((each) => 
+            <Result key={each.nickname} data={each}/>
+          )}
       </ResultFormContainer>
       <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
     </ModalResultComp>
