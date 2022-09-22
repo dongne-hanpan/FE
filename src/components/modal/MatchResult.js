@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { submitCommentThunk, submitResultThunk } from '../../shared/redux/modules/chatSlice';
 import Result from '../chatPage/Results';
 import ReuseBtn from '../reusable/ReuseBtn';
@@ -13,32 +13,53 @@ const MatchResult = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const scrollComp = useRef(null);
   const myScore = useRef(null);
+  const commentRef = useRef([]);
   const sportsEn = getLocal('sports').sportsEn;
   const participantWithoutMe = chatData.userListInMatch.filter((each) => 
-  each.nickname !== userData.nickname);
+    each.nickname !== userData.nickname);
+  const myResultMsg = useRef(null);
+  const [myResultErr, setResultErr] = useState('none');
   
   const submitResult = () => {
-    // 유효성 검사는 나중에
     // 나의 결과 입력
-    const myScoreValue = myScore.current.value;
-    const resultData = {
-      match_id: chatData.match_id,
-      myScore: myScoreValue
+    const myScoreValue = parseInt(myScore.current.value);
+    if(0 <= myScoreValue && myScoreValue <= 300){
+      myResultMsg.current.innerText = '';
+      setResultErr('none');
+      const resultData = {
+        match_id: chatData.match_id,
+        myScore: myScoreValue
+      }
+      dispatch(submitResultThunk(sportsEn,resultData));
+    } else{
+      setResultErr('danger');
+      myResultMsg.current.innerText = '점수 범위를 벗어났습니다';
+      scrollComp.current.scrollIntoView({behavior: "smooth"});
+      return
     }
-    dispatch(submitResultThunk(sportsEn,resultData));
 
-    // 상대 후기 입력
+    // 차례로 상대 후기 입력
     const reviews = Array.from(document.getElementsByClassName('review'));
     const manners = Array.from(document.getElementsByClassName('manner'));
     for(let i=0;i<reviews.length;i++){
-      const reviewData = {
-        match_id: chatData.match_id,
-        nickname: participantWithoutMe[i].nickname,
-        comment: reviews[i].value,
-        mannerPoint: manners[i].value
+      const reviewValue = manners[i].value;
+      const mannerValue = parseInt(manners[i].value);
+
+      if(0<= mannerValue && mannerValue <= 10){
+        const reviewData = {
+          match_id: chatData.match_id,
+          nickname: participantWithoutMe[i].nickname,
+          comment: reviewValue,
+          mannerPoint: mannerValue
+        }
+        dispatch(submitCommentThunk(reviewData));
+      }else{
+        alert(`${participantWithoutMe[i].nickname}님의 매너점수가 점수 범위를 벗어났습니다 \n\n 0 에서 10 점까지 가능합니다`);
+        commentRef.current[i].scrollIntoView({behavior: "smooth"});
+        return
       };
-      dispatch(submitCommentThunk(reviewData));
     }
     dispatch(clearModal());
   }
@@ -52,12 +73,12 @@ const MatchResult = () => {
 
       <ResultFormContainer>
         <Sep> - - - - - - - - - - - -  나의 결과 입력  - - - - - - - - - - - -</Sep>
-          <InputTitleBox>
-            <InputTitle>나의 점수</InputTitle>
+          <InputTitleBox ref={scrollComp}>
+            <InputTitle>나의 점수<ErrMessage ref={myResultMsg} status={myResultErr}></ErrMessage></InputTitle>
           </InputTitleBox>
           <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
-          {participantWithoutMe.map((each) => 
-            <Result key={each.nickname} data={each}/>
+          {participantWithoutMe.map((each, idx) => 
+            <Result key={each.nickname} injRef={el => (commentRef.current[idx] = el)} data={each}/>
           )}
       </ResultFormContainer>
       <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
@@ -125,4 +146,25 @@ const InputTitleBox = styled.div`
 const InputTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_18};
   font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const ErrMessage = styled.span`
+  margin-left: 10px;
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  ${({status, theme}) => {
+    if(status === 'success'){
+      return css`
+      display: inline;
+      color: ${theme.colors.green};
+      `
+    } else if(status === 'danger'){
+      return css`
+      display: inline;
+      color: ${theme.colors.red_light};
+      `
+    } else if(status === 'none'){
+      return css`
+      display: none;
+      `
+    }
+  }}
 `
