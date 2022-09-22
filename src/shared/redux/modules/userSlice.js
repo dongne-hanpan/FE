@@ -59,7 +59,6 @@ export const permitAlermThunk = createAsyncThunk(
 );
 
 
-
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
@@ -88,6 +87,10 @@ const userSlice = createSlice({
       }
     });
     builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
+      if(action.payload.status === 401 || action.payload.status === 500){
+        deleteCookie('mytoken');
+        alert('다시 로그인해주세요');
+      } else{
         console.log('refresh completed');
         const data = action.payload;
         const newUserData = {
@@ -96,6 +99,7 @@ const userSlice = createSlice({
           profileImage: data.profileImage,
         };
         state.userData = newUserData;
+      }
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
       console.log('logout completed');
