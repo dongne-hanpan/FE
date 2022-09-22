@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { contactHostThunk } from '../../shared/redux/modules/matchSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -44,9 +44,10 @@ const MatchWatch = () => {
   const contactToHost = () => {
     if(checkParticipant() === false){
       dispatch(contactHostThunk(modalData.match_id));
-      dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
+      dispatch(setDialogue({dialType: 'confirmApply'}));
     }else{
       navigate(`/chat/${modalData.match_id}`)
+      dispatch(clearModal());
     }
   };
   return(
