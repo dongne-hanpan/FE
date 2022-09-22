@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
+import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
 import Deco from '../univ/Deco';
 import DialConfRemove from './DialConfRemove';
 import DialConfSignup from './DialConfSignup';
 import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
 import DialConfLogin from './DialConfLogin';
-import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
 import DialConfResult from './DialConfResult';
 import DialDenyResult from './DialDenyResult';
 import DialReserveWho from './DialReserveWho';
 import DialRemoveMatch from './DialRemoveMatch';
 import DialPermit from './DialPermit';
+import DialConfLeave from './DialConfLeave';
 
 
 const DialTemplate = () => {
@@ -51,6 +52,8 @@ const DialTemplate = () => {
       return <DialRemoveMatch />
     } else if(dialData.dialType === 'permit'){
       return <DialPermit />
+    } else if(dialData.dialType === 'confirmLeave'){
+      return <DialConfLeave />
     }
   }
 

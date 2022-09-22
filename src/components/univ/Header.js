@@ -64,7 +64,7 @@ const Header = () => {
       <HeaderUserSection>
         <UserGreet>
           <UserGreetNormal> {userData.region ? userData.region:''} </UserGreetNormal>
-          <UserGreetNormal>
+          <UserGreetNormal onClick={goMyPage}>
             {userData.nickname ? 
             <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
             :'로그인 해주세요'
@@ -150,6 +150,7 @@ const UserGreetNormal = styled.div`
   margin-right: 10px;
   color: ${({theme}) => theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
+  cursor: pointer;
 `
 const UserName = styled.span`
   font-weight: ${({theme}) => theme.fontWeight.medium};
