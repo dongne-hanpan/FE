@@ -6,10 +6,12 @@ import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
 import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { getCookie } from '../shared/axios/cookie';
 
 
 const ChatPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
@@ -19,9 +21,9 @@ const ChatPage = () => {
   },[nowChatId])
 
   //userdata 없으면 돌아가
-  const navigate = useNavigate();
   useEffect(() => {
-    if(!userData.username){
+    const cookie = getCookie('mytoken');
+    if(!cookie && !userData.username){
       navigate('/')
     }
   },[userData])

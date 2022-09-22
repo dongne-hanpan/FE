@@ -10,6 +10,7 @@ import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 import { setModal } from '../shared/redux/modules/modalSlice';
+import { getCookie } from '../shared/axios/cookie';
 
 
 const MyPage = () => {
@@ -27,7 +28,8 @@ const MyPage = () => {
   },[]);
 
   useEffect(() => {
-    if(!userData.username){
+    const cookie = getCookie('mytoken');
+    if(!cookie && !userData.username){
       navigate('/')
     }
   },[userData])
