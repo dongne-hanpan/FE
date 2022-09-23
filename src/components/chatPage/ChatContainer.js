@@ -12,6 +12,7 @@ import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
+import { reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 
 
 const ChatContainer = ({chatStatus}) => {
