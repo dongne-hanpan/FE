@@ -13,7 +13,7 @@ import DialTemplate from './components/dialogue/DialTemplate';
 function App() {
   const modalData = useSelector((state) => state.modal.modalData);
   const dialogueData = useSelector((state) => state.modal.dialogueData);
-  console.log('재배포 완료_1');
+
   return (
     <div className="App">
       <Router>

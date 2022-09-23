@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseTextarea from '../reusable/ReuseTextarea';
@@ -13,12 +13,14 @@ import dummyOptionValues from '../../dummyData/dummyOptionValues';
 
 const MatchWrite = () => {
   const dispatch = useDispatch();
+  const whenMsg = useRef(null);
+  const [whenErr, setWhenErr] = useState('none');
+  const intakeMsg = useRef(null);
+  const [intakeErr, setIntakeErr] = useState('none');
   const matchDateRef = useRef(null);
   const matchDescRef = useRef(null);
   const intakeRef = useRef(null);
   const [place, setPlace] = useState(null);
-  const regionAndSports = getLocal('regionAndSports');
-  const sportsEn = regionAndSports.sportsEn;
   
   //이전 날짜 불가능하게 만들기
   useEffect(() => {
@@ -31,25 +33,39 @@ const MatchWrite = () => {
     setPlace(e.target.value);
   }
   const makeMatch = () => {
-    const matchDateValue = matchDateRef.current.value.split('T');
+    const matchDateValue = matchDateRef.current.value;
     const intakeValue = intakeRef.current.value;
+    console.log(matchDateValue);
     if(!matchDateValue){
-      console.log('날짜를 선택해주세요');
+      whenMsg.current.innerText = '날짜, 시간을 선택해주세요';
+      setWhenErr('danger');
       return
     }
     if(!place){
-      console.log('장소를 선택해주세요');
+      whenMsg.current.innerText = '장소를 선택해주세요';
+      setWhenErr('danger');
       return
     }
+    //날짜 시간 장소 통과 시 
+    whenMsg.current.innerText = '';
+    setWhenErr('none');
+
+    //모집인원 유효성 검사
     if(intakeValue === null || intakeValue <2 || intakeValue >6){
       console.log('모집 인원을 확인해주세요');
+      intakeMsg.current.innerText = '유효하지 않은 인원';
+      setIntakeErr('danger');
       return
     }
-    const matchDay = matchDateValue[0];
-    const matchTime = matchDateValue[1];
-    const regionAndSports = getLocal('regionAndSports');
-    const sports = regionAndSports.sports;
-    const regionId = regionAndSports.regionId;
+    //모집인원 통과 시
+    intakeMsg.current.innerText = '';
+    setIntakeErr('none');
+
+    const matchDateValueArray = matchDateValue.split('T');
+    const matchDay = matchDateValueArray[0];
+    const matchTime = matchDateValueArray[1];
+    const sportsEn = getLocal('sports').sportsEn;
+    const regionId = getLocal('region').regionId;
     const selectPlaceArray = place.split(',');
 
     const matchMakeData = {
@@ -73,7 +89,7 @@ const MatchWrite = () => {
   return(
     <ModalWriteComp>
       <InputTitleBox>
-        <InputTitle>일자, 시간, 장소</InputTitle>
+        <InputTitle>일자, 시간, 장소<ErrMessage ref={whenMsg} status={whenErr}></ErrMessage></InputTitle>
       </InputTitleBox>
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} />
 
@@ -94,8 +110,8 @@ const MatchWrite = () => {
       </InputTitleBox>
       <ReuseTextarea injRef={matchDescRef} height={90} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
       <InputTitleBox>
-        <InputTitleSmall>모집 인원</InputTitleSmall>
-        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'ex) 6, (최대 인원: 6 명)'}/>
+        <InputTitleSmall>총 인원<ErrMessage ref={intakeMsg} status={intakeErr}></ErrMessage></InputTitleSmall>
+        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 2 ~ 6 명까지'}/>
       </InputTitleBox>
       <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
@@ -121,6 +137,27 @@ const InputTitleBox = styled.div`
 const InputTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_18};
   font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const ErrMessage = styled.span`
+  margin: 0px 10px;
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  ${({status, theme}) => {
+    if(status === 'success'){
+      return css`
+      display: inline;
+      color: ${theme.colors.green};
+      `
+    } else if(status === 'danger'){
+      return css`
+      display: inline;
+      color: ${theme.colors.red_light};
+      `
+    } else if(status === 'none'){
+      return css`
+      display: none;
+      `
+    }
+  }}
 `
 const PlaceSection = styled.div`
   position: relative;
@@ -157,7 +194,7 @@ const PlaceMap = styled.div`
   margin-bottom: 12px;
 `
 const InputTitleSmall = styled.div`
-  width: 280px;
+  width: 330px;
   height: 40px;
   display: flex;
   justify-content: flex-start;

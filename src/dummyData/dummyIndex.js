@@ -7,7 +7,7 @@ import tennis from '../asset/pictogram_tennis.png';
 
 
 export const dummyRegion = [
-  {regionId: 0, region: '서울'},
+  {regionId: 0, region: '전체 지역'},
   {regionId: 1, region: '강남구'},
   {regionId: 2, region: '강동구'},
   {regionId: 3, region: '강북구'},

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { getMyChatListThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ChatBox from './ChatBox';
-//tmp
-import profile from '../../asset/defaultprofile.jpg';
 
 
 const ChatNav = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((state) => state.user.userData);
   const myChatList = useSelector((state) => state.chat.chatList);
   console.log(myChatList);
@@ -19,10 +19,13 @@ const ChatNav = () => {
     dispatch(getMyChatListThunk())
   },[])
 
+  const goMyPage = () => {
+    navigate('/mypage');
+  }
   return(
     <ChatNavComp>
       <ChatNavHead>
-        <ReuseProfile imgSrc={userData.profileImage} imgSize={60} content={userData.nickname} contentSize={14} />
+        <ReuseProfile imgSrc={userData.profileImage} imgSize={60} content={userData.nickname} contentSize={14} clickEvent={goMyPage} />
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>

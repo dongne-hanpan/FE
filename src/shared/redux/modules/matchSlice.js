@@ -59,8 +59,6 @@ const matchSlice = createSlice({
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {
       const {matchList, ...rest} = action.payload;
-      console.log(rest);
-      console.log(matchList);
       state.elseData = rest;
       state.matches = matchList;
     });
