@@ -34,13 +34,13 @@ const IndexPage = () => {
       sportsEn: sportsEn
     }
     const regionInLocal = {
-      regionId: 0,
-      region: '서울'
+      regionId: '0',
+      region: '전체 지역'
     }
     //새로고침 버그 해결 위해 localstorage에 저장
     setLocal('sports', sportsInLocal);
     setLocal('region', regionInLocal);
-    navigate(`/서울/${sports}`);
+    navigate(`/all/${sports}`);
   }
   return (
     <IndexComp>

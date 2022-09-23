@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
@@ -21,6 +21,7 @@ const SportsPage = () => {
   const regionId = regionLocal.regionId;
   const region = regionLocal.region;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+  const regionRef = useRef(null);
 
   //match 받아오기
   useEffect(() => {
@@ -31,8 +32,13 @@ const SportsPage = () => {
 
   const doMatchWrite = () => {
     if(userData.username){
-      console.log('write!!');
-      dispatch(setModal({modalType: 'matchWrite'}))
+      if(regionId === '0'){
+        alert("'전체 지역'이 아닌 구체적인 지역을 선택해주세요")
+        regionRef.current.focus();
+      }else{
+        console.log('write!!');
+        dispatch(setModal({modalType: 'matchWrite'}))
+      }
     }else{
       dispatch(setDialogue({dialType: 'confirmLogin'}))
     }
@@ -48,7 +54,7 @@ const SportsPage = () => {
       region: selectRegionValue
     }
     setLocal('region',regionInLocal);
-    navigate(`/${selectRegionValue}/${sports}`)
+    navigate(`/${selectRegionValue === '전체 지역' ? 'all': selectRegionValue}/${sports}`)
   };
 
   return(
@@ -59,8 +65,8 @@ const SportsPage = () => {
 
       <MatchContainer>
         <MatchContainerHeader>
-          <MatchContainerHeaderTitle>{region}, {sports} 한 판?</MatchContainerHeaderTitle>
-          <RegionDropbox onChange={selectChangeHandler}>
+          <MatchContainerHeaderTitle>{sports} 한 판? <MatchRegion>{region}</MatchRegion></MatchContainerHeaderTitle>
+          <RegionDropbox ref={regionRef} onChange={selectChangeHandler}>
             <RegionOption>지역을 선택하세요</RegionOption>
             {dummyRegion.map((each) => 
               <RegionOption key={each.regionId} value={[each.regionId,each.region]}>{each.region}</RegionOption>
@@ -83,7 +89,13 @@ const SportsPage = () => {
 };
 
 export default SportsPage;
-
+const shake = keyframes`
+  0% { transform: translate(1px, 0px) rotate(0deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  50% { transform: translate(-1px, 0px) rotate(-1deg); }
+  70% { transform: translate(3px, 0px) rotate(1deg); }
+  100% { transform: translate(1px, 0px) rotate(0deg); }
+`
 const MainPage = styled.main`
   width: 100vw;
   height: 100vh;
@@ -122,6 +134,11 @@ const MatchContainerHeader = styled.div`
 const MatchContainerHeaderTitle = styled.h2`
   font-size: ${({theme}) => theme.fontSize.font_32};
   font-weight: ${({theme}) => theme.fontWeight.bold};
+  `
+const MatchRegion = styled.span`
+  color: ${({theme}) => theme.colors.darkgray};
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
 `
 const RegionDropbox = styled.select`
   height: 40px;
@@ -132,6 +149,10 @@ const RegionDropbox = styled.select`
   color: ${({region, theme}) => region ? theme.colors.background : theme.colors.black};
   font-weight: ${({region, theme}) => region ? theme.fontWeight.bold : theme.fontWeight.medium};
   background-color: ${({region, theme}) => region ? theme.colors.core : theme.colors.background};
+  &:focus{
+    animation: ${shake} 0.1s;
+    animation-iteration-count: 3;
+  }
 `
 const RegionOption = styled.option`
   padding: 10px;
