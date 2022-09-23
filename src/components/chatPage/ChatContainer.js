@@ -14,7 +14,7 @@ import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
-const ChatContainer = ({chatStatus, chatContents}) => {
+const ChatContainer = ({chatStatus}) => {
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const params = useParams().match_id;
@@ -77,6 +77,9 @@ const ChatContainer = ({chatStatus, chatContents}) => {
   const chatData = useSelector((state) => state.chat.nowChatData);
   const userData = useSelector((state) => state.user.userData);
 
+  const doReserved = () => {
+    dispatch(reservedChatThunk(params));
+  }
   const writeResult = () => {
     if(chatStatus === 'recruit'){
       const modalResultData = {
@@ -124,6 +127,7 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     <ChatInput>
       <ChatInputBtns>
         <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
+        <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
@@ -144,7 +148,6 @@ const ChatContainerComp = styled.article`
     display: none;
   }
 `
-
 const ChatInput = styled.article`
   height: 160px;
   display: flex;
@@ -161,6 +164,15 @@ const ChatInputBtns = styled.div`
   padding: 0px 10px;
   margin-bottom: 2px;
 `
+const BtnReserve = styled.button`
+  height: 30px;
+  padding: 4px 14px;
+  color: ${({theme}) => theme.colors.yellow};
+  font-weight: ${({theme}) => theme.fontWeight.semi_bold};
+  border: 2px solid ${({theme}) => theme.colors.yellow};
+  border-radius: 2rem;
+  background-color: ${({theme}) => theme.colors.background};
+`;
 const BtnResult = styled.button`
   height: 30px;
   padding: 4px 14px;

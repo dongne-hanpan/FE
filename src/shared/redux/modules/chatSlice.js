@@ -20,6 +20,14 @@ export const getMyChatListThunk = createAsyncThunk(
     return res;
   }
 )
+export const reservedChatThunk = createAsyncThunk(
+  "chat/reservedChatThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie(`/api/match/match-status-reserved/${match_id}`, cookie);
+    return res;
+  }
+);
 export const leaveChatThunk = createAsyncThunk(
   "chat/leaveChatThunk",
   async(match_id) => {
@@ -61,6 +69,10 @@ const chatSlice = createSlice({
     });
     builder.addCase(getMyChatListThunk.fulfilled, (state,action) => {
       console.log('get my chatList completed');
+      state.chatList = action.payload;
+    });
+    builder.addCase(reservedChatThunk.fulfilled, (state,action) => {
+      console.log('change match status to reserved');
       state.chatList = action.payload;
     });
     builder.addCase(submitResultThunk.fulfilled, (state,action) => {
