@@ -36,7 +36,11 @@ export const leaveChatThunk = createAsyncThunk(
 );
 export const submitMyResultThunk = createAsyncThunk(
   "chat/submitMyResultThunk",
-  async (sports,myResultData) => {
+  async (sports, match_id, myScore) => {
+    const myResultData = {
+      "match_id": match_id,
+      "myScore": myScore,
+    }
     console.log(myResultData);
     const cookie = getCookie('mytoken');
     const res = await postWithCookie(`/api/${sports}/result`, myResultData, cookie);

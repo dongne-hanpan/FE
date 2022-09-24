@@ -20,16 +20,14 @@ const MatchResult = () => {
   
   const submitResult = () => {
     // 나의 결과 입력
-    const myScoreValue = parseInt(myScore.current.value);
+    const myScoreValue = myScore.current.value;
     if(0 <= myScoreValue && myScoreValue <= 300){
       myResultMsg.current.innerText = '';
       setResultErr('none');
-      const myResultData = {
-        "match_id": chatData.match_id,
-        "myScore": myScoreValue
-      }
-      console.log(myResultData);
-      dispatch(submitMyResultThunk(sportsEn,myResultData));
+      const matchId =  chatData.match_id + '';
+      console.log(matchId);
+      console.log(myScoreValue);
+      dispatch(submitMyResultThunk(sportsEn, matchId, myScoreValue));
     } else{
       setResultErr('danger');
       myResultMsg.current.innerText = '점수 범위를 벗어났습니다';
