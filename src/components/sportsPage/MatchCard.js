@@ -31,10 +31,16 @@ const MatchCard = ({data}) => {
     }
     return false;
   }
-  const contactToHost = () => {
+  const contactToHost = async() => {
     if(checkParticipant() === false){
-      dispatch(contactHostThunk(data.match_id));
-      dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
+      const res = await dispatch(contactHostThunk(data.match_id));
+      if(res.payload === '참여 가능 인원이 초과되었습니다'){
+        dispatch(setDialogue({dialType: 'denyContact'}));
+      }else if(res.payload === '이미 신청한 매치 입니다'){
+        dispatch(setDialogue({dialType: 'denyContactAgain'}));
+      }else{
+        dispatch(setDialogue({dialType: 'confirmApply', matchId: data.match_id}));
+      }
     }else{
       navigate(`/chat/${data.match_id}`)
     }

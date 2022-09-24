@@ -22,6 +22,7 @@ const colors = {
 
 const fontSize = {
   font_40: calcRem(40),
+  font_36: calcRem(36),
   font_32: calcRem(32),
   font_26: calcRem(26),
   font_24: calcRem(24),

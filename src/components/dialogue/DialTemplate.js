@@ -14,6 +14,11 @@ import DialReserveWho from './DialReserveWho';
 import DialRemoveMatch from './DialRemoveMatch';
 import DialPermit from './DialPermit';
 import DialConfLeave from './DialConfLeave';
+import DialDenyReserved from './DialDenyReserved';
+import DialDenyContact from './DialDenyContact';
+import DialDenyContactAgain from './DialDenyContactAgain';
+import DialConfComment from './DialConfComment';
+import DialDenyComment from './DialDenyComment';
 
 
 const DialTemplate = () => {
@@ -44,8 +49,18 @@ const DialTemplate = () => {
       return <DialConfApply />
     } else if(dialData.dialType === 'confirmResult'){
       return <DialConfResult />
+    } else if(dialData.dialType === 'confirmComment'){
+      return <DialConfComment />
+    } else if(dialData.dialType === 'denyContact'){
+      return <DialDenyContact />
+    } else if(dialData.dialType === 'denyContactAgain'){
+      return <DialDenyContactAgain />
     } else if(dialData.dialType === 'denyResult'){
       return <DialDenyResult />
+    } else if(dialData.dialType === 'denyComment'){
+      return <DialDenyComment />
+    } else if(dialData.dialType === 'denyReserved'){
+      return <DialDenyReserved />
     } else if(dialData.dialType === 'reserveWho'){
       return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){

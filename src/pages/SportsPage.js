@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import MatchCard from '../components/sportsPage/MatchCard';
-import { loadMatchThunk } from '../shared/redux/modules/matchSlice';
+import { loadAllMatchThunk, loadMatchThunk } from '../shared/redux/modules/matchSlice';
 import { getLocal, setLocal } from '../shared/axios/local';
 
 // tmp
@@ -25,9 +25,15 @@ const SportsPage = () => {
 
   //match 받아오기
   useEffect(() => {
-    console.log('get matches!!!');
-    const additionalUrl = `/${regionId}/${sportsEn}`;
-    dispatch(loadMatchThunk(additionalUrl));
+    if(regionId !== '0'){
+      console.log('get matches!!!');
+      const additionalUrl = `/${regionId}/${sportsEn}`;
+      dispatch(loadMatchThunk(additionalUrl));
+    } else{
+      console.log('get All matches!!!');
+      dispatch(loadAllMatchThunk(sportsEn));
+
+    }
   },[regionId])
 
   const doMatchWrite = () => {

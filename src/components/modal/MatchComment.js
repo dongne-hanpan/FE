@@ -1,43 +1,54 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { submitMyResultThunk } from '../../shared/redux/modules/chatSlice';
-import { getLocal } from '../../shared/axios/local';
-import { clearModal } from '../../shared/redux/modules/modalSlice';
+import { submitCommentThunk } from '../../shared/redux/modules/chatSlice';
+import Result from '../chatPage/Results';
 import ReuseBtn from '../reusable/ReuseBtn';
-import ReuseInput from '../reusable/ReuseInput';
+import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 
 
-const MatchResult = () => {
+const MatchComment = () => {
   const dispatch = useDispatch();
-  const chatData = useSelector((state) => state.chat.nowChatData);
+  const userData = useSelector((state) => state.user.userData);
   const modalData = useSelector((state) => state.modal.modalData);
-  const scrollComp = useRef(null);
-  const myScore = useRef(null);
-  const sportsEn = getLocal('sports').sportsEn;
-  const myResultMsg = useRef(null);
-  const [myResultErr, setResultErr] = useState('none');
+  const chatData = useSelector((state) => state.chat.nowChatData);
+  const commentRef = useRef([]);
+  const participantWithoutMe = chatData.userListInMatch.filter((each) => 
+    each.nickname !== userData.nickname);
   
-  const submitResult = () => {
-    // 나의 결과 입력
-    const myScoreValue = myScore.current.value;
-    if(0 <= myScoreValue && myScoreValue <= 300){
-      myResultMsg.current.innerText = '';
-      setResultErr('none');
-      const matchId =  chatData.match_id + '';
-      console.log(matchId);
-      console.log(myScoreValue);
-      dispatch(submitMyResultThunk(sportsEn, matchId, myScoreValue));
-    } else{
-      setResultErr('danger');
-      myResultMsg.current.innerText = '점수 범위를 벗어났습니다';
-      return
+  const submitComment = async() => {
+    // 차례로 상대 후기 입력
+    const reviews = Array.from(document.getElementsByClassName('review'));
+    const manners = Array.from(document.getElementsByClassName('manner'));
+    for(let i=0;i<reviews.length;i++){
+      const reviewValue = reviews[i].value;
+      const mannerValue = parseInt(manners[i].value);
+
+      if(0<= mannerValue && mannerValue <= 10){
+        const reviewData = {
+          match_id: chatData.match_id,
+          nickname: participantWithoutMe[i].nickname,
+          comment: reviewValue,
+          mannerPoint: mannerValue
+        }
+        const res = await dispatch(submitCommentThunk(reviewData));
+        if(res.payload === '이미 평가한 유저입니다.'){
+          dispatch(setDialogue({dialType: 'denyComment'}))
+        }else{
+          dispatch(setDialogue({dialType: 'confirmComment'}))
+
+        }
+      }else{
+        alert(`${participantWithoutMe[i].nickname}님의 매너점수가 점수 범위를 벗어났습니다 \n\n 0 에서 10 점까지 가능합니다`);
+        commentRef.current[i].scrollIntoView({behavior: "smooth"});
+        return
+      };
     }
     dispatch(clearModal());
   }
   
   return(
-    <ModalResultComp>
+    <ModalCommentComp>
       <MatchCommentHeader>
         <SportsImg src={modalData.sportsImage} alt='sports' />
         <MatchDateTimePlace>
@@ -48,30 +59,28 @@ const MatchResult = () => {
       </MatchCommentHeader>
 
       <ResultFormContainer>
-        <Sep> - - - - - - - - - - - -  나의 결과 입력  - - - - - - - - - - - -</Sep>
-        <InputTitleBox ref={scrollComp}>
-          <InputTitle>나의 점수<ErrMessage ref={myResultMsg} status={myResultErr}></ErrMessage></InputTitle>
-        </InputTitleBox>
-        <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
+        {participantWithoutMe.map((each, idx) => 
+          <Result key={each.nickname} injRef={el => (commentRef.current[idx] = el)} data={each}/>
+        )}
         <Sep> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</Sep>
       </ResultFormContainer>
-      <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
-    </ModalResultComp>
+      <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitComment} />
+    </ModalCommentComp>
   )
 };
 
-export default MatchResult;
+export default MatchComment;
 
-const ModalResultComp = styled.section`
+const ModalCommentComp = styled.section`
   width: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 20px;
 `
 const MatchCommentHeader = styled.article`
   display: flex;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `
 const MatchDateTimePlace = styled.div`
   width: 220px;
@@ -101,17 +110,18 @@ const SportsImg = styled.img`
   margin-right: 14px;
   border-radius: 2rem 1rem 1rem 0rem;
 `
+
 const Sep = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 20px 0px;
+  margin: 10px 0px;
   overflow-x: hidden;
 `
 
 const ResultFormContainer = styled.div`
-  height: 240px;
-  margin-bottom: 20px;
+  height: 300px;
+  margin-bottom: 14px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

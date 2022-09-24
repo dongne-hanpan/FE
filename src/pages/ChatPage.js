@@ -16,8 +16,15 @@ const ChatPage = () => {
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
 
+  const getChatData = async() => {
+    const res = await dispatch(getChatDataThunk(nowChatId));
+    console.log(res.payload);
+    if(res.payload === '매치가 존재하지 않습니다. (Service: null; Status Code: 0; Error Code: null; Request ID: null; Proxy: null)'){
+      navigate('/chat');
+    }
+  }
   useEffect(() => {
-    dispatch(getChatDataThunk(nowChatId))
+    getChatData();
   },[nowChatId])
 
   //userdata 없으면 돌아가
@@ -44,7 +51,7 @@ const ChatPage = () => {
           </ChatPartici>
         </ChatHead>
         {nowChatId ? 
-        <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
+        <ChatContainer />
         :<></>}
       </ChatNow>
     </MainPage>

@@ -10,9 +10,8 @@ import { getLocal } from '../../shared/axios/local';
 
 const DialRemoveMatch = () => {
   const navigate = useNavigate();
-  const regionAndSports = getLocal('regionAndSports');
-  const region = regionAndSports.region;
-  const sports = regionAndSports.sports;
+  const region = getLocal('region').region;
+  const sports = getLocal('sports').sports;
   const dispatch = useDispatch();
   const dialData = useSelector ((state) => state.modal.dialogueData);
   const cancel = () => {

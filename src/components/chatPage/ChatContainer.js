@@ -12,12 +12,15 @@ import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
+import { dummySports } from '../../dummyData/dummyIndex';
+import { getLocal } from '../../shared/axios/local';
+import { getChatDataThunk, reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 
 
-const ChatContainer = ({chatStatus, chatContents}) => {
+const ChatContainer = () => {
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
-  const params = useParams().match_id;
+  const nowChatId = useParams().match_id;
   const headers = {
     "Content-Type": "application/json", 
     "Authorization": `Bearer ${getCookie("mytoken")}`,
@@ -32,10 +35,10 @@ const ChatContainer = ({chatStatus, chatContents}) => {
   const onConnected = () => {
     console.log("연결됨");
     client.subscribe(
-      `/queue/match/${params}`,
+      `/queue/match/${nowChatId}`,
       (message) => {
         if (message.body) {
-          axios.get(`${BASE_URL}/chat/message/${params}`, {headers}).then((res) => {
+          axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
           console.log("서버에 전체 채팅 목록 요청", res.data);
           const new_Data = JSON.parse(message.body);
           setMessageList([...res.data]);
@@ -54,39 +57,62 @@ const ChatContainer = ({chatStatus, chatContents}) => {
   };
 
   useEffect(() => {
-    if (params !== undefined) {
+    if (nowChatId !== undefined) {
       connect();
       return () => {
         client.disconnect();
       };
     }
     return client.disconnect();
-  }, [params]);
+  }, [nowChatId]);
 
 
   //채팅 목록을 가져오기
   useEffect(() => {
-    axios.get(`${BASE_URL}/chat/message/${params}`, {headers}).then((res) => {
+    axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
       console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
-  }, [params]);
+  }, [nowChatId]);
 
   //메세지 보내기 관련
   const dispatch = useDispatch();
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const matchStatus = chatData.matchStatus
   const userData = useSelector((state) => state.user.userData);
-
+  const sportsLocal = getLocal('sports');
+  const sports = sportsLocal.sports;
+  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+  
+  const doReserved = async() => {
+    if( matchStatus === 'recruit'){
+      await dispatch(reservedChatThunk(nowChatId));
+      await dispatch(getChatDataThunk(nowChatId));
+    } else{
+      dispatch(setDialogue({dialType: 'denyReserved'}));
+    }
+  }
   const writeResult = () => {
-    if(chatStatus === 'recruit'){
+    if( matchStatus === 'reserved'){
       const modalResultData = {
         modalType: 'matchResult',
-        matchDay: chatData.date,
-        matchTime: chatData.time,
-        matchPlace: chatData.place,
-        reservedPeople: chatData.userListInMatch
+        sportsImage: matchsports.sportsImage,
       }
       dispatch(setModal(modalResultData));
+    } else{
+      const dialDenyResult = {
+        dialType: 'denyResult'
+      };
+      dispatch(setDialogue(dialDenyResult));
+    }
+  }
+  const writeComment = () => {
+    if( matchStatus === 'reserved'){
+      const modalCommentData = {
+        modalType: 'matchComment',
+        sportsImage: matchsports.sportsImage,
+      }
+      dispatch(setModal(modalCommentData));
     } else{
       const dialDenyResult = {
         dialType: 'denyResult'
@@ -97,18 +123,18 @@ const ChatContainer = ({chatStatus, chatContents}) => {
 
   const leaveChatRoom = () => {
     if(chatData.writer === userData.nickname){
-      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: true}));
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: true}));
     } else{
-      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: false}));
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: false}));
     }
   }
 
   const sendMessage = () => {
     client.send(
-      `/app/chat/${params}`,
+      `/app/chat/${nowChatId}`,
       headers,
       JSON.stringify({
-        match_id: parseInt(params),
+        match_id: parseInt(nowChatId),
         message: message,
       })
     );
@@ -123,7 +149,9 @@ const ChatContainer = ({chatStatus, chatContents}) => {
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
-        <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
+        <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
+        <BtnResult onClick={writeResult}> 나의 결과 </BtnResult>
+        <BtnComment onClick={writeComment}> 후기 입력 </BtnComment>
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
@@ -144,7 +172,6 @@ const ChatContainerComp = styled.article`
     display: none;
   }
 `
-
 const ChatInput = styled.article`
   height: 160px;
   display: flex;
@@ -161,19 +188,29 @@ const ChatInputBtns = styled.div`
   padding: 0px 10px;
   margin-bottom: 2px;
 `
+const BtnReserve = styled.button`
+  height: 30px;
+  padding: 4px 14px;
+  color: ${({theme}) => theme.colors.yellow};
+  font-weight: ${({theme}) => theme.fontWeight.semi_bold};
+  border: 2px solid ${({theme}) => theme.colors.yellow};
+  border-radius: 2rem;
+  background-color: ${({theme}) => theme.colors.background};
+`;
 const BtnResult = styled.button`
   height: 30px;
   padding: 4px 14px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.green};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.green};
   border-radius: 2rem;
   background-color: ${({theme}) => theme.colors.background};
 `;
-const BtnReserve = styled.button`
+const BtnComment = styled.button`
   height: 30px;
   padding: 4px 14px;
-  margin-left: 10px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.core};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.core};
@@ -183,7 +220,7 @@ const BtnReserve = styled.button`
 const BtnOut = styled.button`
   height: 30px;
   padding: 4px 14px;
-  margin-left: 10px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.red_light};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.red_light};
