@@ -3,6 +3,13 @@ import { deleteWithCookie, getWithCookie, getwithoutCookie, postWithCookie, putW
 import { getCookie } from '../../axios/cookie';
 
 
+export const loadAllMatchThunk = createAsyncThunk(
+  "match/loadAllMatchThunk",
+  async(sports) => {
+    const res = await getwithoutCookie(`/api/match/list/${sports}`);
+    return res;
+  }
+);
 export const loadMatchThunk = createAsyncThunk(
   "match/loadMatchThunk",
   async(additionalUrl) => {
@@ -54,6 +61,9 @@ const matchSlice = createSlice({
     },
   },
   extraReducers:(builder) => {
+    builder.addCase(loadAllMatchThunk.fulfilled, (state, action) => {
+      state.matches = action.payload;
+    });
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
       state.matches = action.payload;
     });
