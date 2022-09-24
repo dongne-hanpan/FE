@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deleteWithCookie, getWithCookie, postWithCookie, postWithoutCookie } from '../../axios/axios';
+import { deleteWithCookie, getWithCookie, postWithCookie } from '../../axios/axios';
 import { getCookie } from '../../axios/cookie';
 
 export const getChatDataThunk = createAsyncThunk(
@@ -7,7 +7,6 @@ export const getChatDataThunk = createAsyncThunk(
   async(match_id) => {
     const cookie = getCookie('mytoken');
     const res = await getWithCookie(`/api/match/chatroom/${match_id}`,cookie);
-    console.log(res);
     return res;
   }
 )
@@ -16,7 +15,6 @@ export const getMyChatListThunk = createAsyncThunk(
   async() => {
     const cookie = getCookie('mytoken');
     const res = await getWithCookie(`/api/user/chat-list`,cookie);
-    console.log(res);
     return res;
   }
 )
@@ -36,11 +34,12 @@ export const leaveChatThunk = createAsyncThunk(
     return res;
   }
 );
-export const submitResultThunk = createAsyncThunk(
-  "chat/submitResultThunk",
-  async (sports,result_data) => {
+export const submitMyResultThunk = createAsyncThunk(
+  "chat/submitMyResultThunk",
+  async (sports,myResultData) => {
+    console.log(myResultData);
     const cookie = getCookie('mytoken');
-    const res = await postWithCookie(`/api/${sports}/result`, result_data, cookie);
+    const res = await postWithCookie(`/api/${sports}/result`, myResultData, cookie);
     return res;
   }
 )
@@ -73,9 +72,9 @@ const chatSlice = createSlice({
     });
     builder.addCase(reservedChatThunk.fulfilled, (state,action) => {
       console.log('change match status to reserved');
-      state.chatList = action.payload;
+      console.log(action.payload);
     });
-    builder.addCase(submitResultThunk.fulfilled, (state,action) => {
+    builder.addCase(submitMyResultThunk.fulfilled, (state,action) => {
       console.log('result submit completed');
       console.log(action.payload);
     });

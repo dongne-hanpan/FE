@@ -44,7 +44,7 @@ const ChatPage = () => {
           </ChatPartici>
         </ChatHead>
         {nowChatId ? 
-        <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
+        <ChatContainer />
         :<></>}
       </ChatNow>
     </MainPage>

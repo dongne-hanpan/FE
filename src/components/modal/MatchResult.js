@@ -1,24 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import { submitCommentThunk, submitResultThunk } from '../../shared/redux/modules/chatSlice';
-import Result from '../chatPage/Results';
+import { submitMyResultThunk } from '../../shared/redux/modules/chatSlice';
+import { getLocal } from '../../shared/axios/local';
+import { clearModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
-import {getLocal} from '../../shared/axios/local';
-import { clearModal } from '../../shared/redux/modules/modalSlice';
 
 
 const MatchResult = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const modalData = useSelector((state) => state.modal.modalData);
   const scrollComp = useRef(null);
   const myScore = useRef(null);
-  const commentRef = useRef([]);
   const sportsEn = getLocal('sports').sportsEn;
-  const participantWithoutMe = chatData.userListInMatch.filter((each) => 
-    each.nickname !== userData.nickname);
   const myResultMsg = useRef(null);
   const [myResultErr, setResultErr] = useState('none');
   
@@ -28,58 +24,38 @@ const MatchResult = () => {
     if(0 <= myScoreValue && myScoreValue <= 300){
       myResultMsg.current.innerText = '';
       setResultErr('none');
-      const resultData = {
-        match_id: chatData.match_id,
-        myScore: myScoreValue
+      const myResultData = {
+        "match_id": chatData.match_id,
+        "myScore": myScoreValue
       }
-      dispatch(submitResultThunk(sportsEn,resultData));
+      console.log(myResultData);
+      dispatch(submitMyResultThunk(sportsEn,myResultData));
     } else{
       setResultErr('danger');
       myResultMsg.current.innerText = '점수 범위를 벗어났습니다';
-      scrollComp.current.scrollIntoView({behavior: "smooth"});
       return
-    }
-
-    // 차례로 상대 후기 입력
-    const reviews = Array.from(document.getElementsByClassName('review'));
-    const manners = Array.from(document.getElementsByClassName('manner'));
-    for(let i=0;i<reviews.length;i++){
-      const reviewValue = manners[i].value;
-      const mannerValue = parseInt(manners[i].value);
-
-      if(0<= mannerValue && mannerValue <= 10){
-        const reviewData = {
-          match_id: chatData.match_id,
-          nickname: participantWithoutMe[i].nickname,
-          comment: reviewValue,
-          mannerPoint: mannerValue
-        }
-        dispatch(submitCommentThunk(reviewData));
-      }else{
-        alert(`${participantWithoutMe[i].nickname}님의 매너점수가 점수 범위를 벗어났습니다 \n\n 0 에서 10 점까지 가능합니다`);
-        commentRef.current[i].scrollIntoView({behavior: "smooth"});
-        return
-      };
     }
     dispatch(clearModal());
   }
   
   return(
     <ModalResultComp>
-      <MatchDateTimePlace>
-        <MatchDay>{chatData.date}<MatchTime>{chatData.time}</MatchTime></MatchDay>
-        <MatchPlace>{chatData.place}</MatchPlace>
-      </MatchDateTimePlace>
+      <MatchCommentHeader>
+        <SportsImg src={modalData.sportsImage} alt='sports' />
+        <MatchDateTimePlace>
+          <MatchDay>{chatData.date}</MatchDay>
+          <MatchTime>{chatData.time}</MatchTime>
+          <MatchPlace>{chatData.place}</MatchPlace>
+        </MatchDateTimePlace>
+      </MatchCommentHeader>
 
       <ResultFormContainer>
         <Sep> - - - - - - - - - - - -  나의 결과 입력  - - - - - - - - - - - -</Sep>
-          <InputTitleBox ref={scrollComp}>
-            <InputTitle>나의 점수<ErrMessage ref={myResultMsg} status={myResultErr}></ErrMessage></InputTitle>
-          </InputTitleBox>
-          <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
-          {participantWithoutMe.map((each, idx) => 
-            <Result key={each.nickname} injRef={el => (commentRef.current[idx] = el)} data={each}/>
-          )}
+        <InputTitleBox ref={scrollComp}>
+          <InputTitle>나의 점수<ErrMessage ref={myResultMsg} status={myResultErr}></ErrMessage></InputTitle>
+        </InputTitleBox>
+        <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
+        <Sep> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</Sep>
       </ResultFormContainer>
       <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
     </ModalResultComp>
@@ -95,8 +71,12 @@ const ModalResultComp = styled.section`
   align-items: center;
   margin-top: 30px;
 `
+const MatchCommentHeader = styled.article`
+  display: flex;
+  margin-bottom: 30px;
+`
 const MatchDateTimePlace = styled.div`
-  width: 100%;
+  width: 220px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -104,13 +84,12 @@ const MatchDateTimePlace = styled.div`
 `
 const MatchDay = styled.div`
   width: 100%;
-  margin-bottom: 10px;
-  font-size: ${({theme}) => theme.fontSize.font_40};
+  margin-bottom: 6px;
+  font-size: ${({theme}) => theme.fontSize.font_36};
 `
-const MatchTime = styled.span`
+const MatchTime = styled.div`
   width: 100%;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   font-size: ${({theme}) => theme.fontSize.font_26};
 `
 const MatchPlace = styled.div`
@@ -118,7 +97,12 @@ const MatchPlace = styled.div`
   display: flex;
   font-size: ${({theme}) => theme.fontSize.font_32};
 `
-
+const SportsImg = styled.img`
+  width: 130px;
+  height: auto;
+  margin-right: 14px;
+  border-radius: 2rem 1rem 1rem 0rem;
+`
 const Sep = styled.div`
   width: 100%;
   display: flex;
@@ -128,7 +112,7 @@ const Sep = styled.div`
 `
 
 const ResultFormContainer = styled.div`
-  height: 330px;
+  height: 240px;
   margin-bottom: 20px;
   overflow-y: scroll;
   &::-webkit-scrollbar {

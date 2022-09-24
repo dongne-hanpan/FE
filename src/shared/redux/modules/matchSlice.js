@@ -80,7 +80,7 @@ const matchSlice = createSlice({
       console.log('update match completed');
     });
     builder.addCase(contactHostThunk.fulfilled, (state, action) => {
-      console.log('enter completed');
+      console.log('apply completed');
     });
   }
 });
