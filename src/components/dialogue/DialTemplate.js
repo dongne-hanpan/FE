@@ -14,6 +14,7 @@ import DialReserveWho from './DialReserveWho';
 import DialRemoveMatch from './DialRemoveMatch';
 import DialPermit from './DialPermit';
 import DialConfLeave from './DialConfLeave';
+import DialDenyReserved from './DialDenyReserved';
 
 
 const DialTemplate = () => {
@@ -46,6 +47,8 @@ const DialTemplate = () => {
       return <DialConfResult />
     } else if(dialData.dialType === 'denyResult'){
       return <DialDenyResult />
+    } else if(dialData.dialType === 'denyReserved'){
+      return <DialDenyReserved />
     } else if(dialData.dialType === 'reserveWho'){
       return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){

@@ -12,13 +12,13 @@ import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
-import { reservedChatThunk } from '../../shared/redux/modules/chatSlice';
+import { getChatDataThunk, reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 
 
-const ChatContainer = ({chatStatus}) => {
+const ChatContainer = () => {
   const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
-  const params = useParams().match_id;
+  const nowChatId = useParams().match_id;
   const headers = {
     "Content-Type": "application/json", 
     "Authorization": `Bearer ${getCookie("mytoken")}`,
@@ -33,10 +33,10 @@ const ChatContainer = ({chatStatus}) => {
   const onConnected = () => {
     console.log("연결됨");
     client.subscribe(
-      `/queue/match/${params}`,
+      `/queue/match/${nowChatId}`,
       (message) => {
         if (message.body) {
-          axios.get(`${BASE_URL}/chat/message/${params}`, {headers}).then((res) => {
+          axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
           console.log("서버에 전체 채팅 목록 요청", res.data);
           const new_Data = JSON.parse(message.body);
           setMessageList([...res.data]);
@@ -55,31 +55,36 @@ const ChatContainer = ({chatStatus}) => {
   };
 
   useEffect(() => {
-    if (params !== undefined) {
+    if (nowChatId !== undefined) {
       connect();
       return () => {
         client.disconnect();
       };
     }
     return client.disconnect();
-  }, [params]);
+  }, [nowChatId]);
 
 
   //채팅 목록을 가져오기
   useEffect(() => {
-    axios.get(`${BASE_URL}/chat/message/${params}`, {headers}).then((res) => {
+    axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
       console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
-  }, [params]);
+  }, [nowChatId]);
 
   //메세지 보내기 관련
   const dispatch = useDispatch();
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const matchStatus = chatData.matchStatus
   const userData = useSelector((state) => state.user.userData);
-
-  const doReserved = () => {
-    dispatch(reservedChatThunk(params));
+  const doReserved = async() => {
+    if( matchStatus === 'recruit'){
+      await dispatch(reservedChatThunk(nowChatId));
+      await dispatch(getChatDataThunk(nowChatId));
+    } else{
+      dispatch(setDialogue({dialType: 'denyReserved'}));
+    }
   }
   const writeResult = () => {
     if(chatStatus === 'recruit'){
@@ -101,18 +106,18 @@ const ChatContainer = ({chatStatus}) => {
 
   const leaveChatRoom = () => {
     if(chatData.writer === userData.nickname){
-      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: true}));
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: true}));
     } else{
-      dispatch(setDialogue({dialType: 'removeMatch', matchId: params, isHost: false}));
+      dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: false}));
     }
   }
 
   const sendMessage = () => {
     client.send(
-      `/app/chat/${params}`,
+      `/app/chat/${nowChatId}`,
       headers,
       JSON.stringify({
-        match_id: parseInt(params),
+        match_id: parseInt(nowChatId),
         message: message,
       })
     );
