@@ -12,6 +12,8 @@ import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
+import { dummySports } from '../../dummyData/dummyIndex';
+import { getLocal } from '../../shared/axios/local';
 import { getChatDataThunk, reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 
 
@@ -78,6 +80,10 @@ const ChatContainer = () => {
   const chatData = useSelector((state) => state.chat.nowChatData);
   const matchStatus = chatData.matchStatus
   const userData = useSelector((state) => state.user.userData);
+  const sportsLocal = getLocal('sports');
+  const sports = sportsLocal.sports;
+  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+  
   const doReserved = async() => {
     if( matchStatus === 'recruit'){
       await dispatch(reservedChatThunk(nowChatId));
@@ -87,15 +93,26 @@ const ChatContainer = () => {
     }
   }
   const writeResult = () => {
-    if(chatStatus === 'recruit'){
+    if( matchStatus === 'reserved'){
       const modalResultData = {
         modalType: 'matchResult',
-        matchDay: chatData.date,
-        matchTime: chatData.time,
-        matchPlace: chatData.place,
-        reservedPeople: chatData.userListInMatch
+        sportsImage: matchsports.sportsImage,
       }
       dispatch(setModal(modalResultData));
+    } else{
+      const dialDenyResult = {
+        dialType: 'denyResult'
+      };
+      dispatch(setDialogue(dialDenyResult));
+    }
+  }
+  const writeComment = () => {
+    if( matchStatus === 'reserved'){
+      const modalCommentData = {
+        modalType: 'matchComment',
+        sportsImage: matchsports.sportsImage,
+      }
+      dispatch(setModal(modalCommentData));
     } else{
       const dialDenyResult = {
         dialType: 'denyResult'
@@ -132,8 +149,9 @@ const ChatContainer = () => {
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
-        <BtnResult onClick={writeResult}> 결과 입력 </BtnResult>
         <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
+        <BtnResult onClick={writeResult}> 나의 결과 </BtnResult>
+        <BtnComment onClick={writeComment}> 후기 입력 </BtnComment>
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
@@ -182,16 +200,17 @@ const BtnReserve = styled.button`
 const BtnResult = styled.button`
   height: 30px;
   padding: 4px 14px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.green};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.green};
   border-radius: 2rem;
   background-color: ${({theme}) => theme.colors.background};
 `;
-const BtnReserve = styled.button`
+const BtnComment = styled.button`
   height: 30px;
   padding: 4px 14px;
-  margin-left: 10px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.core};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.core};
@@ -201,7 +220,7 @@ const BtnReserve = styled.button`
 const BtnOut = styled.button`
   height: 30px;
   padding: 4px 14px;
-  margin-left: 10px;
+  margin-left: 6px;
   color: ${({theme}) => theme.colors.red_light};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
   border: 2px solid ${({theme}) => theme.colors.red_light};

@@ -11,6 +11,7 @@ import MatchWatch from './MatchWatch';
 import MatchResult from './MatchResult';
 import UserWatch from './UserWatch';
 import ChangeProfile from './ChangeProfile';
+import MatchComment from './MatchComment';
 
 
 const ModalTemplate = () => {
@@ -20,6 +21,7 @@ const ModalTemplate = () => {
     if(e.target.ariaLabel === 'modalToggle'){
       if(modalData.modalType === 'matchWrite' 
         || modalData.modalType === 'matchResult' 
+        || modalData.modalType === 'matchComment' 
         || modalData.modalType === 'changeProfile'
         ){
         dispatch(setDialogue({dialType: 'confirmRemove'}));
@@ -42,6 +44,8 @@ const ModalTemplate = () => {
       return <MatchWatch />
     } else if(modalData.modalType === 'matchResult'){
       return <MatchResult />
+    } else if(modalData.modalType === 'matchComment'){
+      return <MatchComment />
     } else if(modalData.modalType === 'userWatch'){
       return <UserWatch />
     } else if(modalData.modalType === 'changeProfile'){
