@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWithCookie, postWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
@@ -41,29 +41,12 @@ export const updateProfileThunk = createAsyncThunk(
     return res;
   }
 );
-export const getAlermThunk = createAsyncThunk(
-  "user/getAlermThunk",
-  async () => {
-    const cookie = getCookie('mytoken');
-    const res = await getWithCookie("/api/match/request", cookie);
-    return res;
-  }
-);
-export const permitAlermThunk = createAsyncThunk(
-  "user/permitAlermThunk",
-  async (permitData) => {
-    const cookie = getCookie('mytoken');
-    const res = await postWithCookie("/api/match/permit", permitData, cookie);
-    return res;
-  }
-);
 
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     userData: {},
-    userAlerm:[]
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -113,13 +96,6 @@ const userSlice = createSlice({
         console.log('post image completed');
         state.userData = {...state.userData, profileImage:action.payload}
       }
-    });
-    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-      state.userAlerm = action.payload;
-    });
-    builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
-      console.log('permit completed');
-      state.userAlerm = action.payload;
     });
   }
 });

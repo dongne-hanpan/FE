@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAlermThunk, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -18,17 +19,18 @@ import logo from '../../asset/logo.png';
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const userAlerm = useSelector((state) => state.user.userAlerm);
+  const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
 
-  //새로고침 등으로 userData 값 사라지면, 
+  //새로고침 등으로 userData 값 사라지면, refresh
   useEffect(() => {
     const cookie = getCookie('mytoken');
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
       dispatch(getAlermThunk());
     }
-  },[userData,userAlerm])
+  },[userData])
+
 
   const goIndexPage = () => {
     navigate('/');
@@ -53,8 +55,8 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        { userAlerm.length > 0 ? 
-          userAlerm.map((each,params) => 
+        { alermData.length > 0 ? 
+          alermData.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
         }
