@@ -7,8 +7,8 @@ export const signupUserThunk = createAsyncThunk(
   "user/signupUserThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/signup", user_data);
-  return res
-}
+    return res
+  }
 );
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
@@ -16,7 +16,7 @@ export const loginUserThunk = createAsyncThunk(
     const res = await postWithoutCookie("/api/auth/login", user_data);
     return res;
   }
-  );
+);
 export const refreshUserThunk = createAsyncThunk(
   "user/refreshtUserThunk",
   async () => {
@@ -47,40 +47,25 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     userData: {},
+    error:{}
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
-      console.log('signup completed');
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
-      if(action.payload.status === 401 || action.payload.status === 500){
-        alert('로그인 실패했습니다');
+      const res = action.payload;
+      if(res.statusCode){
+        state.error = res;
       }else{
-          console.log('login completed');
-          const data = action.payload;
-          const accessToken = data.accessToken;
-          document.cookie = `mytoken=${accessToken}; path=/;`;
-          const newUserData = {
-            username: data.username,
-            nickname: data.nickname,
-            profileImage: data.profileImage,
-          };
-          state.userData = newUserData;
-      }
-    });
-    builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
-      if(action.payload.status === 401 || action.payload.status === 500){
-        deleteCookie('mytoken');
-        alert('다시 로그인해주세요');
-      } else{
-        console.log('refresh completed');
-        const data = action.payload;
+        const accessToken = res.accessToken;
+        document.cookie = `mytoken=${accessToken}; path=/;`;
         const newUserData = {
-          username: data.username,
-          nickname: data.nickname,
-          profileImage: data.profileImage,
+          username: res.username,
+          nickname: res.nickname,
+          profileImage: res.profileImage,
         };
+        state.error = {};
         state.userData = newUserData;
       }
     });
@@ -100,4 +85,6 @@ const userSlice = createSlice({
   }
 });
 
+export const getUserData = (state) => state.user.userData;
+export const getAuthError = (state) => state.user.error;
 export default userSlice.reducer;

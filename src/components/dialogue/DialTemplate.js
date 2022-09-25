@@ -19,6 +19,7 @@ import DialDenyContact from './DialDenyContact';
 import DialDenyContactAgain from './DialDenyContactAgain';
 import DialConfComment from './DialConfComment';
 import DialDenyComment from './DialDenyComment';
+import DialFailLogin from './DialFailLogin';
 
 
 const DialTemplate = () => {
@@ -43,6 +44,8 @@ const DialTemplate = () => {
       return <DialConfSignup />
     } else if(dialData.dialType === 'confirmLogin'){
       return <DialConfLogin />
+    } else if(dialData.dialType === 'failLogin'){
+      return <DialFailLogin />
     } else if(dialData.dialType === 'confirmWrite'){
       return <DialConfWrite />
     } else if(dialData.dialType === 'confirmApply'){

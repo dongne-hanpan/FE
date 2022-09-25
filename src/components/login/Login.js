@@ -1,21 +1,30 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearModal, setModal } from '../../shared/redux/modules/modalSlice';
+import { getAuthError, getUserData, loginUserThunk } from '../../shared/redux/modules/userSlice';
+import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
 //temp
 import logo from '../../asset/logo.png';
-import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector(getUserData);
+  const authError = useSelector(getAuthError);
+
+  //doLogin 결과에 따른 에러 핸들링
   useEffect(() => {
+    //성공 시
     if(userData.username){
       dispatch(clearModal());
     }
-  },[userData])
+    //실패 시
+    if(authError.statusCode === 500 || authError.statusCode === 401){
+      dispatch(setDialogue({dialType: 'failLogin'}));
+    }
+  },[userData, authError, dispatch])
+
   const moveToSignup = () => {
     dispatch(setModal({modalType: 'signup'}))
   }
@@ -32,7 +41,7 @@ const Login = () => {
       password: pwValue
     };
     dispatch(loginUserThunk(payload));
-
+    
     loginUsernameRef.current.value = '';
     loginPwRef.current.value = '';
   }
