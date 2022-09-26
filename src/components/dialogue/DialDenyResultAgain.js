@@ -13,7 +13,7 @@ const DialDenyResultAgain = () => {
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🚫 결과 입력 중복 🚫</DialMessageTitle>
+        <DialMessageTitle>🚫 결과 입력 불가 🚫</DialMessageTitle>
         <DialMessageExtra>이미 결과를 입력했습니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>

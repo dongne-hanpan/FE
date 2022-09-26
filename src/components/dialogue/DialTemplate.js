@@ -20,7 +20,7 @@ import DialDenyContact from './DialDenyContact';
 import DialDenyContactAgain from './DialDenyContactAgain';
 import DialApplyCanceled from './DialApplyCanceled';
 import DialConfComment from './DialConfComment';
-import DialDenyComment from './DialDenyComment';
+import DialDenyCommentAgain from './DialDenyCommentAgain';
 import DialFailLogin from './DialFailLogin';
 import DialExpireLogin from './DialExpireLogin';
 import DialDenyFileType from './DialDenyFileType';
@@ -81,8 +81,8 @@ const DialTemplate = () => {
       return <DialDenyResult />
     } else if(dialData.dialType === 'denyResultAgain'){
       return <DialDenyResultAgain />
-    } else if(dialData.dialType === 'denyComment'){
-      return <DialDenyComment />
+    } else if(dialData.dialType === 'denyCommentAgain'){
+      return <DialDenyCommentAgain />
     } else if(dialData.dialType === 'denyReserved'){
       return <DialDenyReserved />
     } else if(dialData.dialType === 'denyFileType'){

@@ -126,8 +126,22 @@ const chatSlice = createSlice({
       }
     });
     builder.addCase(submitCommentThunk.fulfilled, (state,action) => {
-      console.log('result comment completed');
-      console.log(action.payload);
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'submitCommentThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'submitCommentThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+      }
     });
     builder.addCase(leaveChatThunk.fulfilled, (state,action) => {
       const res = action.payload;

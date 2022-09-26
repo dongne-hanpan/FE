@@ -31,13 +31,7 @@ const MatchComment = () => {
           comment: reviewValue,
           mannerPoint: mannerValue
         }
-        const res = await dispatch(submitCommentThunk(reviewData));
-        if(res.payload === '이미 평가한 유저입니다.'){
-          dispatch(setDialogue({dialType: 'denyComment'}))
-        }else{
-          dispatch(setDialogue({dialType: 'confirmComment'}))
-
-        }
+        dispatch(submitCommentThunk(reviewData));
       }else{
         alert(`${participantWithoutMe[i].nickname}님의 매너점수가 점수 범위를 벗어났습니다 \n\n 0 에서 10 점까지 가능합니다`);
         commentRef.current[i].scrollIntoView({behavior: "smooth"});

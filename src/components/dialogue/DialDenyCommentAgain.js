@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { clearAll} from '../../shared/redux/modules/modalSlice';
 
 
-const DialDenyComment = () => {
+const DialDenyCommentAgain = () => {
   const dispatch = useDispatch();
   const cancel = () => {
     dispatch(clearAll());
@@ -14,7 +14,7 @@ const DialDenyComment = () => {
     <>
       <DialMessages>
         <DialMessageTitle>🚫 후기 입력 불가 🚫</DialMessageTitle>
-        <DialMessageExtra>이미 후기를 입력하셨습니다</DialMessageExtra>
+        <DialMessageExtra>이미 후기를 입력했습니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -23,7 +23,7 @@ const DialDenyComment = () => {
   )
 };
 
-export default DialDenyComment;
+export default DialDenyCommentAgain;
 
 
 const DialMessages = styled.div`

@@ -30,6 +30,10 @@ const ChatPage = () => {
       dispatch(setDialogue({dialType: 'confirmResult'}));
       dispatch(clearChatStatus());
     }
+    if(chatStatus.statusType === 'submitCommentThunk'){
+      dispatch(setDialogue({dialType: 'confirmComment'}))
+      dispatch(clearChatStatus());
+    }
     if(chatStatus.statusType === 'reservedChatThunk'){
       dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
       dispatch(clearChatStatus());
@@ -50,6 +54,12 @@ const ChatPage = () => {
     if(chatError.errorType === 'submitMyResultThunk'){
       if(chatError.statusCode === 500){
         dispatch(setDialogue({dialType: 'denyResultAgain'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'submitCommentThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyCommentAgain'}))
       }
       dispatch(clearChatError());
     }
