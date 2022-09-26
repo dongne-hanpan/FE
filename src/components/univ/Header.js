@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { getAuthError, getUserData, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
 import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
-import { setModal } from '../../shared/redux/modules/modalSlice';
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
@@ -18,18 +18,24 @@ import logo from '../../asset/logo.png';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector(getUserData);
+  const authError = useSelector(getAuthError);
   const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
 
-  //새로고침 등으로 userData 값 사라지면, refresh
+  //refresh 에러 핸들링
   useEffect(() => {
     const cookie = getCookie('mytoken');
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
       dispatch(getAlermThunk());
     }
-  },[userData])
+    if(authError.errorType === 'refreshUserThunk'){
+      if(authError.statusCode === 500 || authError.statusCode === 401){
+        dispatch(setDialogue({dialType: 'expireLogin'}))
+      }
+    }
+  },[userData, authError, dispatch])
 
 
   const goIndexPage = () => {

@@ -69,6 +69,27 @@ const userSlice = createSlice({
         state.userData = newUserData;
       }
     });
+    builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
+      const res = action.payload;
+      if(res.statusCode){
+        console.log('hello');
+        deleteCookie('mytoken');
+        const errorObj = {
+          errorType: 'refreshUserThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        const data = action.payload;
+        const newUserData = {
+          username: data.username,
+          nickname: data.nickname,
+          profileImage: data.profileImage,
+        };
+        state.error = {};
+        state.userData = newUserData;
+      }
+    });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
       console.log('logout completed');
       deleteCookie("mytoken");
