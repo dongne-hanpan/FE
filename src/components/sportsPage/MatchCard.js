@@ -23,10 +23,16 @@ const MatchCard = ({data}) => {
     if(alermData.errorType === 'contactHostThunk'){
       if(alermData.statusCode === 500){
         if(alermData.message === '이미 신청한 매치 입니다'){
-          dispatch(setDialogue({dialType: 'denyContactAgain'}));
+          dispatch(setDialogue({dialType: 'denyContactAgain', matchId: data.match_id}));
         } else if(alermData.message === '참여 가능 인원이 초과되었습니다'){
           dispatch(setDialogue({dialType: 'denyContact'}));
         }
+      } else if(alermData.statusCode === 404){
+        dispatch(setDialogue({dialType: 'denyExist'}));
+      }
+    } else if(alermData.errorType === 'permitAlermThunk'){
+      if(alermData.statusCode === 500){
+        dispatch(setDialogue({dialType: 'applyCanceled'}));
       } else if(alermData.statusCode === 404){
         dispatch(setDialogue({dialType: 'denyExist'}));
       }

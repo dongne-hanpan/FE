@@ -11,6 +11,14 @@ export const contactHostThunk = createAsyncThunk(
     return res;
   }
 );
+export const cancelApplyThunk = createAsyncThunk(
+  "match/cancelApplyThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie(`/api/match/cancel/${match_id}`, cookie);
+    return res;
+  }
+);
 export const getAlermThunk = createAsyncThunk(
   "alerm/getAlermThunk",
   async () => {
@@ -54,12 +62,22 @@ const alermSlice = createSlice({
         state.alermStatus = 'success';
       }
     });
+    builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
+    });
     builder.addCase(getAlermThunk.fulfilled, (state, action) => {
       state.alermData = action.payload;
     });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
-      console.log('permit completed');
-      state.alermData = action.payload;
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'permitAlermThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        state.alermData = action.payload;
+      }
     });
   }
 });

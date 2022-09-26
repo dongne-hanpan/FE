@@ -18,6 +18,7 @@ import DialConfLeave from './DialConfLeave';
 import DialDenyReserved from './DialDenyReserved';
 import DialDenyContact from './DialDenyContact';
 import DialDenyContactAgain from './DialDenyContactAgain';
+import DialApplyCanceled from './DialApplyCanceled';
 import DialConfComment from './DialConfComment';
 import DialDenyComment from './DialDenyComment';
 import DialFailLogin from './DialFailLogin';
@@ -70,6 +71,8 @@ const DialTemplate = () => {
       return <DialDenyComment />
     } else if(dialData.dialType === 'denyReserved'){
       return <DialDenyReserved />
+    } else if(dialData.dialType === 'applyCanceled'){
+      return <DialApplyCanceled />
     } else if(dialData.dialType === 'reserveWho'){
       return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){
