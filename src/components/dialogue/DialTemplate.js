@@ -23,6 +23,7 @@ import DialConfComment from './DialConfComment';
 import DialDenyComment from './DialDenyComment';
 import DialFailLogin from './DialFailLogin';
 import DialExpireLogin from './DialExpireLogin';
+import DialDenyFileType from './DialDenyFileType';
 
 
 const DialTemplate = () => {
@@ -71,6 +72,8 @@ const DialTemplate = () => {
       return <DialDenyComment />
     } else if(dialData.dialType === 'denyReserved'){
       return <DialDenyReserved />
+    } else if(dialData.dialType === 'denyFileType'){
+      return <DialDenyFileType />
     } else if(dialData.dialType === 'applyCanceled'){
       return <DialApplyCanceled />
     } else if(dialData.dialType === 'reserveWho'){

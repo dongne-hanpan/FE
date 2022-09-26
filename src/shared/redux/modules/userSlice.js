@@ -76,7 +76,6 @@ const userSlice = createSlice({
     builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
       const res = action.payload;
       if(res.statusCode){
-        console.log('hello');
         deleteCookie('mytoken');
         const errorObj = {
           errorType: 'refreshUserThunk',
@@ -100,10 +99,15 @@ const userSlice = createSlice({
       state.userData = {};
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
-      if(action.payload.status === 500){
-        alert('프로필 사진 변경을 실패했습니다.')
-      } else{
-        console.log('post image completed');
+      const res = action.payload;
+      console.log(res);
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'updateProfileThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
         state.userData = {...state.userData, profileImage:action.payload}
       }
     });
