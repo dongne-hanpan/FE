@@ -140,7 +140,10 @@ const ChatContainer = () => {
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
-        <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
+        { chatData.writer === userData.nickname ?
+          <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
+          :<></>
+        }
         <BtnResult onClick={writeResult}> 나의 결과 </BtnResult>
         <BtnComment onClick={writeComment}> 후기 입력 </BtnComment>
         <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>

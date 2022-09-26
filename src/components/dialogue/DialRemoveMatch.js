@@ -12,7 +12,7 @@ const DialRemoveMatch = () => {
   const cancel = () => {
     dispatch(clearDialogue());
   }
-  const remove = () => {
+  const leaveChatRoom = () => {
     dispatch(leaveChatThunk(dialData.matchId));
   }
   return(
@@ -26,7 +26,7 @@ const DialRemoveMatch = () => {
         }
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'danger'} content={'삭제'} clickEvent={remove} />
+        <ReuseBtn styleType={'danger'} content={'나가기'} clickEvent={leaveChatRoom} />
         <ReuseBtn styleType={'normal'} content={'취소'} clickEvent={cancel} />
       </DialBtns>
     </>
