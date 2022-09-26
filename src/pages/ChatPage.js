@@ -26,7 +26,11 @@ const ChatPage = () => {
   },[nowChatId])
 
   useEffect(() => {
-    if(chatStatus === 'success'){
+    if(chatStatus.statusType === 'reservedChatThunk'){
+      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+      dispatch(clearChatStatus());
+    }
+    if(chatStatus.statusType === 'leaveChatThunk'){
       navigate(`/chat`);
       dispatch(clearChatStatus());
       dispatch(clearDialogue());

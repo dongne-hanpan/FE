@@ -40,7 +40,6 @@ const ChatContainer = () => {
         if (message.body) {
           axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
           console.log("서버에 전체 채팅 목록 요청", res.data);
-          const new_Data = JSON.parse(message.body);
           setMessageList([...res.data]);
         });
         } else {
@@ -70,7 +69,6 @@ const ChatContainer = () => {
   //채팅 목록을 가져오기
   useEffect(() => {
     axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
-      console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
   }, [nowChatId]);
@@ -84,10 +82,9 @@ const ChatContainer = () => {
   const sports = sportsLocal.sports;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
   
-  const doReserved = async() => {
+  const doReserved = () => {
     if( matchStatus === 'recruit'){
-      await dispatch(reservedChatThunk(nowChatId));
-      await dispatch(getChatDataThunk(nowChatId));
+      dispatch(reservedChatThunk(nowChatId));
     } else{
       dispatch(setDialogue({dialType: 'denyReserved'}));
     }
