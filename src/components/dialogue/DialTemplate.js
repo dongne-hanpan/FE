@@ -24,6 +24,7 @@ import DialDenyComment from './DialDenyComment';
 import DialFailLogin from './DialFailLogin';
 import DialExpireLogin from './DialExpireLogin';
 import DialDenyFileType from './DialDenyFileType';
+import DialDenyFileUpload from './DialDenyFileUpload';
 
 
 const DialTemplate = () => {
@@ -74,6 +75,8 @@ const DialTemplate = () => {
       return <DialDenyReserved />
     } else if(dialData.dialType === 'denyFileType'){
       return <DialDenyFileType />
+    } else if(dialData.dialType === 'denyFileUpload'){
+      return <DialDenyFileUpload />
     } else if(dialData.dialType === 'applyCanceled'){
       return <DialApplyCanceled />
     } else if(dialData.dialType === 'reserveWho'){

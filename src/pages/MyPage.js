@@ -9,7 +9,7 @@ import MatchCard from '../components/sportsPage/MatchCard';
 import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
-import { setModal } from '../shared/redux/modules/modalSlice';
+import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
 
 
@@ -17,22 +17,33 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const authError = useSelector((state) => state.user.error);
   const myMatchList = useSelector((state) => state.match.matches);
   const myPageData = useSelector((state) => state.match.elseData);
-  const sportsEn = getLocal('sports').sportsEn;
+  let sportsEn = null;
+
   //match 받아오기
   useEffect(() => {
-    console.log('get my matches!!!');
-    const additionalUrl = `/${sportsEn}`;
-    dispatch(loadMyMatchThunk(additionalUrl));
+    if(getLocal('sports') !== null){
+      console.log('get my matches!!!');
+      sportsEn = getLocal('sports').sportsEn;
+      const additionalUrl = `/${sportsEn}`;
+      dispatch(loadMyMatchThunk(additionalUrl));
+    }
   },[]);
 
   useEffect(() => {
+    if(authError.errorType === 'updateProfileThunk'){
+      if(authError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyFileUpload'}));
+      }
+    }
     const cookie = getCookie('mytoken');
     if(!cookie && !userData.username){
       navigate('/')
     }
-  },[userData])
+  },[userData,authError,navigate])
+
 
   const showChageProfileModal = () => {
     dispatch(setModal({modalType: 'changeProfile'}));
