@@ -97,10 +97,7 @@ const ChatContainer = () => {
       }
       dispatch(setModal(modalResultData));
     } else{
-      const dialDenyResult = {
-        dialType: 'denyResult'
-      };
-      dispatch(setDialogue(dialDenyResult));
+      dispatch(setDialogue({dialType: 'denyResult'}));
     }
   }
   const writeComment = () => {

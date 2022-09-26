@@ -26,6 +26,10 @@ const ChatPage = () => {
   },[nowChatId])
 
   useEffect(() => {
+    if(chatStatus.statusType === 'submitMyResultThunk'){
+      dispatch(setDialogue({dialType: 'confirmResult'}));
+      dispatch(clearChatStatus());
+    }
     if(chatStatus.statusType === 'reservedChatThunk'){
       dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
       dispatch(clearChatStatus());
@@ -40,6 +44,12 @@ const ChatPage = () => {
         dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
       } else if(chatError.statusCode === 404){
         dispatch(setDialogue({dialType: 'denyChatExist'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'submitMyResultThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyResultAgain'}))
       }
       dispatch(clearChatError());
     }

@@ -28,14 +28,10 @@ export const reservedChatThunk = createAsyncThunk(
 );
 export const submitMyResultThunk = createAsyncThunk(
   "chat/submitMyResultThunk",
-  async (sports, match_id, myScore) => {
-    const myResultData = {
-      "match_id": match_id,
-      "myScore": myScore,
-    }
-    console.log(myResultData);
+  async(myResultData) => {
+    const {sports, ...resultData} = myResultData;
     const cookie = getCookie('mytoken');
-    const res = await postWithCookie(`/api/${sports}/result`, myResultData, cookie);
+    const res = await postWithCookie(`/api/${sports}/result`, resultData, cookie);
     return res;
   }
 )
@@ -112,8 +108,22 @@ const chatSlice = createSlice({
       }
     });
     builder.addCase(submitMyResultThunk.fulfilled, (state,action) => {
-      console.log('result submit completed');
-      console.log(action.payload);
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'submitMyResultThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'submitMyResultThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+      }
     });
     builder.addCase(submitCommentThunk.fulfilled, (state,action) => {
       console.log('result comment completed');

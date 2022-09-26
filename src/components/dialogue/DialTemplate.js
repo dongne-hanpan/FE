@@ -28,6 +28,7 @@ import DialDenyFileUpload from './DialDenyFileUpload';
 import DialDenyChatExist from './DialDenyChatExist';
 import DialDenyEnterChatroom from './DialDenyEnterChatroom';
 import DialConfReserved from './DialConfReserved';
+import DialDenyResultAgain from './DialDenyResultAgain';
 
 
 const DialTemplate = () => {
@@ -78,6 +79,8 @@ const DialTemplate = () => {
       return <DialDenyEnterChatroom />
     } else if(dialData.dialType === 'denyResult'){
       return <DialDenyResult />
+    } else if(dialData.dialType === 'denyResultAgain'){
+      return <DialDenyResultAgain />
     } else if(dialData.dialType === 'denyComment'){
       return <DialDenyComment />
     } else if(dialData.dialType === 'denyReserved'){
