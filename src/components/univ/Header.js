@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthError, getUserData, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
 import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
@@ -18,8 +18,8 @@ import logo from '../../asset/logo.png';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const userData = useSelector(getUserData);
-  const authError = useSelector(getAuthError);
+  const userData = useSelector((state) => state.user.userData);
+  const authError = useSelector((state) => state.user.error);
   const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
 

@@ -114,6 +114,4 @@ const userSlice = createSlice({
   }
 });
 
-export const getUserData = (state) => state.user.userData;
-export const getAuthError = (state) => state.user.error;
 export default userSlice.reducer;

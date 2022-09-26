@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthError, getUserData, loginUserThunk } from '../../shared/redux/modules/userSlice';
+import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
@@ -10,8 +10,8 @@ import logo from '../../asset/logo.png';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const userData = useSelector(getUserData);
-  const authError = useSelector(getAuthError);
+  const userData = useSelector((state) => state.user.userData);
+  const authError = useSelector((state) => state.user.error);
 
   //doLogin 결과에 따른 에러 핸들링
   useEffect(() => {

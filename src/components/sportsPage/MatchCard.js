@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, {css} from 'styled-components';
-import { contactHostThunk, getAlermData } from '../../shared/redux/modules/alermSlice';
+import { contactHostThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import { getUserData } from '../../shared/redux/modules/userSlice';
 import ReuseBadge from '../reusable/ReuseBadge';
 import ReuseBtn from '../reusable/ReuseBtn';
 
@@ -12,7 +11,7 @@ import ReuseBtn from '../reusable/ReuseBtn';
 const MatchCard = ({data}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userData = useSelector(getUserData);
+  const userData = useSelector((state) => state.user.userData);
   const alermStatus = useSelector((state) => state.alerm.alermStatus);
   const alermData = useSelector((state) => state.alerm.error);
 
