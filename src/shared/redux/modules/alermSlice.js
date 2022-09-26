@@ -55,11 +55,11 @@ const alermSlice = createSlice({
       }
     });
     builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-      state.userAlerm = action.payload;
+      state.alermData = action.payload;
     });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       console.log('permit completed');
-      state.userAlerm = action.payload;
+      state.alermData = action.payload;
     });
   }
 });
