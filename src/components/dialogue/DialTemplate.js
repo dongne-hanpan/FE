@@ -9,6 +9,7 @@ import DialConfWrite from './DialConfWrite';
 import DialConfApply from './DialConfApply';
 import DialConfLogin from './DialConfLogin';
 import DialConfResult from './DialConfResult';
+import DialDenyExist from './DialDenyExist';
 import DialDenyResult from './DialDenyResult';
 import DialReserveWho from './DialReserveWho';
 import DialRemoveMatch from './DialRemoveMatch';
@@ -61,6 +62,8 @@ const DialTemplate = () => {
       return <DialDenyContact />
     } else if(dialData.dialType === 'denyContactAgain'){
       return <DialDenyContactAgain />
+    } else if(dialData.dialType === 'denyExist'){
+      return <DialDenyExist />
     } else if(dialData.dialType === 'denyResult'){
       return <DialDenyResult />
     } else if(dialData.dialType === 'denyComment'){

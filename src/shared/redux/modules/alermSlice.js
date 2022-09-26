@@ -2,6 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getWithCookie, postWithCookie } from '../../axios/axios';
 import { getCookie } from '../../axios/cookie';
 
+
+export const contactHostThunk = createAsyncThunk(
+  "match/contactHostThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
+    return res;
+  }
+);
 export const getAlermThunk = createAsyncThunk(
   "alerm/getAlermThunk",
   async () => {
@@ -24,10 +33,27 @@ const alermSlice = createSlice({
   name: "alermSlice",
   initialState: {
     alermData: [],
+    alermStatus: null,
     error:{}
   },
-  reducers: {},
+  reducers: {
+    clearStatus: (state) => {
+      state.alermStatus = null;
+    },
+  },
   extraReducers: (builder) => {
+    builder.addCase(contactHostThunk.fulfilled, (state, action) => {
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'contactHostThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        state.alermStatus = 'success';
+      }
+    });
     builder.addCase(getAlermThunk.fulfilled, (state, action) => {
       state.userAlerm = action.payload;
     });
@@ -38,4 +64,5 @@ const alermSlice = createSlice({
   }
 });
 
+export const { clearStatus } = alermSlice.actions;
 export default alermSlice.reducer;
