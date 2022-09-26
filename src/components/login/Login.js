@@ -15,13 +15,13 @@ const Login = () => {
 
   //doLogin 결과에 따른 에러 핸들링
   useEffect(() => {
-    //성공 시
     if(userData.username){
       dispatch(clearModal());
     }
-    //실패 시
-    if(authError.statusCode === 500 || authError.statusCode === 401){
-      dispatch(setDialogue({dialType: 'failLogin'}));
+    if(authError.errorType === 'loginUserThunk'){
+      if(authError.statusCode === 500 || authError.statusCode === 401){
+        dispatch(setDialogue({dialType: 'failLogin'}));
+      }
     }
   },[userData, authError, dispatch])
 

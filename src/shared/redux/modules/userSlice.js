@@ -56,7 +56,11 @@ const userSlice = createSlice({
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
       const res = action.payload;
       if(res.statusCode){
-        state.error = res;
+        const errorObj = {
+          errorType: 'loginUserThunk',
+          ...res
+        }
+        state.error = errorObj;
       }else{
         const accessToken = res.accessToken;
         document.cookie = `mytoken=${accessToken}; path=/;`;
