@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { clearChatError, getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
 import { getCookie } from '../shared/axios/cookie';
-import { setDialogue } from '../shared/redux/modules/modalSlice';
+import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const ChatPage = () => {
@@ -16,6 +16,7 @@ const ChatPage = () => {
   const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const chatStatus = useSelector((state) => state.chat.chatStatus);
   const chatError = useSelector((state) => state.chat.error);
 
   useEffect(() => {
@@ -25,10 +26,21 @@ const ChatPage = () => {
   },[nowChatId])
 
   useEffect(() => {
+    if(chatStatus === 'success'){
+      navigate(`/chat`);
+      dispatch(clearChatStatus());
+      dispatch(clearDialogue());
+    }
     if(chatError.errorType === 'getChatDataThunk'){
       if(chatError.statusCode === 500){
         dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
       } else if(chatError.statusCode === 404){
+        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'leaveChatThunk'){
+      if(chatError.statusCode === 404){
         dispatch(setDialogue({dialType: 'denyChatExist'}))
       }
       dispatch(clearChatError());

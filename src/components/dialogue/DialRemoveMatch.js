@@ -1,26 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
 import { leaveChatThunk } from '../../shared/redux/modules/chatSlice';
-import { getLocal } from '../../shared/axios/local';
 
 
 const DialRemoveMatch = () => {
-  const navigate = useNavigate();
-  const region = getLocal('region').region;
-  const sports = getLocal('sports').sports;
   const dispatch = useDispatch();
   const dialData = useSelector ((state) => state.modal.dialogueData);
   const cancel = () => {
     dispatch(clearDialogue());
   }
-  const remove = async() => {
-    await dispatch(leaveChatThunk(dialData.matchId));
-    dispatch(clearDialogue());
-    navigate(`/${region}/${sports}`);
+  const remove = () => {
+    dispatch(leaveChatThunk(dialData.matchId));
   }
   return(
     <>

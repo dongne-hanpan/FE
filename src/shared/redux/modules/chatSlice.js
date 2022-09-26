@@ -61,9 +61,16 @@ const chatSlice = createSlice({
   initialState: {
     chatList:[],
     nowChatData:{},
+    chatStatus: null,
     error:{}
   },
   reducers: {
+    clearChatData: (state) => {
+      state.nowChatData = {};
+    },
+    clearChatStatus: (state) => {
+      state.chatStatus = null;
+    },
     clearChatError: (state) => {
       state.error = {};
     },
@@ -78,7 +85,6 @@ const chatSlice = createSlice({
         }
         state.error = errorObj;
       }else{
-        console.log('get chatData completed');
         state.error = {};
         state.nowChatData = action.payload;
       }
@@ -98,8 +104,21 @@ const chatSlice = createSlice({
       console.log('result comment completed');
       console.log(action.payload);
     });
+    builder.addCase(leaveChatThunk.fulfilled, (state,action) => {
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'leaveChatThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        state.chatStatus = 'success';
+        state.nowChatData = {};
+      }
+    });
   }
 });
 
-export const { clearChatError } = chatSlice.actions;
+export const { clearChatData, clearChatStatus, clearChatError } = chatSlice.actions;
 export default chatSlice.reducer;

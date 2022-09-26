@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMyChatListThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -11,13 +11,13 @@ import ChatBox from './ChatBox';
 const ChatNav = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const myChatList = useSelector((state) => state.chat.chatList);
-  console.log(myChatList);
 
   useEffect(() => {
     dispatch(getMyChatListThunk())
-  },[])
+  },[dispatch,nowChatId])
 
   const goMyPage = () => {
     navigate('/mypage');
