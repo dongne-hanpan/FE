@@ -60,18 +60,30 @@ const chatSlice = createSlice({
   name: "chatSlice",
   initialState: {
     chatList:[],
-    nowChatData:{
-    }
+    nowChatData:{},
+    error:{}
   },
   reducers: {
+    clearChatError: (state) => {
+      state.error = {};
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getChatDataThunk.fulfilled, (state,action) => {
-      console.log('get chatData completed');
-      state.nowChatData = action.payload;
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'getChatDataThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        console.log('get chatData completed');
+        state.error = {};
+        state.nowChatData = action.payload;
+      }
     });
     builder.addCase(getMyChatListThunk.fulfilled, (state,action) => {
-      console.log('get my chatList completed');
       state.chatList = action.payload;
     });
     builder.addCase(reservedChatThunk.fulfilled, (state,action) => {
@@ -89,4 +101,5 @@ const chatSlice = createSlice({
   }
 });
 
+export const { clearChatError } = chatSlice.actions;
 export default chatSlice.reducer;

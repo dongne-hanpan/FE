@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { clearChatError, getChatDataThunk } from '../shared/redux/modules/chatSlice';
 import { getCookie } from '../shared/axios/cookie';
+import { setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const ChatPage = () => {
@@ -15,17 +16,24 @@ const ChatPage = () => {
   const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const chatError = useSelector((state) => state.chat.error);
 
-  const getChatData = async() => {
-    const res = await dispatch(getChatDataThunk(nowChatId));
-    console.log(res.payload);
-    if(res.payload === '매치가 존재하지 않습니다. (Service: null; Status Code: 0; Error Code: null; Request ID: null; Proxy: null)'){
-      navigate('/chat');
-    }
-  }
   useEffect(() => {
-    getChatData();
+    if(nowChatId !== undefined){
+      dispatch(getChatDataThunk(nowChatId));
+    }
   },[nowChatId])
+
+  useEffect(() => {
+    if(chatError.errorType === 'getChatDataThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
+      } else if(chatError.statusCode === 404){
+        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      }
+      dispatch(clearChatError());
+    }
+  },[chatData, chatError])
 
   //userdata 없으면 돌아가
   useEffect(() => {
@@ -33,7 +41,7 @@ const ChatPage = () => {
     if(!cookie && !userData.username){
       navigate('/')
     }
-  },[userData])
+  },[userData, navigate])
 
   return (
     <MainPage>
