@@ -51,7 +51,7 @@ const MatchWrite = () => {
     setWhenErr('none');
 
     //모집인원 유효성 검사
-    if(intakeValue === null || intakeValue <2 || intakeValue >6){
+    if(intakeValue === null || intakeValue <1 || intakeValue >6){
       console.log('모집 인원을 확인해주세요');
       intakeMsg.current.innerText = '유효하지 않은 인원';
       setIntakeErr('danger');
