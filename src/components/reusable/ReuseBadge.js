@@ -92,6 +92,26 @@ const BadgeComp = styled.div`
         cursor: pointer;
         `  
       }
+    } else if(bdgType === 'status'){
+      if(content ==='모집 중'){
+        return css`
+        margin: 2px;
+        color: ${theme.colors.background};
+        background-color: ${theme.colors.green};
+        `
+      } else if(content === '모집 완료'){
+        return css`
+        margin: 2px;
+        color: ${theme.colors.background};
+        background-color: ${theme.colors.orange};
+        `
+      } else if(content === '완료'){
+        return css`
+        margin: 2px;
+        color: ${theme.colors.dark};
+        background-color: ${theme.colors.gray};
+        `
+      }
     }
   }}
 `
