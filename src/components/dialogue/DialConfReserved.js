@@ -1,39 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { clearDialogue} from '../../shared/redux/modules/modalSlice';
+import { getChatDataThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearDialogue } from '../../shared/redux/modules/modalSlice';
-import { leaveChatThunk } from '../../shared/redux/modules/chatSlice';
 
 
-const DialRemoveMatch = () => {
+const DialConfReserved = ({dialData}) => {
   const dispatch = useDispatch();
-  const dialData = useSelector ((state) => state.modal.dialogueData);
+  const nowChatId = useSelector((state) => state.modal.dialogueData.matchId);
   const cancel = () => {
+    dispatch(getChatDataThunk(nowChatId));
     dispatch(clearDialogue());
-  }
-  const leaveChatRoom = () => {
-    dispatch(leaveChatThunk(dialData.matchId));
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>⚠️ 채팅방을 나가시겠어요? ⚠️</DialMessageTitle>
-        {dialData.isHost ? 
-          <DialMessageExtra>퇴장 시, 모집 글도 함께 삭제됩니다</DialMessageExtra>
-          :
-          <DialMessageExtra>본 작업은 되돌릴 수 없습니다</DialMessageExtra>
-        }
+        <DialMessageTitle>🎉 모집 완료 🎉</DialMessageTitle>
+        <DialMessageExtra>나의 결과, 상대 후기 입력이 가능합니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'danger'} content={'나가기'} clickEvent={leaveChatRoom} />
-        <ReuseBtn styleType={'normal'} content={'취소'} clickEvent={cancel} />
+        <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
       </DialBtns>
     </>
   )
 };
 
-export default DialRemoveMatch;
+export default DialConfReserved;
+
 
 const DialMessages = styled.div`
   width: 100%;
@@ -55,6 +49,4 @@ const DialMessageTitle = styled.div`
 const DialBtns = styled.div`
   width: 100%;
   height: 50px;
-  display: flex;
-  justify-content: space-around;
 `

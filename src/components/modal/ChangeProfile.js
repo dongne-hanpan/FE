@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearModal } from '../../shared/redux/modules/modalSlice';
+import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 import { updateProfileThunk } from '../../shared/redux/modules/userSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 
@@ -15,15 +15,20 @@ const ChangeProfile = () => {
   const dropImg = (e) =>{
     e.preventDefault();
     const file = e.dataTransfer.files;
-    setImgData(file[0]);
-    const reader = new FileReader();
-    reader.readAsDataURL(file[0]);
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      if(base64){
-        const base64Sub = base64.toString();
-        setPreview(base64Sub);
+    const fileType = file[0].type;
+    if(fileType === 'image/png' || fileType === 'image/jpeg'){
+      setImgData(file[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(file[0]);
+      reader.onloadend = () => {
+        const base64 = reader.result;
+        if(base64){
+          const base64Sub = base64.toString();
+          setPreview(base64Sub);
+        }
       }
+    } else{
+      dispatch(setDialogue({dialType: 'denyFileType'}));
     }
   };
   const dragOverImg = (e) =>{
@@ -33,16 +38,21 @@ const ChangeProfile = () => {
     inputFile.current.click();
   }
   const inputImgChange = (e) => {
-    const files = e.target.files;
-    setImgData(files[0]);
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      if(base64){
-        const base64Sub = base64.toString();
-        setPreview(base64Sub);
+    const file = e.target.files;
+    const fileType = file[0].type;
+    if(fileType === 'image/png' || fileType === 'image/jpeg'){
+      setImgData(file[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(file[0]);
+      reader.onloadend = () => {
+        const base64 = reader.result;
+        if(base64){
+          const base64Sub = base64.toString();
+          setPreview(base64Sub);
+        }
       }
+    } else{
+      dispatch(setDialogue({dialType: 'denyFileType'}));
     }
   };
 

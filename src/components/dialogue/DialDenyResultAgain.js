@@ -1,22 +1,20 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearAll } from '../../shared/redux/modules/modalSlice';
-import { clearStatus } from '../../shared/redux/modules/alermSlice';
+import { useDispatch } from 'react-redux';
+import { clearAll} from '../../shared/redux/modules/modalSlice';
 
 
-const DialConfApply = () => {
+const DialDenyResultAgain = () => {
   const dispatch = useDispatch();
   const cancel = () => {
-    dispatch(clearStatus());
     dispatch(clearAll());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 신청 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>신청이 수락되면 채팅방에 초대됩니다</DialMessageExtra>
+        <DialMessageTitle>🚫 결과 입력 불가 🚫</DialMessageTitle>
+        <DialMessageExtra>이미 결과를 입력했습니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -25,7 +23,7 @@ const DialConfApply = () => {
   )
 };
 
-export default DialConfApply;
+export default DialDenyResultAgain;
 
 
 const DialMessages = styled.div`

@@ -1,39 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
-import { permitAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { reservedChatThunk } from '../../shared/redux/modules/chatSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
-const DialPermit = () => {
+const DialConfAlone = () => {
   const dispatch = useDispatch();
-  const dialData = useSelector((state) => state.modal.dialogueData.data);
-
-  const sendPermit = (e) => {
-    const isAccept = e.target.innerText;
-    const permitData = {
-      match_id: dialData.match_id,
-      nickname: dialData.nickname,
-      permit: isAccept === '거절하기' ? false : true,
-    }
-    dispatch(permitAlermThunk(permitData));
+  const nowChatId = useSelector((state) => state.modal.dialogueData.matchId);
+  const doReserve = () => {
+    dispatch(reservedChatThunk(nowChatId));
+  }
+  const cancel = () => {
     dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🙂 요청을 수락하시겠습니까? 🙂</DialMessageTitle>
-        <DialMessageExtra>수락 시 해당 유저가 채팅방에 초대됩니다</DialMessageExtra>
+        <DialMessageTitle>⚠️ 모집을 완료하겠습니까? ⚠️</DialMessageTitle>
+        <DialMessageExtra>현재 본인 이외의 참여인원이 없습니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'normal'} content={'수락하기'} clickEvent={sendPermit} />
-        <ReuseBtn styleType={'danger'} content={'거절하기'} clickEvent={sendPermit} />
+        <ReuseBtn styleType={'normal'} content={'모집 완료'} clickEvent={doReserve} />
+        <ReuseBtn styleType={'normal'} content={'취소'} clickEvent={cancel} />
       </DialBtns>
     </>
   )
 };
 
-export default DialPermit;
+export default DialConfAlone;
 
 const DialMessages = styled.div`
   width: 100%;

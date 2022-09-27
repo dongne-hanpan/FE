@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import { contactHostThunk } from '../../shared/redux/modules/matchSlice';
+import { contactHostThunk } from '../../shared/redux/modules/alermSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
@@ -41,18 +41,12 @@ const MatchWatch = () => {
     }
     return false;
   }
-  const contactToHost = async() => {
+  const contactToHost = () => {
     if(checkParticipant() === false){
-      const res = await dispatch(contactHostThunk(modalData.match_id));
-      if(res.payload === '참여 가능 인원이 초과되었습니다'){
-        dispatch(setDialogue({dialType: 'denyContact'}));
-      }else if(res.payload === '이미 신청한 매치 입니다'){
-        dispatch(setDialogue({dialType: 'denyContactAgain'}));
-      }else{
-        dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
-      }
+      dispatch(contactHostThunk(modalData.match_id));
     }else{
       navigate(`/chat/${modalData.match_id}`)
+      dispatch(clearModal());
     }
   };
   return(

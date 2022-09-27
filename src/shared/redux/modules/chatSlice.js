@@ -26,24 +26,12 @@ export const reservedChatThunk = createAsyncThunk(
     return res;
   }
 );
-export const leaveChatThunk = createAsyncThunk(
-  "chat/leaveChatThunk",
-  async(match_id) => {
-    const cookie = getCookie('mytoken');
-    const res = await deleteWithCookie(`/api/match/delete/${match_id}`, cookie);
-    return res;
-  }
-);
 export const submitMyResultThunk = createAsyncThunk(
   "chat/submitMyResultThunk",
-  async (sports, match_id, myScore) => {
-    const myResultData = {
-      "match_id": match_id,
-      "myScore": myScore,
-    }
-    console.log(myResultData);
+  async(myResultData) => {
+    const {sports, ...resultData} = myResultData;
     const cookie = getCookie('mytoken');
-    const res = await postWithCookie(`/api/${sports}/result`, myResultData, cookie);
+    const res = await postWithCookie(`/api/${sports}/result`, resultData, cookie);
     return res;
   }
 )
@@ -55,38 +43,127 @@ export const submitCommentThunk = createAsyncThunk(
     return res;
   }
 )
+export const leaveChatThunk = createAsyncThunk(
+  "chat/leaveChatThunk",
+  async(match_id) => {
+    const cookie = getCookie('mytoken');
+    const res = await deleteWithCookie(`/api/match/delete/${match_id}`, cookie);
+    return res;
+  }
+);
 
 const chatSlice = createSlice({
   name: "chatSlice",
   initialState: {
     chatList:[],
-    nowChatData:{
-    }
+    nowChatData:{},
+    chatStatus: {},
+    error:{}
   },
   reducers: {
+    clearChatData: (state) => {
+      state.nowChatData = {};
+    },
+    clearChatStatus: (state) => {
+      state.chatStatus = {};
+    },
+    clearChatError: (state) => {
+      state.error = {};
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getChatDataThunk.fulfilled, (state,action) => {
-      console.log('get chatData completed');
-      state.nowChatData = action.payload;
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'getChatDataThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        state.nowChatData = action.payload;
+      }
     });
     builder.addCase(getMyChatListThunk.fulfilled, (state,action) => {
-      console.log('get my chatList completed');
       state.chatList = action.payload;
     });
     builder.addCase(reservedChatThunk.fulfilled, (state,action) => {
-      console.log('change match status to reserved');
-      console.log(action.payload);
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'reservedChatThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'reservedChatThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+      }
     });
     builder.addCase(submitMyResultThunk.fulfilled, (state,action) => {
-      console.log('result submit completed');
-      console.log(action.payload);
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'submitMyResultThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'submitMyResultThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+      }
     });
     builder.addCase(submitCommentThunk.fulfilled, (state,action) => {
-      console.log('result comment completed');
-      console.log(action.payload);
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'submitCommentThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'submitCommentThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+      }
+    });
+    builder.addCase(leaveChatThunk.fulfilled, (state,action) => {
+      const res = action.payload;
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'leaveChatThunk',
+          ...res
+        }
+        state.chatStatus = {};
+        state.error = errorObj;
+      }else{
+        state.error = {};
+        const successObj = {
+          statusType: 'leaveChatThunk',
+          status: 'success'
+        }
+        state.chatStatus = successObj;
+        state.nowChatData = {};
+      }
     });
   }
 });
 
+export const { clearChatData, clearChatStatus, clearChatError } = chatSlice.actions;
 export default chatSlice.reducer;

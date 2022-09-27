@@ -25,9 +25,12 @@ const MatchResult = () => {
       myResultMsg.current.innerText = '';
       setResultErr('none');
       const matchId =  chatData.match_id + '';
-      console.log(matchId);
-      console.log(myScoreValue);
-      dispatch(submitMyResultThunk(sportsEn, matchId, myScoreValue));
+      const myResultData = {
+        "sports": sportsEn,
+        "match_id": matchId,
+        "myScore": myScoreValue,
+      }
+      dispatch(submitMyResultThunk(myResultData));
     } else{
       setResultErr('danger');
       myResultMsg.current.innerText = '점수 범위를 벗어났습니다';

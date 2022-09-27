@@ -40,7 +40,6 @@ const ChatContainer = () => {
         if (message.body) {
           axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
           console.log("서버에 전체 채팅 목록 요청", res.data);
-          const new_Data = JSON.parse(message.body);
           setMessageList([...res.data]);
         });
         } else {
@@ -70,7 +69,6 @@ const ChatContainer = () => {
   //채팅 목록을 가져오기
   useEffect(() => {
     axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
-      console.log("서버에 전체 채팅 목록 요청", res.data);
       setMessageList([...res.data]);
     });
   }, [nowChatId]);
@@ -84,40 +82,44 @@ const ChatContainer = () => {
   const sports = sportsLocal.sports;
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
   
-  const doReserved = async() => {
-    if( matchStatus === 'recruit'){
-      await dispatch(reservedChatThunk(nowChatId));
-      await dispatch(getChatDataThunk(nowChatId));
+  const doReserved = () => {
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
+      console.log(chatData.userListInMatch);
+      if(chatData.matchIntakeFull !== 1 && chatData.userListInMatch.length === 1){
+        dispatch(setDialogue({dialType: 'confirmAlone', matchId: nowChatId}));
+      }else{
+        dispatch(setDialogue({dialType: 'confirmReserve', matchId: nowChatId}));
+      }
     } else{
       dispatch(setDialogue({dialType: 'denyReserved'}));
     }
   }
   const writeResult = () => {
-    if( matchStatus === 'reserved'){
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
       const modalResultData = {
         modalType: 'matchResult',
         sportsImage: matchsports.sportsImage,
       }
       dispatch(setModal(modalResultData));
     } else{
-      const dialDenyResult = {
-        dialType: 'denyResult'
-      };
-      dispatch(setDialogue(dialDenyResult));
+      dispatch(setDialogue({dialType: 'denyResult'}));
     }
   }
   const writeComment = () => {
-    if( matchStatus === 'reserved'){
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
       const modalCommentData = {
         modalType: 'matchComment',
         sportsImage: matchsports.sportsImage,
       }
       dispatch(setModal(modalCommentData));
     } else{
-      const dialDenyResult = {
-        dialType: 'denyResult'
-      };
-      dispatch(setDialogue(dialDenyResult));
+      dispatch(setDialogue({dialType: 'denyResult'}));
     }
   }
 
@@ -130,15 +132,17 @@ const ChatContainer = () => {
   }
 
   const sendMessage = () => {
-    client.send(
-      `/app/chat/${nowChatId}`,
-      headers,
-      JSON.stringify({
-        match_id: parseInt(nowChatId),
-        message: message,
-      })
-    );
-    setMessage("");
+    if( matchStatus !== 'done'){
+      client.send(
+        `/app/chat/${nowChatId}`,
+        headers,
+        JSON.stringify({
+          match_id: parseInt(nowChatId),
+          message: message,
+        })
+      );
+      setMessage("");
+    }
   };
   return(
     <>
@@ -149,14 +153,17 @@ const ChatContainer = () => {
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
-        <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
-        <BtnResult onClick={writeResult}> 나의 결과 </BtnResult>
-        <BtnComment onClick={writeComment}> 후기 입력 </BtnComment>
-        <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
+        { chatData.writer === userData.nickname ?
+          <BtnReserve matchStatus={matchStatus} onClick={doReserved}> 모집 완료 </BtnReserve>
+          :<></>
+        }
+        <BtnResult matchStatus={matchStatus} onClick={writeResult}> 나의 결과 </BtnResult>
+        <BtnComment matchStatus={matchStatus} onClick={writeComment}> 후기 입력 </BtnComment>
+        <BtnOut matchStatus={matchStatus} onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
         <ReuseTextarea height={100} value={message} onChageEvent={messageHandler} />
-        <ButtonBox onClick={sendMessage}> 전송 </ButtonBox>
+        <ButtonBox matchStatus={matchStatus} onClick={sendMessage}> 전송 </ButtonBox>
       </ChatInputTalks>
     </ChatInput>
     </>
@@ -191,30 +198,30 @@ const ChatInputBtns = styled.div`
 const BtnReserve = styled.button`
   height: 30px;
   padding: 4px 14px;
-  color: ${({theme}) => theme.colors.yellow};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.yellow};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.yellow};
   border-radius: 2rem;
+  color: ${({theme,matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.yellow};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnResult = styled.button`
   height: 30px;
   padding: 4px 14px;
   margin-left: 6px;
-  color: ${({theme}) => theme.colors.green};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.green};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.green};
   border-radius: 2rem;
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.green};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnComment = styled.button`
   height: 30px;
   padding: 4px 14px;
   margin-left: 6px;
-  color: ${({theme}) => theme.colors.core};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.core};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.core};
   border-radius: 2rem;
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.core};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnOut = styled.button`
@@ -238,6 +245,6 @@ const ButtonBox = styled.button`
   height: 100px;
   margin-left: 10px;
   border-radius: 0.5rem;
-  color: ${({theme}) => theme.colors.background};
-  background-color: ${({theme}) => theme.colors.skyblue};
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.darkgray : theme.colors.background};
+  background-color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.skyblue};
 `

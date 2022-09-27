@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { getMyChatListThunk } from '../../shared/redux/modules/chatSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ChatBox from './ChatBox';
@@ -11,16 +12,44 @@ import ChatBox from './ChatBox';
 const ChatNav = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const myChatList = useSelector((state) => state.chat.chatList);
-  console.log(myChatList);
+  const [doneToggle, setDoneToggle] = useState(false);
+  const [sortedChatList, setSortedChatList] = useState(
+    {
+      recruitChatList:[],
+      reservedChatList: [],
+      doneChatList: []
+    });
+
+  useEffect(() => {
+    const newSortedChatList = {
+      recruitChatList:[],
+      reservedChatList: [],
+      doneChatList: []
+    }
+    myChatList.map((each) => {
+      if(each.matchStatus === 'recruit'){
+        newSortedChatList.recruitChatList.push(each)
+      } else if(each.matchStatus === 'reserved'){
+        newSortedChatList.reservedChatList.push(each)
+      } else{
+        newSortedChatList.doneChatList.push(each)
+      }
+    })
+    setSortedChatList(newSortedChatList);
+  },[myChatList])
 
   useEffect(() => {
     dispatch(getMyChatListThunk())
-  },[])
+  },[dispatch,nowChatId])
 
   const goMyPage = () => {
     navigate('/mypage');
+  }
+  const showDoneToggle = () => {
+    setDoneToggle(!doneToggle);
   }
   return(
     <ChatNavComp>
@@ -29,9 +58,21 @@ const ChatNav = () => {
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>
-        {myChatList.map((each) => 
+        {/* {myChatList.map((each) => 
+          <ChatBox key={each.chatId} data={each} />
+        )} */}
+        {sortedChatList.reservedChatList.map((each) => 
           <ChatBox key={each.chatId} data={each} />
         )}
+        {sortedChatList.recruitChatList.map((each) => 
+          <ChatBox key={each.chatId} data={each} />
+        )}
+        <ToggleBtn>
+          <ReuseBtn styleType={'stretch'} content={doneToggle ? '닫기' : '완료된 방 보기'} clickEvent={showDoneToggle}/>
+        </ToggleBtn>
+        {doneToggle ? sortedChatList.doneChatList.map((each) => 
+          <ChatBox key={each.chatId} data={each} />
+        ):<></>}
       </ChatNavContainer>
     </ChatNavComp>
   )
@@ -67,4 +108,7 @@ const ChatNavContainer = styled.article`
   &::-webkit-scrollbar {
     display: none;
   }
+`
+const ToggleBtn = styled.div`
+  margin-bottom: 10px;
 `

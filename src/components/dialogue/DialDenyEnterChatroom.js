@@ -2,36 +2,36 @@ import React from 'react';
 import styled from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAll } from '../../shared/redux/modules/modalSlice';
-import { cancelApplyThunk } from '../../shared/redux/modules/alermSlice';
+import { clearDialogue } from '../../shared/redux/modules/modalSlice';
+import { useNavigate } from 'react-router';
 
 
-const DialDenyContactAgain = () => {
+const DialDenyEnterChatroom = () => {
   const dispatch = useDispatch();
-  const dialData = useSelector((state) => state.modal.dialogueData);
-  const cancel = () => {
-    dispatch(clearAll());
+  const navigate = useNavigate();
+  const goMyPage = () => {
+    navigate('/mypage');
+    dispatch(clearDialogue());
   }
-  const cancelApply = () => {
-    const matchId = dialData.matchId;
-    dispatch(cancelApplyThunk(matchId))
-    dispatch(clearAll());
+  const goChatPage = () => {
+    navigate('/chat');
+    dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🚫 이미 신청 되었습니다 🚫</DialMessageTitle>
-        <DialMessageExtra> 신청을 취소하시겠습니까? </DialMessageExtra>
+        <DialMessageTitle>🚫 입장이 거부되었습니다 🚫</DialMessageTitle>
+        <DialMessageExtra> 초대되지 않은 채팅 방입니다 </DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'danger'} content={'신청 취소'} clickEvent={cancelApply} />
-        <ReuseBtn styleType={'normal'} content={'닫기'} clickEvent={cancel} />
+        <ReuseBtn styleType={'normal'} content={'채팅창 가기'} clickEvent={goChatPage} />
+        <ReuseBtn styleType={'normal'} content={'마이페이지 가기'} clickEvent={goMyPage} />
       </DialBtns>
     </>
   )
 };
 
-export default DialDenyContactAgain;
+export default DialDenyEnterChatroom;
 
 
 const DialMessages = styled.div`

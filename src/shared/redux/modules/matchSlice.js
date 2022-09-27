@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteWithCookie, getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
+import { getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
 import { getCookie } from '../../axios/cookie';
 
 
@@ -40,14 +40,7 @@ export const updateMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const contactHostThunk = createAsyncThunk(
-  "match/contactHostThunk",
-  async(match_id) => {
-    const cookie = getCookie('mytoken');
-    const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
-    return res;
-  }
-);
+
 
 const matchSlice = createSlice({
   name: "matchSlice",
@@ -78,9 +71,6 @@ const matchSlice = createSlice({
     });
     builder.addCase(updateMatchThunk.fulfilled, (state, action) => {
       console.log('update match completed');
-    });
-    builder.addCase(contactHostThunk.fulfilled, (state, action) => {
-      console.log('apply completed');
     });
   }
 });

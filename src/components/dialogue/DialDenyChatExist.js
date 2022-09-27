@@ -1,31 +1,32 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearAll } from '../../shared/redux/modules/modalSlice';
-import { clearStatus } from '../../shared/redux/modules/alermSlice';
+import { useDispatch } from 'react-redux';
+import { clearDialogue} from '../../shared/redux/modules/modalSlice';
+import { useNavigate } from 'react-router';
 
 
-const DialConfApply = () => {
+const DialDenyChatExist = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cancel = () => {
-    dispatch(clearStatus());
-    dispatch(clearAll());
+    navigate('/mypage');
+    dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 신청 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>신청이 수락되면 채팅방에 초대됩니다</DialMessageExtra>
+        <DialMessageTitle>🚫 존재하지 않는 방입니다 🚫</DialMessageTitle>
+        <DialMessageExtra>버튼을 누르면 마이페이지로 이동합니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
+        <ReuseBtn styleType={'stretch'} content={'마이 페이지 가기'} clickEvent={cancel} />
       </DialBtns>
     </>
   )
 };
 
-export default DialConfApply;
+export default DialDenyChatExist;
 
 
 const DialMessages = styled.div`

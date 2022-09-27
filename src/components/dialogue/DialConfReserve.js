@@ -1,31 +1,31 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearDialogue} from '../../shared/redux/modules/modalSlice';
+import { reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearAll } from '../../shared/redux/modules/modalSlice';
-import { clearStatus } from '../../shared/redux/modules/alermSlice';
 
 
-const DialConfApply = () => {
+const DialConfReserve = () => {
   const dispatch = useDispatch();
-  const cancel = () => {
-    dispatch(clearStatus());
-    dispatch(clearAll());
+  const nowChatId = useSelector((state) => state.modal.dialogueData.matchId);
+  const doReserve = () => {
+    dispatch(reservedChatThunk(nowChatId));
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 신청 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>신청이 수락되면 채팅방에 초대됩니다</DialMessageExtra>
+        <DialMessageTitle>✅ 모집을 완료하겠습니까? ✅</DialMessageTitle>
+        <DialMessageExtra>더 이상 인원 변경이 불가합니다</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
+        <ReuseBtn styleType={'stretch'} content={'모집 완료'} clickEvent={doReserve} />
       </DialBtns>
     </>
   )
 };
 
-export default DialConfApply;
+export default DialConfReserve;
 
 
 const DialMessages = styled.div`
@@ -41,7 +41,7 @@ const DialMessageTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-const DialMessageExtra = styled.div`
+  const DialMessageExtra = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `

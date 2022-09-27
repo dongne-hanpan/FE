@@ -1,30 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch } from 'react-redux';
-import { clearAll} from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
+import { clearDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 
-
-const DialDenyComment = () => {
+const DialExpireLogin = ({dialData}) => {
   const dispatch = useDispatch();
   const cancel = () => {
-    dispatch(clearAll());
+    dispatch(clearDialogue());
+  }
+  const showLogin = () => {
+    dispatch(setModal({modalType: 'login'}));
+    dispatch(clearDialogue());
   }
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🚫 후기 입력 불가 🚫</DialMessageTitle>
-        <DialMessageExtra>이미 후기를 입력하셨습니다</DialMessageExtra>
+        <DialMessageTitle>⚠️ 로그인 시간이 만료되었습니다 ⚠️</DialMessageTitle>
+        <DialMessageExtra>다시 로그인 하시겠어요?</DialMessageExtra>
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
+        <ReuseBtn styleType={'normal'} content={'로그인 하기'} clickEvent={showLogin} />
+        <ReuseBtn styleType={'danger'} content={'취소'} clickEvent={cancel} />
       </DialBtns>
     </>
   )
 };
 
-export default DialDenyComment;
-
+export default DialExpireLogin;
 
 const DialMessages = styled.div`
   width: 100%;
@@ -39,11 +42,13 @@ const DialMessageTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-const DialMessageExtra = styled.div`
+  const DialMessageExtra = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `
 const DialBtns = styled.div`
   width: 100%;
   height: 50px;
+  display: flex;
+  justify-content: space-around;
 `
