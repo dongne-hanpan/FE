@@ -3,12 +3,11 @@ import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
-import MatchCard from '../components/sportsPage/MatchCard';
 import { loadAllMatchThunk, loadMatchThunk } from '../shared/redux/modules/matchSlice';
+import MatchCard from '../components/sportsPage/MatchCard';
 import { getLocal, setLocal } from '../shared/axios/local';
+import { regionData, sportsData } from '../data/regionSportsData';
 
-// tmp
-import { dummyRegion, dummySports } from '../dummyData/dummyIndex';
 
 const SportsPage = () => {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ const SportsPage = () => {
   const regionLocal = getLocal('region');
   const regionId = regionLocal.regionId;
   const region = regionLocal.region;
-  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+  const matchsports = sportsData.filter((each) => each.sports === sports)[0];
   const regionRef = useRef(null);
 
   //match 받아오기
@@ -74,7 +73,7 @@ const SportsPage = () => {
           <MatchContainerHeaderTitle>{sports} 한 판? <MatchRegion>{region}</MatchRegion></MatchContainerHeaderTitle>
           <RegionDropbox ref={regionRef} onChange={selectChangeHandler}>
             <RegionOption>지역을 선택하세요</RegionOption>
-            {dummyRegion.map((each) => 
+            {regionData.map((each) => 
               <RegionOption key={each.regionId} value={[each.regionId,each.region]}>{each.region}</RegionOption>
             )}
           </RegionDropbox>

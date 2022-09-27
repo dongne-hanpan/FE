@@ -8,13 +8,12 @@ import StompJS from "stompjs";
 import SockJS from "sockjs-client";
 import axios from "axios";
 import { getCookie } from "../../shared/axios/cookie";
-import useInput from "../../shared/hooks/useInput";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import ReuseTextarea from '../reusable/ReuseTextarea';
-import { dummySports } from '../../dummyData/dummyIndex';
+import { sportsData } from '../../data/regionSportsData';
 import { getLocal } from '../../shared/axios/local';
-import { getChatDataThunk, reservedChatThunk } from '../../shared/redux/modules/chatSlice';
+import useInput from "../../shared/hooks/useInput";
+import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
 const ChatContainer = () => {
@@ -80,7 +79,7 @@ const ChatContainer = () => {
   const userData = useSelector((state) => state.user.userData);
   const sportsLocal = getLocal('sports');
   const sports = sportsLocal.sports;
-  const matchsports = dummySports.filter((each) => each.sports === sports)[0];
+  const matchsports = sportsData.filter((each) => each.sports === sports)[0];
   
   const doReserved = () => {
     if( matchStatus === 'done'){

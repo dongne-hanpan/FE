@@ -7,8 +7,7 @@ import ReuseTextarea from '../reusable/ReuseTextarea';
 import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
-//temp
-import dummyOptionValues from '../../dummyData/dummyOptionValues';
+import dummyOptionValues, {bowlingAddress} from '../../data/bowlingData';
 
 
 const MatchWrite = () => {
