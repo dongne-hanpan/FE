@@ -1,10 +1,4 @@
-const dummyOptionValues = [
-  { value:'장소 선택', address: "default" },
-  { value:'한숲볼링센터', address: "서울 동작구 여의대방로 250 대림쇼핑타운 3층 309호" },
-  { value:'성대볼링센타', address: "서울 동작구 상도로 102 성대시장 3층" },
-  { value:'보라매볼링장', address: "서울 동작구 보라매로5가길 16 아카데미 타워 7층" }
-]
-export const bowlingAddress = {
+const bowlingData = {
   1:[
     { region: '강남구', value:'스매싱볼 강남점', address: "서울 강남구 강남대로 468 충림빌딩" },
     { region: '강남구', value:'스매싱볼 청담점', address: "서울 강남구 선릉로 818 지하2층 스매싱볼 청담점" },
@@ -171,8 +165,5 @@ export const bowlingAddress = {
     { region: '중랑구', value:'삼보볼링장', address: "서울 중랑구 중랑천로10길 76 삼보볼링센타" },
     { region: '중랑구', value:'BK플러스볼링장', address: "서울 중랑구 봉화산로 221 동성타워프라자 지하 2층" },
   ],
-}
-
-
-
-export default dummyOptionValues;
+};
+export default bowlingData;

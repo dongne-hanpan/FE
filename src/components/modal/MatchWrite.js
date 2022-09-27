@@ -7,7 +7,7 @@ import ReuseTextarea from '../reusable/ReuseTextarea';
 import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
-import dummyOptionValues, {bowlingAddress} from '../../data/bowlingData';
+import bowlingData from '../../data/bowlingData';
 
 
 const MatchWrite = () => {
@@ -34,7 +34,6 @@ const MatchWrite = () => {
   const makeMatch = () => {
     const matchDateValue = matchDateRef.current.value;
     const intakeValue = intakeRef.current.value;
-    console.log(matchDateValue);
     if(!matchDateValue){
       whenMsg.current.innerText = '날짜, 시간을 선택해주세요';
       setWhenErr('danger');
@@ -51,7 +50,6 @@ const MatchWrite = () => {
 
     //모집인원 유효성 검사
     if(intakeValue === null || intakeValue <1 || intakeValue >6){
-      console.log('모집 인원을 확인해주세요');
       intakeMsg.current.innerText = '유효하지 않은 인원';
       setIntakeErr('danger');
       return
@@ -78,12 +76,14 @@ const MatchWrite = () => {
       contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
       matchIntakeFull: intakeValue,
     }
-    console.log(matchMakeData);
     dispatch(makeMatchThunk(matchMakeData));
     dispatch(setDialogue({dialType: 'confirmWrite'}))
   }
-  // const getMatches = () => {
-  // }
+  const thisRegionBowling = () => {
+    const regionData = getLocal('region');
+    const nowRegionId = regionData.regionId;
+    return bowlingData[nowRegionId];
+  }
 
   return(
     <ModalWriteComp>
@@ -94,7 +94,7 @@ const MatchWrite = () => {
 
       <PlaceSection>
         <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
-          {dummyOptionValues.map((each) => 
+          {thisRegionBowling().map((each) => 
             <PlaceOption key={each.value} value={[each.value,each.address]}>
               {each.value}
             </PlaceOption>
@@ -110,7 +110,7 @@ const MatchWrite = () => {
       <ReuseTextarea injRef={matchDescRef} height={90} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
       <InputTitleBox>
         <InputTitleSmall>총 인원<ErrMessage ref={intakeMsg} status={intakeErr}></ErrMessage></InputTitleSmall>
-        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 2 ~ 6 명까지'}/>
+        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 1 ~ 6 명까지'}/>
       </InputTitleBox>
       <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
