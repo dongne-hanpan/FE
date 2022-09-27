@@ -154,16 +154,16 @@ const ChatContainer = () => {
     <ChatInput>
       <ChatInputBtns>
         { chatData.writer === userData.nickname ?
-          <BtnReserve onClick={doReserved}> 모집 완료 </BtnReserve>
+          <BtnReserve matchStatus={matchStatus} onClick={doReserved}> 모집 완료 </BtnReserve>
           :<></>
         }
-        <BtnResult onClick={writeResult}> 나의 결과 </BtnResult>
-        <BtnComment onClick={writeComment}> 후기 입력 </BtnComment>
-        <BtnOut onClick={leaveChatRoom}> 나가기 </BtnOut>
+        <BtnResult matchStatus={matchStatus} onClick={writeResult}> 나의 결과 </BtnResult>
+        <BtnComment matchStatus={matchStatus} onClick={writeComment}> 후기 입력 </BtnComment>
+        <BtnOut matchStatus={matchStatus} onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
         <ReuseTextarea height={100} value={message} onChageEvent={messageHandler} />
-        <ButtonBox onClick={sendMessage}> 전송 </ButtonBox>
+        <ButtonBox matchStatus={matchStatus} onClick={sendMessage}> 전송 </ButtonBox>
       </ChatInputTalks>
     </ChatInput>
     </>
