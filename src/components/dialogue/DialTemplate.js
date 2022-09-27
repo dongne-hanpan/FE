@@ -28,7 +28,10 @@ import DialDenyFileUpload from './DialDenyFileUpload';
 import DialDenyChatExist from './DialDenyChatExist';
 import DialDenyEnterChatroom from './DialDenyEnterChatroom';
 import DialConfReserved from './DialConfReserved';
+import DialConfReserve from './DialConfReserve';
 import DialDenyResultAgain from './DialDenyResultAgain';
+import DialConfAlone from './DialConfAlone';
+import DialAlreadyDone from './DialAlreadyDone';
 
 
 const DialTemplate = () => {
@@ -67,6 +70,12 @@ const DialTemplate = () => {
       return <DialConfComment />
     } else if(dialData.dialType === 'confirmReserved'){
       return <DialConfReserved />
+    } else if(dialData.dialType === 'confirmReserve'){
+      return <DialConfReserve />
+    } else if(dialData.dialType === 'confirmAlone'){
+      return <DialConfAlone />
+    } else if(dialData.dialType === 'alreadyDone'){
+      return <DialAlreadyDone />
     } else if(dialData.dialType === 'denyContact'){
       return <DialDenyContact />
     } else if(dialData.dialType === 'denyContactAgain'){

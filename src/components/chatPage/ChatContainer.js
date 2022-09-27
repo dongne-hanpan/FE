@@ -83,14 +83,23 @@ const ChatContainer = () => {
   const matchsports = dummySports.filter((each) => each.sports === sports)[0];
   
   const doReserved = () => {
-    if( matchStatus === 'recruit'){
-      dispatch(reservedChatThunk(nowChatId));
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
+      console.log(chatData.userListInMatch);
+      if(chatData.matchIntakeFull !== 1 && chatData.userListInMatch.length === 1){
+        dispatch(setDialogue({dialType: 'confirmAlone', matchId: nowChatId}));
+      }else{
+        dispatch(setDialogue({dialType: 'confirmReserve', matchId: nowChatId}));
+      }
     } else{
       dispatch(setDialogue({dialType: 'denyReserved'}));
     }
   }
   const writeResult = () => {
-    if( matchStatus === 'reserved'){
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
       const modalResultData = {
         modalType: 'matchResult',
         sportsImage: matchsports.sportsImage,
@@ -101,7 +110,9 @@ const ChatContainer = () => {
     }
   }
   const writeComment = () => {
-    if( matchStatus === 'reserved'){
+    if( matchStatus === 'done'){
+      dispatch(setDialogue({dialType: 'alreadyDone'}))
+    }else if( matchStatus === 'recruit'){
       const modalCommentData = {
         modalType: 'matchComment',
         sportsImage: matchsports.sportsImage,
@@ -121,15 +132,17 @@ const ChatContainer = () => {
   }
 
   const sendMessage = () => {
-    client.send(
-      `/app/chat/${nowChatId}`,
-      headers,
-      JSON.stringify({
-        match_id: parseInt(nowChatId),
-        message: message,
-      })
-    );
-    setMessage("");
+    if( matchStatus !== 'done'){
+      client.send(
+        `/app/chat/${nowChatId}`,
+        headers,
+        JSON.stringify({
+          match_id: parseInt(nowChatId),
+          message: message,
+        })
+      );
+      setMessage("");
+    }
   };
   return(
     <>
@@ -185,30 +198,30 @@ const ChatInputBtns = styled.div`
 const BtnReserve = styled.button`
   height: 30px;
   padding: 4px 14px;
-  color: ${({theme}) => theme.colors.yellow};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.yellow};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.yellow};
   border-radius: 2rem;
+  color: ${({theme,matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.yellow};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnResult = styled.button`
   height: 30px;
   padding: 4px 14px;
   margin-left: 6px;
-  color: ${({theme}) => theme.colors.green};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.green};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.green};
   border-radius: 2rem;
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.green};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnComment = styled.button`
   height: 30px;
   padding: 4px 14px;
   margin-left: 6px;
-  color: ${({theme}) => theme.colors.core};
   font-weight: ${({theme}) => theme.fontWeight.semi_bold};
-  border: 2px solid ${({theme}) => theme.colors.core};
+  border: 2px solid ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.core};
   border-radius: 2rem;
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.core};
   background-color: ${({theme}) => theme.colors.background};
 `;
 const BtnOut = styled.button`
@@ -232,6 +245,6 @@ const ButtonBox = styled.button`
   height: 100px;
   margin-left: 10px;
   border-radius: 0.5rem;
-  color: ${({theme}) => theme.colors.background};
-  background-color: ${({theme}) => theme.colors.skyblue};
+  color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.darkgray : theme.colors.background};
+  background-color: ${({theme, matchStatus}) => matchStatus === 'done' ? theme.colors.gray : theme.colors.skyblue};
 `
