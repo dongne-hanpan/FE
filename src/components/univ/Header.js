@@ -26,6 +26,9 @@ const Header = () => {
   //refresh 에러 핸들링
   useEffect(() => {
     const cookie = getCookie('mytoken');
+    if(userData.username === undefined && !cookie){
+      setTestAlerm([]);
+    }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
       dispatch(getAlermThunk());
