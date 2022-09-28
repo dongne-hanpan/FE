@@ -121,4 +121,5 @@ const SwitchToSignup = styled.div`
 `
 const SwitchToSignupLink = styled.span`
   color: ${({theme}) => theme.colors.core};
+  cursor: pointer;
 `

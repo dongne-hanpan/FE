@@ -242,4 +242,5 @@ const SwitchToLogin = styled.div`
 `
 const SwitchToLoginLink = styled.span`
   color: ${({theme}) => theme.colors.core};
+  cursor: pointer;
 `
