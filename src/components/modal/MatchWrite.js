@@ -7,8 +7,8 @@ import ReuseTextarea from '../reusable/ReuseTextarea';
 import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
-//temp
-import dummyOptionValues from '../../dummyData/dummyOptionValues';
+import bowlingData from '../../data/bowlingData';
+import KaKaoMap from '../../shared/KaKaoMap';
 
 
 const MatchWrite = () => {
@@ -35,7 +35,6 @@ const MatchWrite = () => {
   const makeMatch = () => {
     const matchDateValue = matchDateRef.current.value;
     const intakeValue = intakeRef.current.value;
-    console.log(matchDateValue);
     if(!matchDateValue){
       whenMsg.current.innerText = '날짜, 시간을 선택해주세요';
       setWhenErr('danger');
@@ -52,7 +51,6 @@ const MatchWrite = () => {
 
     //모집인원 유효성 검사
     if(intakeValue === null || intakeValue <1 || intakeValue >6){
-      console.log('모집 인원을 확인해주세요');
       intakeMsg.current.innerText = '유효하지 않은 인원';
       setIntakeErr('danger');
       return
@@ -79,12 +77,14 @@ const MatchWrite = () => {
       contents: matchDescRef.current.value ? matchDescRef.current.value : '누구든지 환영합니다.',
       matchIntakeFull: intakeValue,
     }
-    console.log(matchMakeData);
     dispatch(makeMatchThunk(matchMakeData));
     dispatch(setDialogue({dialType: 'confirmWrite'}))
   }
-  // const getMatches = () => {
-  // }
+  const thisRegionBowling = () => {
+    const regionData = getLocal('region');
+    const nowRegionId = regionData.regionId;
+    return bowlingData[nowRegionId];
+  }
 
   return(
     <ModalWriteComp>
@@ -94,15 +94,17 @@ const MatchWrite = () => {
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} />
 
       <PlaceSection>
-        <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
-          {dummyOptionValues.map((each) => 
+        <PlaceSelect onChange={selectChangeHandler}>
+          {thisRegionBowling().map((each) => 
             <PlaceOption key={each.value} value={[each.value,each.address]}>
               {each.value}
             </PlaceOption>
           )}
         </PlaceSelect>
         <PlaceMap>
-          <div>네이버 지도</div>
+          <KaKaoMap
+            nowPlace={place ? place.split(',')[0] : null} 
+            nowAddress={place ? place.split(',')[1] : null} />
         </PlaceMap>
       </PlaceSection>
       <InputTitleBox>
@@ -111,7 +113,7 @@ const MatchWrite = () => {
       <ReuseTextarea injRef={matchDescRef} height={90} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
       <InputTitleBox>
         <InputTitleSmall>총 인원<ErrMessage ref={intakeMsg} status={intakeErr}></ErrMessage></InputTitleSmall>
-        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 2 ~ 6 명까지'}/>
+        <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 1 ~ 6 명까지'}/>
       </InputTitleBox>
       <ReuseBtn styleType={'stretch'} content={'게시하기'} clickEvent={makeMatch} />
     </ModalWriteComp>
@@ -173,8 +175,9 @@ const PlaceSelect = styled.select`
   left: 6px;
   height: 40px;
   padding: 0px 10px;
-  border: none;
+  border: 2px solid ${({theme}) => theme.colors.gray};
   border-radius: 0.5rem;
+  z-index: 1;
 `
 const PlaceOption = styled.option.attrs(({address}) => ({
     disabled : address === 'default' ? true : false,
@@ -189,7 +192,6 @@ const PlaceMap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${({theme}) => theme.colors.skyblue};
   border-radius: 0.5rem;
   margin-bottom: 12px;
 `

@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setLocal } from '../shared/axios/local';
 import ReuseBtn from '../components/reusable/ReuseBtn';
-
-//temp
-import { dummySports, sportsConverter } from '../dummyData/dummyIndex';
+import { sportsData, sportsConverter } from '../data/regionSportsData';
 
 
 const IndexPage = () => {
@@ -45,7 +43,7 @@ const IndexPage = () => {
   return (
     <IndexComp>
       <SportsComp>
-        {dummySports.map((each) => 
+        {sportsData.map((each) => 
           <SportsImgBox key={each.sportsId} aria-label={each.sports} onClick={selectSports} onMouseEnter={showSportsName}>
             <SportsImg src={each.sportsImage} alt={each.sports} sports={sports} />
           </SportsImgBox>

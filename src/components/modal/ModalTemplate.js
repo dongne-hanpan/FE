@@ -80,6 +80,7 @@ const ModalComp = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${({theme}) => theme.colors.dark};
+  z-index:2;
 `
 const ModalOutBtn = styled.div`
   position: absolute;

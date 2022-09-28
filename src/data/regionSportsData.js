@@ -6,7 +6,7 @@ import running from '../asset/pictogram_running.png';
 import tennis from '../asset/pictogram_tennis.png';
 
 
-export const dummyRegion = [
+export const regionData = [
   {regionId: 0, region: '전체 지역'},
   {regionId: 1, region: '강남구'},
   {regionId: 2, region: '강동구'},
@@ -35,7 +35,7 @@ export const dummyRegion = [
   {regionId: 25, region: '중랑구'},
 ];
 
-export const dummySports = [
+export const sportsData = [
   {sportsId: 0, sports: '볼링', sportsImage: bowling},
   {sportsId: 1, sports: '테니스', sportsImage: tennis},
   {sportsId: 2, sports: '배드민턴', sportsImage: badminton},
