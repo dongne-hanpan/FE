@@ -72,7 +72,7 @@ const SportsPage = () => {
         <MatchContainerHeader>
           <MatchContainerHeaderTitle>{sports} 한 판? <MatchRegion>{region}</MatchRegion></MatchContainerHeaderTitle>
           <RegionDropbox ref={regionRef} onChange={selectChangeHandler}>
-            <RegionOption>지역을 선택하세요</RegionOption>
+            <RegionOption disabled>지역을 선택하세요</RegionOption>
             {regionData.map((each) => 
               <RegionOption key={each.regionId} value={[each.regionId,each.region]}>{each.region}</RegionOption>
             )}
