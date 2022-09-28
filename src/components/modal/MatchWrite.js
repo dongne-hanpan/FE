@@ -8,6 +8,7 @@ import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
 import bowlingData from '../../data/bowlingData';
+import KaKaoMap from '../../shared/KaKaoMap';
 
 
 const MatchWrite = () => {
@@ -93,7 +94,7 @@ const MatchWrite = () => {
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} />
 
       <PlaceSection>
-        <PlaceSelect className="selectBox" onChange={selectChangeHandler}>
+        <PlaceSelect onChange={selectChangeHandler}>
           {thisRegionBowling().map((each) => 
             <PlaceOption key={each.value} value={[each.value,each.address]}>
               {each.value}
@@ -101,7 +102,9 @@ const MatchWrite = () => {
           )}
         </PlaceSelect>
         <PlaceMap>
-          <div>네이버 지도</div>
+          <KaKaoMap
+            nowPlace={place ? place.split(',')[0] : null} 
+            nowAddress={place ? place.split(',')[1] : null} />
         </PlaceMap>
       </PlaceSection>
       <InputTitleBox>
@@ -172,8 +175,9 @@ const PlaceSelect = styled.select`
   left: 6px;
   height: 40px;
   padding: 0px 10px;
-  border: none;
+  border: 2px solid ${({theme}) => theme.colors.gray};
   border-radius: 0.5rem;
+  z-index: 1;
 `
 const PlaceOption = styled.option.attrs(({address}) => ({
     disabled : address === 'default' ? true : false,
@@ -188,7 +192,6 @@ const PlaceMap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${({theme}) => theme.colors.skyblue};
   border-radius: 0.5rem;
   margin-bottom: 12px;
 `

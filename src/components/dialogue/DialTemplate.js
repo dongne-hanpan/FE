@@ -135,6 +135,7 @@ const DialComp = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${({theme}) => theme.colors.dark};
+  z-index:3;
 `
 
 const DialSection = styled.div`
