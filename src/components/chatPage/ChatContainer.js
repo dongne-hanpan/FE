@@ -132,6 +132,9 @@ const ChatContainer = () => {
 
   const sendMessage = () => {
     if( matchStatus !== 'done'){
+      if(message === null || message === undefined || message === ''){
+        return
+      }
       client.send(
         `/app/chat/${nowChatId}`,
         headers,
