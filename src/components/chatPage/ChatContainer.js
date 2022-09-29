@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import ChatContent from './ChatContent';
@@ -145,12 +145,23 @@ const ChatContainer = () => {
       setMessage("");
     }
   };
+  const lastMsg = useRef(null);
+  useEffect(() => {
+    if(lastMsg.current !== null){
+      console.log(lastMsg.current);
+      lastMsg.current.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    }
+  },[messageList])
   return(
     <>
     <ChatContainerComp>
-        {messageList.map((each, params) => (
-          <ChatContent key={params} data={each} />
-        ))}
+        {messageList.length >0 ? messageList.map((each, idx) => {
+          if(idx === messageList.length-1){
+            return <ChatContent injRef={lastMsg} key={idx} data={each} />
+          }
+          return <ChatContent key={idx} data={each} />
+          }
+        ):<></>}
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>

@@ -13,6 +13,7 @@ const colors = {
   // addtional color
   dark: "#6d6d6d71",
   darkgray: "#767676",
+  deepdarkgray: "#323237",
   gray: "#b5b3ac",
   red_light: "#ff0000",
   red_pale: "#ffa2a2",
