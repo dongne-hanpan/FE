@@ -11,6 +11,7 @@ import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseReserved from '../reusable/ReuseReserved';
 import ReuseBadge from '../reusable/ReuseBadge';
+import { setLocal } from '../../shared/axios/local';
 
 //temp
 import logo from '../../asset/logo.png';
@@ -25,9 +26,24 @@ const Header = () => {
   const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
   const [testAlerm, setTestAlerm] = useState([]);
+  const successCallback = (pos) => {
+    const crd = pos.coords;
+    const myLatLng = {
+      lat: crd.latitude,
+      lng: crd.longitude
+    }
+    setLocal('myLatLng', myLatLng)
+  }
+  const errorCallback = () => {
+    console.log('fail get my Location data')
+  }
+
+  const getMyLocation = () => {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+  }
   useEffect(() => {
-    console.log(testAlerm);
-  },[testAlerm])
+    getMyLocation();
+  },[])
 
   //SSE
   // useEffect(() => {

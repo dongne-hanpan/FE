@@ -24,8 +24,7 @@ const ChatContainer = () => {
     "Content-Type": "application/json", 
     "Authorization": `Bearer ${getCookie("mytoken")}`,
   };
-  const BASE_URL = "http://3.38.191.6";
-  // const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   //나 이제 채팅 쓸꺼야
   let sock = new SockJS(`${BASE_URL}/ws/chat`);

@@ -10,7 +10,6 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 // https로 변경하는 이유
 // ref: https://apis.map.kakao.com/web/sample/geolocationMarker/
 // ref: https://velog.io/@yaytomato/React-%EC%9B%B9%EC%82%AC%EC%9D%B4%ED%8A%B8-https%EB%A1%9C-%EB%A1%9C%EC%BB%AC-%ED%85%8C%EC%8A%A4%ED%8C%85%ED%95%98%EA%B8%B0#--%EB%A1%9C%EC%BB%AC%EC%97%90%EC%84%9C-https%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8C%85%ED%95%98%EA%B8%B0
-// 내 ip? 172.30.1.60
 
 
 const KaKaoMap = ({nowAddress}) => {
@@ -47,10 +46,7 @@ const KaKaoMap = ({nowAddress}) => {
   const SearchMap = () => {
     const callback = function(result, status) {
       if (status === window.kakao.maps.services.Status.OK) {
-        console.log(result)
-        console.log(nowAddress);
         const newSearch = result[0]
-        console.log(newSearch);
         setState({
           center: { lat: newSearch.y, lng: newSearch.x }
         })
