@@ -80,7 +80,7 @@ const SportsPage = () => {
         </MatchContainerHeader>
         <CircleBtns>
           <CircleBtn onClick={doMatchWrite}>
-            <CircleBtnContent>+</CircleBtnContent>
+            <CircleBtnContent><i className="fa-solid fa-plus" /></CircleBtnContent>
           </CircleBtn>
         </CircleBtns>
         <MatchContainerBody>

@@ -28,7 +28,7 @@ const MatchWatch = () => {
   }
 
   const copyPlaceDetail = async() => {
-    const placeDetail = modalData.matchPlaceDetail;
+    const placeDetail = modalData.placeDetail;
     await navigator.clipboard.writeText(placeDetail);
     alert('주소가 복사되었습니다');
   }
@@ -57,7 +57,7 @@ const MatchWatch = () => {
           <MatchTime>{modalData.time}</MatchTime>
           <MatchPlace>
             <Place>{modalData.place}
-            <PlaceIcon>info
+            <PlaceIcon className="fa-solid fa-circle-info">
               <PlaceDetail>{modalData.placeDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
             </PlaceIcon>
             </Place>
@@ -137,31 +137,32 @@ const MatchPlace = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_32};
 `
 const Place = styled.div`
-`
-const PlaceIcon = styled.span`
   position: relative;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  border-radius: 2rem;
+  cursor: pointer;
+`
+const PlaceIcon = styled.i`
   margin-left: 7px;
-  background-color: ${({theme}) => theme.colors.background_light};
-  font-size: ${({theme}) => theme.fontSize.font_12};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
+  font-size: ${({theme}) => theme.fontSize.font_22};
 `
 const PlaceDetail = styled.div`
   position: absolute;
-  top: -2px;
+  top: -4px;
   left: 0px;
   width: 200px;
   min-height: 40px;
-  display: none;
+  opacity: 0;
   padding: 10px;
   border-radius: 0.5rem;
   background-color: ${({theme}) => theme.colors.background_light};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+  font-family: 'none';
+  cursor: default;
+  transition: opacity 0.3s ease-in-out;
   ${PlaceIcon}:hover &{
-    display: inline;
-    font-size: ${({theme}) => theme.fontSize.font_12};
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+
   }
 `
 const CopyBtn = styled.span`

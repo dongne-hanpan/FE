@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
-import ReuseBtn from '../reusable/ReuseBtn';
 import Deco from '../univ/Deco';
 import Login from '../login/Login';
 import Signup from '../login/Signup';
@@ -56,7 +55,7 @@ const ModalTemplate = () => {
   return(
     <ModalComp aria-label='modalToggle' onClick={removeModal}>
       <ModalOutBtn>
-        <ReuseBtn name={'modalToggle'} styleType={'shrink'} content={'X'} clickEvent={removeModal} />
+      <IconOut className="fa-regular fa-circle-xmark" aria-label="modalToggle" onClick={removeModal} />
       </ModalOutBtn>
       <ModalSection>
         <Deco />
@@ -86,6 +85,12 @@ const ModalOutBtn = styled.div`
   position: absolute;
   top: 30px;
   right: 50px;
+`
+const IconOut = styled.i`
+  padding: 6px;
+  color: ${({theme}) => theme.colors.green};
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  cursor: pointer;
 `
 const ModalSection = styled.div`
   position: relative;
