@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         margin: 0px;
         background-color: ${({theme}) => theme.colors.background};
+        overflow: hidden;
         &::-webkit-scrollbar {
             display: none;
         }
@@ -47,7 +48,6 @@ const GlobalStyle = createGlobalStyle`
 `
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <GlobalStyle />

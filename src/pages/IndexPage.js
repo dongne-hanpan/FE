@@ -71,7 +71,6 @@ const SportsComp = styled.section`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  // margin-top: 30px;
   margin-bottom: 10px;
 `
 const SportsImgBox = styled.button`

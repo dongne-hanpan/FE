@@ -27,7 +27,14 @@ const MatchWrite = () => {
     matchDateRef.current.min = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
     .toISOString()
     .slice(0, -8);
+    const now = new Date();
+    const maxDate = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+    matchDateRef.current.max = maxDate.toISOString().slice(0, -8);
+    matchDateRef.current.click();
   },[]);
+  const preventKeyDown = (e) => {
+    e.preventDefault();
+  }
 
   const selectChangeHandler = (e) => {
     setPlace(e.target.value);
@@ -91,8 +98,7 @@ const MatchWrite = () => {
       <InputTitleBox>
         <InputTitle>일자, 시간, 장소<ErrMessage ref={whenMsg} status={whenErr}></ErrMessage></InputTitle>
       </InputTitleBox>
-      <ReuseInput injRef={matchDateRef} injType={'datetime-local'} />
-
+      <ReuseInput injRef={matchDateRef} injType={'datetime-local'} keyDownEvent={preventKeyDown} />
       <PlaceSection>
         <PlaceSelect onChange={selectChangeHandler}>
           {thisRegionBowling().map((each) => 

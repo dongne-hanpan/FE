@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const ReuseInput = ({injRef, injClass, injType, placeholderValue}) => {
+const ReuseInput = ({injRef, injClass, injType, placeholderValue, keyDownEvent}) => {
   //데이터 값 들어오면 프론트에서 처리
   return(
     <InputComp
@@ -10,6 +10,7 @@ const ReuseInput = ({injRef, injClass, injType, placeholderValue}) => {
       className={injClass}
       type={injType}
       placeholder={placeholderValue} 
+      onKeyDown={keyDownEvent}
       required
     />
   )

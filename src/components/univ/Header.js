@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,10 +22,14 @@ const Header = () => {
   const authError = useSelector((state) => state.user.error);
   const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
+  const [testAlerm, setTestAlerm] = useState([]);
 
   //refresh 에러 핸들링
   useEffect(() => {
     const cookie = getCookie('mytoken');
+    if(userData.username === undefined && !cookie){
+      setTestAlerm([]);
+    }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
       dispatch(getAlermThunk());
@@ -102,7 +106,7 @@ export default Header;
 
 
 const HeaderComp = styled.header`
-  // width: 100vw;
+  width: 100vw;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -117,11 +121,11 @@ const HeaderComp = styled.header`
 `
 const HeaderLogoSection = styled.article`
   flex-grow: 3;
-  cursor: pointer;
-`
-const HeaderLogo = styled.img`
+  `
+  const HeaderLogo = styled.img`
   height: 40px;
   margin: 0px 10px;
+  cursor: pointer;
 `
 const HeaderAlermSection = styled.article`
   min-width: 450px;
