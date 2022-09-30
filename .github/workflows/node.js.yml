@@ -13,6 +13,12 @@ jobs:
   build:
 
     runs-on: self-hosted
+    env:
+      REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+      REACT_APP_WEATHER_API_KEY: ${{ secrets.REACT_APP_WEATHER_API_KEY }}
+      REACT_APP_LATITUDE: ${{ secrets.REACT_APP_LATITUDE }}
+      REACT_APP_LONGITUDE: ${{ secrets.REACT_APP_LONGITUDE }}
+      REACT_APP_NAVER_ID: ${{ secrets.REACT_APP_NAVER_ID }}
 
     strategy:
       matrix:
