@@ -14,14 +14,13 @@ const GlobalStyle = createGlobalStyle`
     }
     .App {
         position: relative;
+        width: 100vw;
+        height: 100vh;
     }
     body {
         margin: 0px;
         background-color: ${({theme}) => theme.colors.background};
         overflow: hidden;
-        &::-webkit-scrollbar {
-            display: none;
-        }
     }
     h1{
         margin: 0px;
