@@ -58,10 +58,14 @@ const MatchCard = ({data}) => {
     return false;
   }
   const contactToHost = () => {
-    if(checkParticipant() === false){
-      dispatch(contactHostThunk(data.match_id));
+    if(userData.nickname !== undefined){
+      if(checkParticipant() === false){
+        dispatch(contactHostThunk(data.match_id));
+      }else{
+        navigate(`/chat/${data.match_id}`)
+      }
     }else{
-      navigate(`/chat/${data.match_id}`)
+      dispatch(setDialogue({dialType: 'confirmLogin'}))
     }
   };
 

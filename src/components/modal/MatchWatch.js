@@ -42,11 +42,15 @@ const MatchWatch = () => {
     return false;
   }
   const contactToHost = () => {
-    if(checkParticipant() === false){
-      dispatch(contactHostThunk(modalData.match_id));
+    if(userData.nickname !== undefined){
+      if(checkParticipant() === false){
+        dispatch(contactHostThunk(modalData.match_id));
+      }else{
+        navigate(`/chat/${modalData.match_id}`)
+        dispatch(clearModal());
+      }
     }else{
-      navigate(`/chat/${modalData.match_id}`)
-      dispatch(clearModal());
+      dispatch(setDialogue({dialType: 'confirmLogin'}))
     }
   };
   return(
@@ -84,11 +88,7 @@ const MatchWatch = () => {
           </MatchIntakeNum>
           /{modalData.matchIntakeFull} 명
         </MatchIntake>
-        {
-          modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
-          :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
-        }
+        <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
       </MatchContact>
     </ModalWatchComp>
   )
