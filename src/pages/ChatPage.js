@@ -23,9 +23,14 @@ const ChatPage = () => {
     if(nowChatId !== undefined){
       dispatch(getChatDataThunk(nowChatId));
     }
-  },[nowChatId])
+  },[nowChatId,dispatch])
 
   useEffect(() => {
+    //성공 시
+    if(chatStatus.statusType === 'reservedChatThunk'){
+      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+      dispatch(clearChatStatus());
+    }
     if(chatStatus.statusType === 'submitMyResultThunk'){
       dispatch(setDialogue({dialType: 'confirmResult'}));
       dispatch(clearChatStatus());
@@ -34,15 +39,12 @@ const ChatPage = () => {
       dispatch(setDialogue({dialType: 'confirmComment'}))
       dispatch(clearChatStatus());
     }
-    if(chatStatus.statusType === 'reservedChatThunk'){
-      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
-      dispatch(clearChatStatus());
-    }
     if(chatStatus.statusType === 'leaveChatThunk'){
       navigate(`/chat`);
       dispatch(clearChatStatus());
       dispatch(clearDialogue());
     }
+    //에러 시
     if(chatError.errorType === 'getChatDataThunk'){
       if(chatError.statusCode === 500){
         dispatch(setDialogue({dialType: 'denyEnterChatroom'}))

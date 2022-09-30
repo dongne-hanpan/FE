@@ -4,11 +4,13 @@ const colors = {
   black: "#000000",
   core: "#0373F3",
   skyblue: "#8ACCE4",
+  background_deep: "#f3eac6",
   background: "#F5EFD7",
   background_light: "#FFFCF1",
   //point color
   red: "#CC0000",
   green: "#41CC00",
+  green_pale: "#91d473",
   yellow: "#FFC700",
   // addtional color
   dark: "#6d6d6d71",

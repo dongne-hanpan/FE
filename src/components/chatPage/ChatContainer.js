@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import ChatContent from './ChatContent';
+import ChatNotice from './ChatNotice';
 
 //채팅
 import StompJS from "stompjs";
@@ -65,7 +66,7 @@ const ChatContainer = () => {
   //메세지 보내기 관련
   const dispatch = useDispatch();
   const chatData = useSelector((state) => state.chat.nowChatData);
-  const matchStatus = chatData.matchStatus
+  const matchStatus = chatData.matchStatus;
   const userData = useSelector((state) => state.user.userData);
   const sportsLocal = getLocal('sports');
   const sports = sportsLocal.sports;
@@ -87,7 +88,7 @@ const ChatContainer = () => {
   const writeResult = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
-    }else if( matchStatus === 'recruit'){
+    }else if( matchStatus === 'reserved'){
       const modalResultData = {
         modalType: 'matchResult',
         sportsImage: matchsports.sportsImage,
@@ -100,7 +101,7 @@ const ChatContainer = () => {
   const writeComment = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
-    }else if( matchStatus === 'recruit'){
+    }else if( matchStatus === 'reserved'){
       const modalCommentData = {
         modalType: 'matchComment',
         sportsImage: matchsports.sportsImage,
@@ -130,6 +131,7 @@ const ChatContainer = () => {
         `/app/chat/${nowChatId}`,
         headers,
         JSON.stringify({
+          type: 'message',
           match_id: parseInt(nowChatId),
           message: msgAreaValue.replace(/\n\r?/g, '%0D%0A'),
         })
@@ -137,6 +139,7 @@ const ChatContainer = () => {
       msgArea.current.value = '';
     }
   };
+  //메시지 아래로 이동
   const lastMsg = useRef(null);
   useEffect(() => {
     if(lastMsg.current !== null){
@@ -160,12 +163,12 @@ const ChatContainer = () => {
     <>
     <ChatContainerComp>
         {messageList.length >0 ? messageList.map((each, idx) => {
-          if(idx === messageList.length-1){
-            return <ChatContent injRef={lastMsg} key={idx} data={each} />
+          if(each.type === 'message'){
+            return <ChatContent injRef={idx === messageList.length-1 ? lastMsg : null} key={idx} data={each} />
+          } else{
+            return <ChatNotice key={idx} injRef={idx === messageList.length-1 ? lastMsg : null} data={each} />
           }
-          return <ChatContent key={idx} data={each} />
-          }
-        ):<></>}
+        }):<></>}
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>

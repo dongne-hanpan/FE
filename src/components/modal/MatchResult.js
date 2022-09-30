@@ -21,7 +21,7 @@ const MatchResult = () => {
   const submitResult = () => {
     // 나의 결과 입력
     const myScoreValue = myScore.current.value;
-    if(0 <= myScoreValue && myScoreValue <= 300){
+    if(myScoreValue !== '' && 0 <= myScoreValue && myScoreValue <= 300){
       myResultMsg.current.innerText = '';
       setResultErr('none');
       const matchId =  chatData.match_id + '';
