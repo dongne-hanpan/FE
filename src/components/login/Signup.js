@@ -105,16 +105,14 @@ const Signup = () => {
   const [validNickname, setValidNickname] = useState(null);
 
   const isValidUsername = (idValue) => {
-    // var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{6,12}$/;
-    var regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{6,12}$/;
+    var regExp = /^[a-z0-9_]{6,12}$/ 
     return regExp.test(idValue);
   }
   const isValidNickname = (asValue) => {
-    var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,12}$/;
+    var regExp = /^[가-힣a-z0-9_-]{2,12}$/;
     return regExp.test(asValue);
   }
   const isValidPw = (pwValue) => {
-    // var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     var regExp = /^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{8,20}$/;
     return regExp.test(pwValue);
   }
