@@ -65,9 +65,9 @@ const alermSlice = createSlice({
     });
     builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
     });
-    // builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-    //   state.alermData = action.payload;
-    // });
+    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
+      state.alermData = action.payload;
+    });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       const res = action.payload;
       if(res.statusCode){

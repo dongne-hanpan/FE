@@ -38,7 +38,7 @@ const HeaderAlerm = ({data}) => {
         {isChecked ? <></> : <AlermImg src={red} alt='checkToggle'/>}
       </AlermImgBox>
       <AlermMsg>
-        {data.date} 일자의 {data.returnMessage}
+        {alermRouter()}
       </AlermMsg>
       <AlermBtnBox>
         <ReuseBtn name={'userDetail'} direc={'horiz'} styleType={'small'} content={'정보'} clickEvent={checkApplicant} />
