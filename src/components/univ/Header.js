@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,11 +15,9 @@ import { setLocal } from '../../shared/axios/local';
 
 //temp
 import logo from '../../asset/logo.png';
-import Sse from './Sse';
 
 
 const Header = () => {
-  console.log('here??')
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
@@ -38,26 +36,18 @@ const Header = () => {
   const errorCallback = () => {
     console.log('fail get my Location data')
   }
-
   const getMyLocation = () => {
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
   }
   useEffect(() => {
     getMyLocation();
   },[])
-  // const [testAlerm, setTestAlerm] = useState([]);
-  // useEffect(() => {
-  //   console.log(testAlerm);
-  // },[testAlerm])
 
   //refresh 에러 핸들링
   useEffect(() => {
-    // if(userData.username === undefined && !cookie){
-    //   setTestAlerm([]);
-    // }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-      // dispatch(getAlermThunk());
+      dispatch(getAlermThunk());
     }
     if(authError.errorType === 'refreshUserThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
@@ -90,12 +80,16 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        {/* <Sse testAlerm={testAlerm} setTestAlerm={setTestAlerm} /> */}
-        { alermData && alermData.length >0 ? 
-          alermData.map((each,params) => 
+        {/* { testAlerm.length > 0 ? 
+          testAlerm.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
         } */}
+        { alermData.length > 0 ? 
+          alermData.map((each,params) => 
+            <HeaderAlerm key={params} data={each} />
+          ): <div>'로그인이 필요합니다'</div>
+        }
       </HeaderAlermSection>
 
       <HeaderUserSection>

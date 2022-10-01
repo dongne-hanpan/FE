@@ -75,9 +75,47 @@ const Sse = ({testAlerm, setTestAlerm}) => {
         console.log('status from error',eventSource.readyState)
         eventSource.close();
       }
-      eventSource.addEventListener("connect", connectCallback);
-      eventSource.addEventListener("request", requestCallback)
-      eventSource.addEventListener("message", messageCallback)
+      eventSource.addEventListener("connect", function (e) {
+        const myAlerms = JSON.parse(e.data);
+        console.log('connected, compare myAlerms and testAlerm', myAlerms,testAlerm)
+        if(myAlerms !== testAlerm){
+          setTestAlerm(myAlerms);
+        }
+      })
+      eventSource.addEventListener("request", function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
+        let newMyAlerms = null;
+        if(data.nickname !== undefined){
+          newMyAlerms = {
+            alermType: 'apply',
+            ...data
+          };
+        }
+        console.log('request', newMyAlerms)
+        console.log('testAlerm',testAlerm);
+        const neww = [...testAlerm, newMyAlerms];
+        console.log('new',neww);
+        setTestAlerm(neww);
+      })
+      eventSource.addEventListener("message", function (e) {
+        const data = JSON.parse(e.data);
+        let newMyAlerms = null;
+        if(data.returnMessage === "신청이 수락되었습니다."){
+          newMyAlerms = {
+            alermType: 'permit',
+            ...data
+          };
+        } else{
+          newMyAlerms = {
+            alermType: 'deny',
+            ...data
+          };
+        }
+        if([newMyAlerms] !== testAlerm){
+          setTestAlerm([newMyAlerms]);
+        }
+      })
       return () => {
         eventSource.removeEventListener('connect', connectCallback);
         eventSource.removeEventListener('request', requestCallback);
