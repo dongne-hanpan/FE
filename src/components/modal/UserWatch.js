@@ -1,46 +1,61 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { postWithoutCookie } from '../../shared/axios/axios';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseBadge from '../reusable/ReuseBadge';
 import ReuseTemperature from '../reusable/ReuseTemperature';
-import ReuseBtn from '../reusable/ReuseBtn';
+import Comment from '../univ/Comment';
 
 
 const UserWatch = () => {
-  const modalData = useSelector((state) => state.modal.modalData);
-  const userDetailData = modalData.userData;
+  const userDetailData = useSelector((state) => state.modal.modalData.userData);
+  const [commentList, setCommentList] = useState([]);
+  const getComments = async() => {
+    const nicknameData = {nickname: userDetailData.nickname}
+    const res = await postWithoutCookie('/api/user/show-comment',nicknameData);
+    setCommentList(res);
+  }
+  useEffect(() => {
+    getComments();
+  },[])
+  const sportsList = ['볼링', '달리기', '테니스'];
+
   return(
     <UserWatchComp>
       <UserInfo>
-        <ReuseProfile imgSrc={userDetailData.profileImage} imgSize={120}/>
+        <ReuseProfile imgSrc={userDetailData.profileImage} imgSize={70}/>
         <UserInfoDetail>
           <NameAndBadge>
             <Name>{userDetailData.nickname}</Name>
             <ReuseBadge bdgType={'rank'} content={userDetailData.userLevel}/>
           </NameAndBadge>
           <SportsBadges>
-            {userDetailData.sports !== undefined ?
-              userDetailData.sports.map((each) => 
+            {sportsList !== undefined ?
+              sportsList.map((each) => 
                 <ReuseBadge key={each} bdgType={'sports'} content={each} />
               ):<></>
             }
+            {/* {userDetailData.sports !== undefined ?
+              userDetailData.sports.map((each) => 
+                <ReuseBadge key={each} bdgType={'sports'} content={each} />
+              ):<></>
+            } */}
           </SportsBadges>
         </UserInfoDetail>
       </UserInfo>
-      <UserFriends>
-        {userDetailData.friends !== undefined ?
-          userDetailData.friends.map((each) => 
-            <ReuseProfile key={each.nickname} direc={'horiz'} imgSrc={each.profileImage} content={each.nickname}/>
-          ):<></>
-        }
-      </UserFriends>
       <UserRank>
         <ReuseTemperature type={'personal'} type2={'score'} data={userDetailData.averageScore} />
         <ReuseTemperature type={'personal'} type2={'count'} data={userDetailData.matchCount} />
         <ReuseTemperature type={'personal'} type2={'temper'} data={userDetailData.mannerPoint} />
       </UserRank>
-      <ReuseBtn styleType={'stretch'} content={'친구하기'} />
+      <UserComments>
+        {commentList.length > 0 ?
+          commentList.map((each,idx) => 
+            <Comment key={idx} bdgType={'sports'} content={each} />
+          ):<div>후기가 없습니다.</div>
+        }
+      </UserComments>
     </UserWatchComp>
   )
 };
@@ -54,14 +69,15 @@ const UserWatchComp = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
-const UserInfo = styled.article`
+  `
+  const UserInfo = styled.article`
   width: 100%;
   display: flex;
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 14px;
 `
 const UserInfoDetail = styled.div`
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -70,7 +86,6 @@ const UserInfoDetail = styled.div`
 const NameAndBadge = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 14px;
 `
 const Name = styled.div`
   margin-right: 10px;
@@ -83,15 +98,24 @@ const SportsBadges = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
 `
-const UserFriends = styled.article`
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-`
 const UserRank = styled.article`
   width: 100%;
-  height: 240px;
+  height: 220px;;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+`
+const UserComments = styled.article`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  border-radius: 1rem;
+  background-color: ${({theme}) => theme.colors.background_light};
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+}
 `
