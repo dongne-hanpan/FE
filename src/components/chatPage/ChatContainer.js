@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import ChatContent from './ChatContent';
+import ChatNotice from './ChatNotice';
 
 //채팅
 import StompJS from "stompjs";
@@ -12,40 +13,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { sportsData } from '../../data/regionSportsData';
 import { getLocal } from '../../shared/axios/local';
-import useInput from "../../shared/hooks/useInput";
-import ReuseTextarea from '../reusable/ReuseTextarea';
+import { getWithCookie } from '../../shared/axios/axios';
 
 
 const ChatContainer = () => {
-  const [message, messageHandler, setMessage] = useInput();
   const [messageList, setMessageList] = useState([]);
   const nowChatId = useParams().match_id;
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const cookie = getCookie('mytoken');
   const headers = {
-    "Content-Type": "application/json", 
-    "Authorization": `Bearer ${getCookie("mytoken")}`,
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${cookie}`,
   };
-  const BASE_URL = "http://3.38.191.6";
-  // const BASE_URL = process.env.REACT_APP_BASE_URL;
-
   //나 이제 채팅 쓸꺼야
   let sock = new SockJS(`${BASE_URL}/ws/chat`);
   let client = StompJS.over(sock);
 
+  const connectWebsocket = async() => {
+    const res = await getWithCookie(`/chat/message/${nowChatId}`,cookie);
+    setMessageList([...res])
+  }
+
   const onConnected = () => {
     console.log("연결됨");
-    client.subscribe(
-      `/queue/match/${nowChatId}`,
-      (message) => {
-        if (message.body) {
-          axios.get(`${BASE_URL}/chat/message/${nowChatId}`, {headers}).then((res) => {
-          console.log("서버에 전체 채팅 목록 요청", res.data);
-          setMessageList([...res.data]);
-        });
-        } else {
-          alert("메세지가 없습니다.");
-        }
-      }
-    );
+    client.subscribe(`/queue/match/${nowChatId}`,connectWebsocket);
   };
   const onError = (err) => {
     console.log(err);
@@ -75,7 +66,7 @@ const ChatContainer = () => {
   //메세지 보내기 관련
   const dispatch = useDispatch();
   const chatData = useSelector((state) => state.chat.nowChatData);
-  const matchStatus = chatData.matchStatus
+  const matchStatus = chatData.matchStatus;
   const userData = useSelector((state) => state.user.userData);
   const sportsLocal = getLocal('sports');
   const sports = sportsLocal.sports;
@@ -85,7 +76,6 @@ const ChatContainer = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
     }else if( matchStatus === 'recruit'){
-      console.log(chatData.userListInMatch);
       if(chatData.matchIntakeFull !== 1 && chatData.userListInMatch.length === 1){
         dispatch(setDialogue({dialType: 'confirmAlone', matchId: nowChatId}));
       }else{
@@ -98,7 +88,7 @@ const ChatContainer = () => {
   const writeResult = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
-    }else if( matchStatus === 'recruit'){
+    }else if( matchStatus === 'reserved'){
       const modalResultData = {
         modalType: 'matchResult',
         sportsImage: matchsports.sportsImage,
@@ -111,7 +101,7 @@ const ChatContainer = () => {
   const writeComment = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
-    }else if( matchStatus === 'recruit'){
+    }else if( matchStatus === 'reserved'){
       const modalCommentData = {
         modalType: 'matchComment',
         sportsImage: matchsports.sportsImage,
@@ -130,28 +120,55 @@ const ChatContainer = () => {
     }
   }
 
+  const msgArea = useRef(null);
   const sendMessage = () => {
     if( matchStatus !== 'done'){
-      if(message === null || message === undefined || message === ''){
+      let msgAreaValue = msgArea.current.value;
+      if(msgAreaValue === null || msgAreaValue === undefined || msgAreaValue === ''){
         return
       }
       client.send(
         `/app/chat/${nowChatId}`,
         headers,
         JSON.stringify({
+          type: 'message',
           match_id: parseInt(nowChatId),
-          message: message,
+          message: msgAreaValue.replace(/\n\r?/g, '%0D%0A'),
         })
       );
-      setMessage("");
+      msgArea.current.value = '';
     }
   };
+  //메시지 아래로 이동
+  const lastMsg = useRef(null);
+  useEffect(() => {
+    if(lastMsg.current !== null){
+      lastMsg.current.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    }
+  },[messageList])
+
+  const keyDownHandler = (e) => {
+    if(e.code === 'Enter'){
+      const nowTextareaValue = msgArea.current.value;
+      if(e.ctrlKey){
+        console.log(nowTextareaValue);
+        msgArea.current.value = nowTextareaValue + '\r\n';
+      }else{
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+  }
   return(
     <>
     <ChatContainerComp>
-        {messageList.map((each, params) => (
-          <ChatContent key={params} data={each} />
-        ))}
+        {messageList.length >0 ? messageList.map((each, idx) => {
+          if(each.type === 'message'){
+            return <ChatContent injRef={idx === messageList.length-1 ? lastMsg : null} key={idx} data={each} />
+          } else{
+            return <ChatNotice key={idx} injRef={idx === messageList.length-1 ? lastMsg : null} data={each} />
+          }
+        }):<></>}
     </ChatContainerComp>
     <ChatInput>
       <ChatInputBtns>
@@ -164,7 +181,7 @@ const ChatContainer = () => {
         <BtnOut matchStatus={matchStatus} onClick={leaveChatRoom}> 나가기 </BtnOut>
       </ChatInputBtns>
       <ChatInputTalks>
-        <ReuseTextarea height={100} value={message} onChageEvent={messageHandler} />
+        <ChatTextarea ref={msgArea} onKeyDown={keyDownHandler}/>
         <ButtonBox matchStatus={matchStatus} onClick={sendMessage}> 전송 </ButtonBox>
       </ChatInputTalks>
     </ChatInput>
@@ -241,6 +258,14 @@ const ChatInputTalks = styled.div`
   height: 100px;
   display: flex;
   padding: 0px 10px;
+`
+const ChatTextarea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-radius: 0.5rem;
+  background-color: ${({theme}) => theme.colors.background_light};
 `
 const ButtonBox = styled.button`
   width: 150px;

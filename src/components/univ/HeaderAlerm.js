@@ -23,13 +23,22 @@ const HeaderAlerm = ({data}) => {
     }
     dispatch(setDialogue({dialType: 'permit', data: data}))
   }
+  const alermRouter = () => {
+    if(data.alermType === 'permit'){
+      return `${data.date} 일자의 신청이 수락되었습니다`
+    } else if(data.alermType === 'deny'){
+      return `${data.date} 일자의 신청이 거절되었습니다`
+    } else if(data.alermType === 'apply'){
+      return `${data.nickname} 님의 신청이 도착했습니다`
+    }
+  }
   return(
     <AlermComp onClick={showPermitDial}>
       <AlermImgBox>
         {isChecked ? <></> : <AlermImg src={red} alt='checkToggle'/>}
       </AlermImgBox>
       <AlermMsg>
-        {data.nickname} 님의 매치 신청이 도착했습니다.
+        {data.date} 일자의 {data.returnMessage}
       </AlermMsg>
       <AlermBtnBox>
         <ReuseBtn name={'userDetail'} direc={'horiz'} styleType={'small'} content={'정보'} clickEvent={checkApplicant} />

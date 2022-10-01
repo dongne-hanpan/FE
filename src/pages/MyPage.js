@@ -75,7 +75,6 @@ const MyPage = () => {
       <MatchContainer>
         <MatchContainerHeader>
           <MatchContainerHeaderTitle>나의 매치</MatchContainerHeaderTitle>
-          <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <MatchContainerBody>
           {myMatchList? myMatchList.map((each) => 
@@ -91,14 +90,15 @@ export default MyPage;
 
 const MainPage = styled.main`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
-  overflow-y: scroll;
+  padding-bottom: 100px;
+  overflow: scroll;
   &::-webkit-scrollbar {
-    display: none;
+      display: none;
   }
 `
 const SportsAndRank = styled.section`
@@ -130,9 +130,6 @@ const MatchContainerHeader = styled.div`
 const MatchContainerHeaderTitle = styled.h2`
   font-size: ${({theme}) => theme.fontSize.font_32};
   font-weight: ${({theme}) => theme.fontWeight.bold};
-`
-const MatchContainerHeaderUsers = styled.div`
-  display: flex;
 `
 const MatchContainerBody = styled.ul`
   padding: 0px;

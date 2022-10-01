@@ -55,42 +55,51 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
       const res = action.payload;
-      if(res.statusCode){
-        const errorObj = {
-          errorType: 'loginUserThunk',
-          ...res
+        console.log(res);
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'loginUserThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.userId,
+            username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
         }
-        state.error = errorObj;
-      }else{
-        const accessToken = res.accessToken;
-        document.cookie = `mytoken=${accessToken}; path=/;`;
-        const newUserData = {
-          username: res.username,
-          nickname: res.nickname,
-          profileImage: res.profileImage,
-        };
-        state.error = {};
-        state.userData = newUserData;
       }
     });
     builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
       const res = action.payload;
-      if(res.statusCode){
-        deleteCookie('mytoken');
-        const errorObj = {
-          errorType: 'refreshUserThunk',
-          ...res
+      if(res.status !== 500){
+        if(res.statusCode){
+          deleteCookie('mytoken');
+          const errorObj = {
+            errorType: 'refreshUserThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const data = action.payload;
+          const newUserData = {
+            userId: res.userId,
+            username: data.username,
+            nickname: data.nickname,
+            profileImage: data.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
         }
-        state.error = errorObj;
       }else{
-        const data = action.payload;
-        const newUserData = {
-          username: data.username,
-          nickname: data.nickname,
-          profileImage: data.profileImage,
-        };
-        state.error = {};
-        state.userData = newUserData;
+        deleteCookie('mytoken');
       }
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {

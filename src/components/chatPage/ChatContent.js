@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import ReuseProfile from '../reusable/ReuseProfile';
 
-// tmp
-import defaultProfile from '../../asset/defaultprofile.jpg';
-import { useSelector } from 'react-redux';
 
-
-function ChatContent({data}) {
+function ChatContent({injRef, data}) {
   const userData = useSelector((state) => state.user.userData);
+  const afterConvert = data.message.replace('%0D%0A','<br />')
+  const contentArea = useRef(null);
+  useEffect(() => {
+    contentArea.current.innerHTML= afterConvert;
+  },[])
+
   return (
-    <ChatContentComp isMe={data.sender !== userData.nickname}>
+    <ChatContentComp ref={injRef} isMe={data.sender !== userData.nickname}>
       {data.sender !== userData.nickname ? 
       <>
       <ChatUser>
@@ -18,13 +21,11 @@ function ChatContent({data}) {
       </ChatUser>
       <ChatNameAndContent>
         <ChatNickname>{data.sender}</ChatNickname>
-        <Chat>{data.message}</Chat>
+        <Chat ref={contentArea} />
       </ChatNameAndContent>
       </>
       :
-      <Chat>
-        {data.message}
-      </Chat>
+      <Chat ref={contentArea} />
       }
     </ChatContentComp>
   );
@@ -37,8 +38,7 @@ const ChatContentComp = styled.div`
   width: 100%;
   display: flex;
   justify-content: ${({isMe}) => isMe ? 'flex-start':'flex-end'};
-  padding: 10px 14px;
-  margin-bottom: 10px;
+  padding: ${({isMe}) => isMe ? '4px 14px':'10px 14px'}; ;
 `
 const ChatUser = styled.div`
   height: 30px;
@@ -59,8 +59,10 @@ const ChatNickname = styled.div`
 const Chat = styled.div`
   max-width: 270px;
   display: flex;
-  padding: 4px 15px;
+  padding: 8px 10px 5px 12px;
   font-size: ${({theme}) => theme.fontSize.font_14};
+  color: ${({theme}) => theme.colors.deepdarkgray};
   background-color: ${({theme}) => theme.colors.background_light};
+  line-height: 19px;
   border-radius: 0.5rem;
 `

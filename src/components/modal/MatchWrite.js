@@ -8,7 +8,7 @@ import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
 import bowlingData from '../../data/bowlingData';
-import KaKaoMap from '../../shared/KaKaoMap';
+import MapNaver from '../../shared/MapNaver';
 
 
 const MatchWrite = () => {
@@ -30,7 +30,6 @@ const MatchWrite = () => {
     const now = new Date();
     const maxDate = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
     matchDateRef.current.max = maxDate.toISOString().slice(0, -8);
-    matchDateRef.current.click();
   },[]);
   const preventKeyDown = (e) => {
     e.preventDefault();
@@ -101,6 +100,7 @@ const MatchWrite = () => {
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} keyDownEvent={preventKeyDown} />
       <PlaceSection>
         <PlaceSelect onChange={selectChangeHandler}>
+          <PlaceOption disabled >볼링장 선택</PlaceOption>
           {thisRegionBowling().map((each) => 
             <PlaceOption key={each.value} value={[each.value,each.address]}>
               {each.value}
@@ -108,9 +108,7 @@ const MatchWrite = () => {
           )}
         </PlaceSelect>
         <PlaceMap>
-          <KaKaoMap
-            nowPlace={place ? place.split(',')[0] : null} 
-            nowAddress={place ? place.split(',')[1] : null} />
+          <MapNaver injAddress={place ? place.split(',')[1] : null} />
         </PlaceMap>
       </PlaceSection>
       <InputTitleBox>
@@ -185,9 +183,7 @@ const PlaceSelect = styled.select`
   border-radius: 0.5rem;
   z-index: 1;
 `
-const PlaceOption = styled.option.attrs(({address}) => ({
-    disabled : address === 'default' ? true : false,
-  }))`
+const PlaceOption = styled.option`
   height: 40px;
   padding: 0px 20px;
 `

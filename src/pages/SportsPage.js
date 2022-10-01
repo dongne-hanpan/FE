@@ -80,7 +80,7 @@ const SportsPage = () => {
         </MatchContainerHeader>
         <CircleBtns>
           <CircleBtn onClick={doMatchWrite}>
-            <CircleBtnContent>+</CircleBtnContent>
+            <CircleBtnContent><i className="fa-solid fa-plus" /></CircleBtnContent>
           </CircleBtn>
         </CircleBtns>
         <MatchContainerBody>
@@ -103,14 +103,15 @@ const shake = keyframes`
 `
 const MainPage = styled.main`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
-  overflow-y: scroll;
+  padding-bottom: 100px;
+  overflow: scroll;
   &::-webkit-scrollbar {
-    display: none;
+      display: none;
   }
 `
 const SportsAndRank = styled.section`
