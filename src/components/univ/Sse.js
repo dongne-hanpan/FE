@@ -65,17 +65,11 @@ const Sse = ({testAlerm, setTestAlerm}) => {
             ...data
           };
         }
-        console.log('testAlerm',testAlerm);
-        console.log('newMyAlerms',newMyAlerms);
-        console.log('message, compare myAlerms and testAlerm', newMyAlerms,testAlerm)
         if([newMyAlerms] !== testAlerm){
           setTestAlerm([newMyAlerms]);
         }
       })
       return () => {
-        eventSource.removeEventListener('connect', connectCallback);
-        eventSource.removeEventListener('request', requestCallback);
-        eventSource.removeEventListener('message', messageCallback);
         eventSource.close();
       }
     }

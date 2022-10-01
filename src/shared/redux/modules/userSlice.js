@@ -55,7 +55,6 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
       const res = action.payload;
-        console.log(res);
       if(res.status !== 500){
         if(res.statusCode){
           const errorObj = {
@@ -109,7 +108,6 @@ const userSlice = createSlice({
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
       const res = action.payload;
-      console.log(res);
       if(res.statusCode){
         const errorObj = {
           errorType: 'updateProfileThunk',
