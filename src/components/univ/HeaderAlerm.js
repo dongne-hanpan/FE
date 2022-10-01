@@ -28,7 +28,7 @@ const HeaderAlerm = ({data}) => {
       return `${data.date} 일자의 신청이 수락되었습니다`
     } else if(data.alermType === 'deny'){
       return `${data.date} 일자의 신청이 거절되었습니다`
-    } else if(data.alermType === 'apply'){
+    } else if(data.alermType === 'apply'|| data.nickname !== undefined){
       return `${data.nickname} 님의 신청이 도착했습니다`
     }
   }
@@ -38,7 +38,7 @@ const HeaderAlerm = ({data}) => {
         {isChecked ? <></> : <AlermImg src={red} alt='checkToggle'/>}
       </AlermImgBox>
       <AlermMsg>
-        {data.date} 일자의 {data.returnMessage}
+        {alermRouter()}
       </AlermMsg>
       <AlermBtnBox>
         <ReuseBtn name={'userDetail'} direc={'horiz'} styleType={'small'} content={'정보'} clickEvent={checkApplicant} />

@@ -27,14 +27,14 @@ export const cancelApplyThunk = createAsyncThunk(
 //     console.log(res);
 //     return res;
 //   }
-// export const getAlermThunk = createAsyncThunk(
-//   "alerm/getAlermThunk",
-//   async () => {
-//     const cookie = getCookie('mytoken');
-//     const res = await getWithCookie("/api/match/request", cookie);
-//     return res;
-//   }
-// );
+export const getAlermThunk = createAsyncThunk(
+  "alerm/getAlermThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/match/request", cookie);
+    return res;
+  }
+);
 export const permitAlermThunk = createAsyncThunk(
   "alerm/permitAlermThunk",
   async (permitData) => {
@@ -72,9 +72,9 @@ const alermSlice = createSlice({
     });
     builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
     });
-    // builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-    //   state.alermData = action.payload;
-    // });
+    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
+      state.alermData = action.payload;
+    });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       const res = action.payload;
       if(res.statusCode){
