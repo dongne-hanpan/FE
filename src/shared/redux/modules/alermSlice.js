@@ -19,18 +19,11 @@ export const cancelApplyThunk = createAsyncThunk(
     return res;
   }
 );
-// export const getAlermThunk = createAsyncThunk(
-//   "alerm/getAlermThunk",
-//   async () => {
-//     const cookie = getCookie('mytoken');
-//     const res = await getWithCookie("/sub", cookie);
-//     console.log(res);
-//     return res;
-//   }
 export const getAlermThunk = createAsyncThunk(
   "alerm/getAlermThunk",
   async () => {
     const cookie = getCookie('mytoken');
+    // const res = await getWithCookie("/sub", cookie);
     const res = await getWithCookie("/api/match/request", cookie);
     return res;
   }
