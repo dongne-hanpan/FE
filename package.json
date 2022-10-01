@@ -12,6 +12,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "4.4.0",
+    "react-kakao-maps-sdk": "^1.1.4",
     "react-redux": "8.0.2",
     "react-router": "6.3.0",
     "react-router-dom": "6.3.0",
@@ -23,9 +24,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "securestart": "HTTPS=true SSL_CRT_FILE=_wildcard.example.com+2.pem SSL_KEY_FILE=_wildcard.example.com+2-key.pem HOST=0.0.0.0 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "deploy": "aws s3 sync ./build s3://dongne-fe --profile=ingjun",
     "deploy": "aws s3 sync ./build s3://dongne-fe --profile=ingjun"
   },
   "eslintConfig": {

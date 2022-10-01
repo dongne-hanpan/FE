@@ -14,13 +14,13 @@ const GlobalStyle = createGlobalStyle`
     }
     .App {
         position: relative;
+        width: 100vw;
+        height: 100vh;
     }
     body {
         margin: 0px;
         background-color: ${({theme}) => theme.colors.background};
-        &::-webkit-scrollbar {
-            display: none;
-        }
+        overflow: hidden;
     }
     h1{
         margin: 0px;
@@ -47,11 +47,6 @@ const GlobalStyle = createGlobalStyle`
 `
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
-    // <ThemeProvider theme={theme}>
-    //     <App />
-    // </ThemeProvider>
-
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <GlobalStyle />

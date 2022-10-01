@@ -2,11 +2,23 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ReuseProfile from '../reusable/ReuseProfile';
+import ReuseBadge from '../reusable/ReuseBadge';
 
 
 function ChatBox({data}) {
   const navigate = useNavigate();
   const nowChatId = useParams().match_id;
+  const chatStatus = data.matchStatus;
+
+  const convertChatStatus = () => {
+    if(chatStatus === 'recruit'){
+      return '모집 중';
+    } else if(chatStatus === 'reserved'){
+      return '모집 완료';
+    } else if(chatStatus === 'done'){
+      return '완료';
+    }
+  }
 
   const moveToChatRoom = () => {
     navigate(`/chat/${data.chatId}`);
@@ -14,6 +26,9 @@ function ChatBox({data}) {
   return (
     <ChatBoxComp isNow={parseInt(nowChatId) === data.chatId} onClick={moveToChatRoom}>
       <ChatInfo>
+        <BdgBox>
+          <ReuseBadge bdgType={'status'} content={convertChatStatus()}/>
+        </BdgBox>
         <ChatDate isNow={parseInt(nowChatId) === data.chatId}>{data.date}</ChatDate>
         <ChatPlace isNow={parseInt(nowChatId) === data.chatId}>{data.place}</ChatPlace>
       </ChatInfo>
@@ -45,6 +60,10 @@ const ChatInfo = styled.div`
   justify-content: space-between;
   align-items: left;
 `;
+const BdgBox = styled.div`
+  width: 70px;
+  margin-bottom: 2px;
+`
 const ChatDate = styled.div`
   margin-bottom: 4px;
   color: ${({theme, isNow}) => isNow ? theme.colors.background_light : theme.colors.black};

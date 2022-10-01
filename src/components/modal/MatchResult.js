@@ -1,66 +1,62 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { submitCommentThunk, submitResultThunk } from '../../shared/redux/modules/chatSlice';
-import Result from '../chatPage/Results';
+import styled, { css } from 'styled-components';
+import { submitMyResultThunk } from '../../shared/redux/modules/chatSlice';
+import { getLocal } from '../../shared/axios/local';
+import { clearModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
-import {getLocal} from '../../shared/axios/local';
-import { clearModal } from '../../shared/redux/modules/modalSlice';
 
 
 const MatchResult = () => {
   const dispatch = useDispatch();
-  const modalData = useSelector((state) => state.modal.modalData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const modalData = useSelector((state) => state.modal.modalData);
+  const scrollComp = useRef(null);
   const myScore = useRef(null);
-  const regionAndSports = getLocal('regionAndSports');
-  const sportsEn = regionAndSports.sportsEn;
+  const sportsEn = getLocal('sports').sportsEn;
+  const myResultMsg = useRef(null);
+  const [myResultErr, setResultErr] = useState('none');
   
   const submitResult = () => {
-    // 유효성 검사는 나중에
     // 나의 결과 입력
     const myScoreValue = myScore.current.value;
-    const resultData = {
-      match_id: chatData.match_id,
-      myScore: myScoreValue
-    }
-    dispatch(submitResultThunk(sportsEn,resultData));
-
-    // 상대 후기 입력
-    const reviews = Array.from(document.getElementsByClassName('review'));
-    const manners = Array.from(document.getElementsByClassName('manner'));
-    for(let i=0;i<reviews.length;i++){
-      const reviewData = {
-        match_id: chatData.match_id,
-        nickname: chatData.userListInMatch[i+1].nickname,
-        comment: reviews[i].value,
-        mannerPoint: manners[i].value
-      };
-      dispatch(submitCommentThunk(reviewData));
+    if(myScoreValue !== '' && 0 <= myScoreValue && myScoreValue <= 300){
+      myResultMsg.current.innerText = '';
+      setResultErr('none');
+      const matchId =  chatData.match_id + '';
+      const myResultData = {
+        "sports": sportsEn,
+        "match_id": matchId,
+        "myScore": myScoreValue,
+      }
+      dispatch(submitMyResultThunk(myResultData));
+    } else{
+      setResultErr('danger');
+      myResultMsg.current.innerText = '점수 범위를 벗어났습니다';
+      return
     }
     dispatch(clearModal());
   }
   
   return(
     <ModalResultComp>
-      <MatchDateTimePlace>
-        <MatchDay>{chatData.date}<MatchTime>{chatData.time}</MatchTime></MatchDay>
-        <MatchPlace>{chatData.place}</MatchPlace>
-      </MatchDateTimePlace>
+      <MatchCommentHeader>
+        <SportsImg src={modalData.sportsImage} alt='sports' />
+        <MatchDateTimePlace>
+          <MatchDay>{chatData.date}</MatchDay>
+          <MatchTime>{chatData.time}</MatchTime>
+          <MatchPlace>{chatData.place}</MatchPlace>
+        </MatchDateTimePlace>
+      </MatchCommentHeader>
 
       <ResultFormContainer>
         <Sep> - - - - - - - - - - - -  나의 결과 입력  - - - - - - - - - - - -</Sep>
-          <InputTitleBox>
-            <InputTitle>나의 점수</InputTitle>
-          </InputTitleBox>
-          <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
-          {modalData.reservedPeople.map((each) => {
-            console.log(each);
-            if(each.nickname !== chatData.writer){
-              return <Result key={each.nickname} data={each}/>
-            }
-          })}
+        <InputTitleBox ref={scrollComp}>
+          <InputTitle>나의 점수<ErrMessage ref={myResultMsg} status={myResultErr}></ErrMessage></InputTitle>
+        </InputTitleBox>
+        <ReuseInput injRef={myScore} injType={'number'} placeholderValue={'0 ~ 300점 (숫자 만 표기) '} />
+        <Sep> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</Sep>
       </ResultFormContainer>
       <ReuseBtn styleType={'stretch'} content={'완료'} clickEvent={submitResult} />
     </ModalResultComp>
@@ -76,8 +72,12 @@ const ModalResultComp = styled.section`
   align-items: center;
   margin-top: 30px;
 `
+const MatchCommentHeader = styled.article`
+  display: flex;
+  margin-bottom: 30px;
+`
 const MatchDateTimePlace = styled.div`
-  width: 100%;
+  width: 220px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -85,13 +85,12 @@ const MatchDateTimePlace = styled.div`
 `
 const MatchDay = styled.div`
   width: 100%;
-  margin-bottom: 10px;
-  font-size: ${({theme}) => theme.fontSize.font_40};
+  margin-bottom: 6px;
+  font-size: ${({theme}) => theme.fontSize.font_36};
 `
-const MatchTime = styled.span`
+const MatchTime = styled.div`
   width: 100%;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   font-size: ${({theme}) => theme.fontSize.font_26};
 `
 const MatchPlace = styled.div`
@@ -99,7 +98,12 @@ const MatchPlace = styled.div`
   display: flex;
   font-size: ${({theme}) => theme.fontSize.font_32};
 `
-
+const SportsImg = styled.img`
+  width: 130px;
+  height: auto;
+  margin-right: 14px;
+  border-radius: 2rem 1rem 1rem 0rem;
+`
 const Sep = styled.div`
   width: 100%;
   display: flex;
@@ -109,7 +113,7 @@ const Sep = styled.div`
 `
 
 const ResultFormContainer = styled.div`
-  height: 330px;
+  height: 240px;
   margin-bottom: 20px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -127,4 +131,25 @@ const InputTitleBox = styled.div`
 const InputTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_18};
   font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const ErrMessage = styled.span`
+  margin-left: 10px;
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  ${({status, theme}) => {
+    if(status === 'success'){
+      return css`
+      display: inline;
+      color: ${theme.colors.green};
+      `
+    } else if(status === 'danger'){
+      return css`
+      display: inline;
+      color: ${theme.colors.red_light};
+      `
+    } else if(status === 'none'){
+      return css`
+      display: none;
+      `
+    }
+  }}
 `

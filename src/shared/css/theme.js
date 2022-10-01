@@ -4,15 +4,18 @@ const colors = {
   black: "#000000",
   core: "#0373F3",
   skyblue: "#8ACCE4",
+  background_deep: "#f3eac6",
   background: "#F5EFD7",
   background_light: "#FFFCF1",
   //point color
   red: "#CC0000",
   green: "#41CC00",
+  green_pale: "#91d473",
   yellow: "#FFC700",
   // addtional color
   dark: "#6d6d6d71",
   darkgray: "#767676",
+  deepdarkgray: "#323237",
   gray: "#b5b3ac",
   red_light: "#ff0000",
   red_pale: "#ffa2a2",
@@ -22,6 +25,7 @@ const colors = {
 
 const fontSize = {
   font_40: calcRem(40),
+  font_36: calcRem(36),
   font_32: calcRem(32),
   font_26: calcRem(26),
   font_24: calcRem(24),

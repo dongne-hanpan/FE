@@ -1,24 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWithCookie, postWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
+export const signupUserThunk = createAsyncThunk(
+  "user/signupUserThunk",
+  async (user_data) => {
+    const res = await postWithoutCookie("/api/auth/signup", user_data);
+    return res
+  }
+);
 export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/login", user_data);
     return res;
-  }
-);
-export const signupUserThunk = createAsyncThunk(
-  "user/signupUserThunk",
-  async (user_data) => {
-    const res = await postWithoutCookie("/api/auth/signup", user_data);
-    if(res.status === 201){
-      return res.data;
-    } else{
-      return res.data;
-    }
   }
 );
 export const refreshUserThunk = createAsyncThunk(
@@ -45,62 +41,66 @@ export const updateProfileThunk = createAsyncThunk(
     return res;
   }
 );
-export const getAlermThunk = createAsyncThunk(
-  "user/getAlermThunk",
-  async () => {
-    const cookie = getCookie('mytoken');
-    const res = await getWithCookie("/api/match/request", cookie);
-    return res;
-  }
-);
-export const permitAlermThunk = createAsyncThunk(
-  "user/permitAlermThunk",
-  async (permitData) => {
-    const cookie = getCookie('mytoken');
-    const res = await postWithCookie("/api/match/permit", permitData, cookie);
-    return res;
-  }
-);
-
 
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     userData: {},
-    userAlerm:[]
+    error:{}
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
-      console.log('signup completed');
     });
     builder.addCase(loginUserThunk.fulfilled,(state, action) => {
-      if(action.payload.status !== 401){
-        console.log('login completed');
-        const data = action.payload;
-        const accessToken = data.accessToken;
-        document.cookie = `mytoken=${accessToken}; path=/;`;
-        const newUserData = {
-          username: data.username,
-          nickname: data.nickname,
-          profileImage: data.profileImage,
-        };
-        state.userData = newUserData;
-        console.log(state.userData);
-      } else{
-        alert('로그인 실패했습니다');
+      const res = action.payload;
+        console.log(res);
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'loginUserThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.userId,
+            username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
       }
     });
     builder.addCase(refreshUserThunk.fulfilled,(state,action) => {
-        console.log('refresh completed');
-        const data = action.payload;
-        const newUserData = {
-          username: data.username,
-          nickname: data.nickname,
-          profileImage: data.profileImage,
-        };
-        state.userData = newUserData;
+      const res = action.payload;
+      if(res.status !== 500){
+        if(res.statusCode){
+          deleteCookie('mytoken');
+          const errorObj = {
+            errorType: 'refreshUserThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const data = action.payload;
+          const newUserData = {
+            userId: res.userId,
+            username: data.username,
+            nickname: data.nickname,
+            profileImage: data.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
+      }else{
+        deleteCookie('mytoken');
+      }
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
       console.log('logout completed');
@@ -108,15 +108,17 @@ const userSlice = createSlice({
       state.userData = {};
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
-      console.log('post image completed');
-      state.userData = {...state.userData, profileImage:action.payload}
-    });
-    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-      state.userAlerm = action.payload;
-    });
-    builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
-      console.log('permit completed');
-      state.userAlerm = action.payload;
+      const res = action.payload;
+      console.log(res);
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'updateProfileThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }else{
+        state.userData = {...state.userData, profileImage:action.payload}
+      }
     });
   }
 });

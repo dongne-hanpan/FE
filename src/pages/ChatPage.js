@@ -1,30 +1,85 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { getCookie } from '../shared/axios/cookie';
+import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const ChatPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const chatData = useSelector((state) => state.chat.nowChatData);
+  const chatStatus = useSelector((state) => state.chat.chatStatus);
+  const chatError = useSelector((state) => state.chat.error);
 
   useEffect(() => {
-    dispatch(getChatDataThunk(nowChatId))
-  },[nowChatId])
+    if(nowChatId !== undefined){
+      dispatch(getChatDataThunk(nowChatId));
+    }
+  },[nowChatId,dispatch])
+
+  useEffect(() => {
+    //성공 시
+    if(chatStatus.statusType === 'reservedChatThunk'){
+      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+      dispatch(clearChatStatus());
+    }
+    if(chatStatus.statusType === 'submitMyResultThunk'){
+      dispatch(setDialogue({dialType: 'confirmResult'}));
+      dispatch(clearChatStatus());
+    }
+    if(chatStatus.statusType === 'submitCommentThunk'){
+      dispatch(setDialogue({dialType: 'confirmComment'}))
+      dispatch(clearChatStatus());
+    }
+    if(chatStatus.statusType === 'leaveChatThunk'){
+      navigate(`/chat`);
+      dispatch(clearChatStatus());
+      dispatch(clearDialogue());
+    }
+    //에러 시
+    if(chatError.errorType === 'getChatDataThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
+      } else if(chatError.statusCode === 404){
+        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'submitMyResultThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyResultAgain'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'submitCommentThunk'){
+      if(chatError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyCommentAgain'}))
+      }
+      dispatch(clearChatError());
+    }
+    if(chatError.errorType === 'leaveChatThunk'){
+      if(chatError.statusCode === 404){
+        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      }
+      dispatch(clearChatError());
+    }
+  },[chatData, chatError])
 
   //userdata 없으면 돌아가
-  const navigate = useNavigate();
   useEffect(() => {
-    if(!userData.username){
+    const cookie = getCookie('mytoken');
+    if(!cookie && !userData.username){
       navigate('/')
     }
-  },[userData])
+  },[userData, navigate])
 
   return (
     <MainPage>
@@ -42,7 +97,7 @@ const ChatPage = () => {
           </ChatPartici>
         </ChatHead>
         {nowChatId ? 
-        <ChatContainer chatStatus={chatData.matchStatus} chatContents={chatData.chatContents} />
+        <ChatContainer />
         :<></>}
       </ChatNow>
     </MainPage>

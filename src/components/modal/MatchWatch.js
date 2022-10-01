@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import { contactHostThunk } from '../../shared/redux/modules/matchSlice';
+import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import { contactHostThunk } from '../../shared/redux/modules/alermSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
@@ -28,7 +28,7 @@ const MatchWatch = () => {
   }
 
   const copyPlaceDetail = async() => {
-    const placeDetail = modalData.matchPlaceDetail;
+    const placeDetail = modalData.placeDetail;
     await navigator.clipboard.writeText(placeDetail);
     alert('주소가 복사되었습니다');
   }
@@ -42,11 +42,15 @@ const MatchWatch = () => {
     return false;
   }
   const contactToHost = () => {
-    if(checkParticipant() === false){
-      dispatch(contactHostThunk(modalData.match_id));
-      dispatch(setDialogue({dialType: 'confirmApply', matchId: modalData.match_id}));
+    if(userData.nickname !== undefined){
+      if(checkParticipant() === false){
+        dispatch(contactHostThunk(modalData.match_id));
+      }else{
+        navigate(`/chat/${modalData.match_id}`)
+        dispatch(clearModal());
+      }
     }else{
-      navigate(`/chat/${modalData.match_id}`)
+      dispatch(setDialogue({dialType: 'confirmLogin'}))
     }
   };
   return(
@@ -57,7 +61,7 @@ const MatchWatch = () => {
           <MatchTime>{modalData.time}</MatchTime>
           <MatchPlace>
             <Place>{modalData.place}
-            <PlaceIcon>info
+            <PlaceIcon className="fa-solid fa-circle-info">
               <PlaceDetail>{modalData.placeDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
             </PlaceIcon>
             </Place>
@@ -84,11 +88,7 @@ const MatchWatch = () => {
           </MatchIntakeNum>
           /{modalData.matchIntakeFull} 명
         </MatchIntake>
-        {
-          modalData.hostNickname !== userData.nickname ?
-          <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
-          :<ReuseBtn styleType={'stretch'} content={'수정하기'} />
-        }
+        <ReuseBtn styleType={'stretch'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
       </MatchContact>
     </ModalWatchComp>
   )
@@ -137,31 +137,32 @@ const MatchPlace = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_32};
 `
 const Place = styled.div`
-`
-const PlaceIcon = styled.span`
   position: relative;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  border-radius: 2rem;
+  cursor: pointer;
+`
+const PlaceIcon = styled.i`
   margin-left: 7px;
-  background-color: ${({theme}) => theme.colors.background_light};
-  font-size: ${({theme}) => theme.fontSize.font_12};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
+  font-size: ${({theme}) => theme.fontSize.font_22};
 `
 const PlaceDetail = styled.div`
   position: absolute;
-  top: -2px;
+  top: -4px;
   left: 0px;
   width: 200px;
   min-height: 40px;
-  display: none;
+  opacity: 0;
   padding: 10px;
   border-radius: 0.5rem;
   background-color: ${({theme}) => theme.colors.background_light};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+  font-family: 'none';
+  cursor: default;
+  transition: opacity 0.3s ease-in-out;
   ${PlaceIcon}:hover &{
-    display: inline;
-    font-size: ${({theme}) => theme.fontSize.font_12};
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+
   }
 `
 const CopyBtn = styled.span`

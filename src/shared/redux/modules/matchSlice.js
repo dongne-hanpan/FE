@@ -1,8 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteWithCookie, getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
+import { getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
 import { getCookie } from '../../axios/cookie';
 
 
+export const loadAllMatchThunk = createAsyncThunk(
+  "match/loadAllMatchThunk",
+  async(sports) => {
+    const res = await getwithoutCookie(`/api/match/list/${sports}`);
+    return res;
+  }
+);
 export const loadMatchThunk = createAsyncThunk(
   "match/loadMatchThunk",
   async(additionalUrl) => {
@@ -33,14 +40,7 @@ export const updateMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const contactHostThunk = createAsyncThunk(
-  "match/contactHostThunk",
-  async(match_id) => {
-    const cookie = getCookie('mytoken');
-    const res = await getWithCookie(`/api/match/enter/${match_id}`, cookie);
-    return res;
-  }
-);
+
 
 const matchSlice = createSlice({
   name: "matchSlice",
@@ -54,13 +54,14 @@ const matchSlice = createSlice({
     },
   },
   extraReducers:(builder) => {
+    builder.addCase(loadAllMatchThunk.fulfilled, (state, action) => {
+      state.matches = action.payload;
+    });
     builder.addCase(loadMatchThunk.fulfilled, (state, action) => {
       state.matches = action.payload;
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {
       const {matchList, ...rest} = action.payload;
-      console.log(rest);
-      console.log(matchList);
       state.elseData = rest;
       state.matches = matchList;
     });
@@ -70,9 +71,6 @@ const matchSlice = createSlice({
     });
     builder.addCase(updateMatchThunk.fulfilled, (state, action) => {
       console.log('update match completed');
-    });
-    builder.addCase(contactHostThunk.fulfilled, (state, action) => {
-      console.log('enter completed');
     });
   }
 });

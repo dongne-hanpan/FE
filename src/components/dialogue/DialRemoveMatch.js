@@ -1,27 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
 import { leaveChatThunk } from '../../shared/redux/modules/chatSlice';
-import { getLocal } from '../../shared/axios/local';
 
 
 const DialRemoveMatch = () => {
-  const navigate = useNavigate();
-  const regionAndSports = getLocal('regionAndSports');
-  const region = regionAndSports.region;
-  const sports = regionAndSports.sports;
   const dispatch = useDispatch();
   const dialData = useSelector ((state) => state.modal.dialogueData);
   const cancel = () => {
     dispatch(clearDialogue());
   }
-  const remove = async() => {
-    await dispatch(leaveChatThunk(dialData.matchId));
-    dispatch(clearDialogue());
-    navigate(`/${region}/${sports}`);
+  const leaveChatRoom = () => {
+    dispatch(leaveChatThunk(dialData.matchId));
   }
   return(
     <>
@@ -34,7 +26,7 @@ const DialRemoveMatch = () => {
         }
       </DialMessages>
       <DialBtns>
-        <ReuseBtn styleType={'danger'} content={'삭제'} clickEvent={remove} />
+        <ReuseBtn styleType={'danger'} content={'나가기'} clickEvent={leaveChatRoom} />
         <ReuseBtn styleType={'normal'} content={'취소'} clickEvent={cancel} />
       </DialBtns>
     </>

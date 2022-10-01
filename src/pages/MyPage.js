@@ -9,32 +9,47 @@ import MatchCard from '../components/sportsPage/MatchCard';
 import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
-import { setModal } from '../shared/redux/modules/modalSlice';
+import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
+import { getCookie } from '../shared/axios/cookie';
 
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const authError = useSelector((state) => state.user.error);
   const myMatchList = useSelector((state) => state.match.matches);
   const myPageData = useSelector((state) => state.match.elseData);
-  const regionAndSports = getLocal('regionAndSports');
-  const sportsEn = regionAndSports.sportsEn;
+  let sportsEn = null;
+
   //match 받아오기
   useEffect(() => {
-    console.log('get my matches!!!');
-    const additionalUrl = `/${sportsEn}`;
-    dispatch(loadMyMatchThunk(additionalUrl));
+    if(getLocal('sports') !== null){
+      console.log('get my matches!!!');
+      sportsEn = getLocal('sports').sportsEn;
+      const additionalUrl = `/${sportsEn}`;
+      dispatch(loadMyMatchThunk(additionalUrl));
+    }
   },[]);
 
   useEffect(() => {
-    if(!userData.username){
+    if(authError.errorType === 'updateProfileThunk'){
+      if(authError.statusCode === 500){
+        dispatch(setDialogue({dialType: 'denyFileUpload'}));
+      }
+    }
+    const cookie = getCookie('mytoken');
+    if(!cookie && !userData.username){
       navigate('/')
     }
-  },[userData])
+  },[userData,authError,navigate])
+
 
   const showChageProfileModal = () => {
     dispatch(setModal({modalType: 'changeProfile'}));
+  }
+  const goChatPage = () => {
+    navigate('/chat');
   }
   const doLogout = () => {
     dispatch(logoutUserThunk());
@@ -47,6 +62,7 @@ const MyPage = () => {
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={myPageData.level} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
         <RankArticle>
@@ -59,7 +75,6 @@ const MyPage = () => {
       <MatchContainer>
         <MatchContainerHeader>
           <MatchContainerHeaderTitle>나의 매치</MatchContainerHeaderTitle>
-          <MatchContainerHeaderUsers>profile 컨테이너</MatchContainerHeaderUsers>
         </MatchContainerHeader>
         <MatchContainerBody>
           {myMatchList? myMatchList.map((each) => 
@@ -75,14 +90,15 @@ export default MyPage;
 
 const MainPage = styled.main`
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 30px;
-  overflow-y: scroll;
+  padding-bottom: 100px;
+  overflow: scroll;
   &::-webkit-scrollbar {
-    display: none;
+      display: none;
   }
 `
 const SportsAndRank = styled.section`
@@ -114,9 +130,6 @@ const MatchContainerHeader = styled.div`
 const MatchContainerHeaderTitle = styled.h2`
   font-size: ${({theme}) => theme.fontSize.font_32};
   font-weight: ${({theme}) => theme.fontWeight.bold};
-`
-const MatchContainerHeaderUsers = styled.div`
-  display: flex;
 `
 const MatchContainerBody = styled.ul`
   padding: 0px;

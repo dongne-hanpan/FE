@@ -1,35 +1,110 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAlermThunk, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
-import { setModal } from '../../shared/redux/modules/modalSlice';
+import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+// import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
 import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseReserved from '../reusable/ReuseReserved';
 import ReuseBadge from '../reusable/ReuseBadge';
+import { setLocal } from '../../shared/axios/local';
 
 //temp
 import logo from '../../asset/logo.png';
+import Sse from './Sse';
 
 
 const Header = () => {
+  console.log('here??')
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const userAlerm = useSelector((state) => state.user.userAlerm);
+  const authError = useSelector((state) => state.user.error);
+  const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
+  const [testAlerm, setTestAlerm] = useState([]);
+  const successCallback = (pos) => {
+    const crd = pos.coords;
+    const myLatLng = {
+      lat: crd.latitude,
+      lng: crd.longitude
+    }
+    setLocal('myLatLng', myLatLng)
+  }
+  const errorCallback = () => {
+    console.log('fail get my Location data')
+  }
 
-  console.log(userAlerm);
-  //새로고침 등으로 userData 값 사라지면, 
+  const getMyLocation = () => {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+  }
+  useEffect(() => {
+    getMyLocation();
+  },[])
+
+  //SSE
+  // useEffect(() => {
+  //   const BASE_URL = "http://3.34.142.119";
+  //   const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
+  //   if(userData.username !== undefined){
+  //     const eventSource = new EventSource(subscribeUrl, {
+  //       withCredentials: true,
+  //     });
+  //     eventSource.onopen = function(e){
+  //       console.log('SSE open success');
+  //       console.log('status from open',eventSource.readyState)
+  //     }
+  //     eventSource.onmessage = function(e) {
+  //       console.log(e);
+  //       console.log(JSON.parse(e.data));
+  //       console.log('status from msg',eventSource.readyState)
+  //     }
+  //     eventSource.onerror = function (e) {
+  //       console.log(JSON.parse(e.data))
+  //       console.log('status from error',eventSource.readyState)
+  //       eventSource.close();
+  //     }
+  //     eventSource.addEventListener("connect", function (e) {
+  //       const myAlerms = JSON.parse(e.data);
+  //       console.log('compare myAlerms and testAlerm', myAlerms,testAlerm)
+  //       if(myAlerms !== testAlerm){
+  //         setTestAlerm(myAlerms);
+  //       }
+  //     })
+  //     eventSource.addEventListener("request", function (e) {
+  //       const newMyAlerms = JSON.parse(e.data);
+  //       console.log(newMyAlerms)
+  //       console.log(testAlerm);
+  //       const neww = [...testAlerm, newMyAlerms];
+  //       console.log(neww);
+  //       setTestAlerm(neww);
+  //     })
+  //     return () => {
+  //       eventSource.close();
+  //     }
+  //   }
+  // },[userData])
+
+  //refresh 에러 핸들링
   useEffect(() => {
     const cookie = getCookie('mytoken');
+    if(userData.username === undefined && !cookie){
+      setTestAlerm([]);
+    }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-      dispatch(getAlermThunk());
+      // dispatch(getAlermThunk());
     }
-  },[userData,userAlerm])
+    if(authError.errorType === 'refreshUserThunk'){
+      if(authError.statusCode === 500 || authError.statusCode === 401){
+        dispatch(setDialogue({dialType: 'expireLogin'}))
+      }
+    }
+  },[userData, authError, dispatch])
+
 
   const goIndexPage = () => {
     navigate('/');
@@ -54,17 +129,23 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        { userAlerm.length > 0 ? 
-          userAlerm.map((each,params) => 
+        <Sse testAlerm={testAlerm} setTestAlerm={setTestAlerm} />
+        {/* { testAlerm.length > 0 ? 
+          testAlerm.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
-        }
+        } */}
+        {/* { alermData.length > 0 ? 
+          alermData.map((each,params) => 
+            <HeaderAlerm key={params} data={each} />
+          ): <div>'로그인이 필요합니다'</div>
+        } */}
       </HeaderAlermSection>
 
       <HeaderUserSection>
         <UserGreet>
           <UserGreetNormal> {userData.region ? userData.region:''} </UserGreetNormal>
-          <UserGreetNormal>
+          <UserGreetNormal onClick={goMyPage}>
             {userData.nickname ? 
             <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
             :'로그인 해주세요'
@@ -95,7 +176,7 @@ export default Header;
 
 
 const HeaderComp = styled.header`
-  // width: 100vw;
+  width: 100vw;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -110,11 +191,11 @@ const HeaderComp = styled.header`
 `
 const HeaderLogoSection = styled.article`
   flex-grow: 3;
-  cursor: pointer;
-`
-const HeaderLogo = styled.img`
+  `
+  const HeaderLogo = styled.img`
   height: 40px;
   margin: 0px 10px;
+  cursor: pointer;
 `
 const HeaderAlermSection = styled.article`
   min-width: 450px;
@@ -150,6 +231,7 @@ const UserGreetNormal = styled.div`
   margin-right: 10px;
   color: ${({theme}) => theme.colors.background};
   font-weight: ${({theme}) => theme.fontWeight.light};
+  cursor: pointer;
 `
 const UserName = styled.span`
   font-weight: ${({theme}) => theme.fontWeight.medium};

@@ -4,7 +4,7 @@ import ReuseInput from '../reusable/ReuseInput';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 
 
-const Result = ({data}) => {
+const Result = ({injRef, data}) => {
   return(
     <>
       <Sep> - - - - - - - - - - -  {data.nickname} 후기 입력  - - - - - - - - - - -</Sep>
@@ -12,7 +12,7 @@ const Result = ({data}) => {
         <InputTitle>{data.nickname} 님과의 매치는 어땠나요?</InputTitle>
       </InputTitleBox>
       <ReuseTextarea injClass={"review"} height={90} placeholderValue={`${data.nickname}님과의 매치 후기를 남겨주세요`} />
-      <InputTitleBox>
+      <InputTitleBox ref={injRef}>
         <InputTitle>{data.nickname} 님의 매너는 어땠나요?</InputTitle>
       </InputTitleBox>
       <ReuseInput injClass={"manner"} injType={'number'} placeholderValue={'10점 만점 (숫자 만 표기) '} />

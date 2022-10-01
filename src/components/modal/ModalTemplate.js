@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
-import ReuseBtn from '../reusable/ReuseBtn';
 import Deco from '../univ/Deco';
 import Login from '../login/Login';
 import Signup from '../login/Signup';
@@ -11,6 +10,7 @@ import MatchWatch from './MatchWatch';
 import MatchResult from './MatchResult';
 import UserWatch from './UserWatch';
 import ChangeProfile from './ChangeProfile';
+import MatchComment from './MatchComment';
 
 
 const ModalTemplate = () => {
@@ -18,9 +18,15 @@ const ModalTemplate = () => {
   const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
-      if(modalData.modalType === 'matchWrite' || modalData.modalType === 'matchResult' || modalData.modalType === 'changeProfile'){
+      if(modalData.modalType === 'matchWrite' 
+        || modalData.modalType === 'matchResult' 
+        || modalData.modalType === 'matchComment' 
+        || modalData.modalType === 'changeProfile'
+        ){
         dispatch(setDialogue({dialType: 'confirmRemove'}));
-      } else{
+      } else if(modalData.modalType === 'login' || modalData.modalType === 'signup'){
+        dispatch(setDialogue({dialType: 'confirmLeave'}));
+      }else{
         dispatch(clearModal());
       }
     }
@@ -37,6 +43,8 @@ const ModalTemplate = () => {
       return <MatchWatch />
     } else if(modalData.modalType === 'matchResult'){
       return <MatchResult />
+    } else if(modalData.modalType === 'matchComment'){
+      return <MatchComment />
     } else if(modalData.modalType === 'userWatch'){
       return <UserWatch />
     } else if(modalData.modalType === 'changeProfile'){
@@ -47,7 +55,7 @@ const ModalTemplate = () => {
   return(
     <ModalComp aria-label='modalToggle' onClick={removeModal}>
       <ModalOutBtn>
-        <ReuseBtn name={'modalToggle'} styleType={'shrink'} content={'X'} clickEvent={removeModal} />
+      <IconOut className="fa-regular fa-circle-xmark" aria-label="modalToggle" onClick={removeModal} />
       </ModalOutBtn>
       <ModalSection>
         <Deco />
@@ -71,11 +79,18 @@ const ModalComp = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${({theme}) => theme.colors.dark};
+  z-index:2;
 `
 const ModalOutBtn = styled.div`
   position: absolute;
   top: 30px;
   right: 50px;
+`
+const IconOut = styled.i`
+  padding: 6px;
+  color: ${({theme}) => theme.colors.green};
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  cursor: pointer;
 `
 const ModalSection = styled.div`
   position: relative;

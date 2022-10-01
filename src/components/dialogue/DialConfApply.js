@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
 import { clearAll } from '../../shared/redux/modules/modalSlice';
+import { clearStatus } from '../../shared/redux/modules/alermSlice';
 
 
 const DialConfApply = () => {
   const dispatch = useDispatch();
   const cancel = () => {
+    dispatch(clearStatus());
     dispatch(clearAll());
   }
   return(
