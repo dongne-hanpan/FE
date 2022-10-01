@@ -158,3 +158,57 @@ const ChatPlace = styled.div`
 const ChatPartici = styled.div`
   display: flex;
 `;
+
+
+const MainPage = styled.main`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+const ChatNow = styled.section`
+  position: relative;
+  width: 440px;
+  height: 690px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  border: 3px solid ${({theme}) => theme.colors.skyblue};
+  border-radius: 1rem;
+`
+const ChatHead = styled.article`
+  height: 94px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 10px;
+  border-bottom: 2px solid ${({theme}) => theme.colors.skyblue};
+  border-radius: 0.8rem 0.8rem 0rem 0rem;
+  background-color: ${({theme}) => theme.colors.core};
+`
+const ChatInfo = styled.div`
+`;
+const ChatDate = styled.div`
+  margin-bottom: 6px;
+  color: ${({theme}) => theme.colors.background};
+  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-weight: ${({theme}) => theme.fontWeight.semi_bold};
+`
+const ChatTime = styled.span`
+  margin-left: 10px;
+  color: ${({theme}) => theme.colors.skyblue};
+  font-size: ${({theme}) => theme.fontSize.font_18};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const ChatPlace = styled.div`
+  color: ${({theme}) => theme.colors.background};
+  font-size: ${({theme}) => theme.fontSize.font_22};
+  font-weight: ${({theme}) => theme.fontWeight.medium};
+`
+const ChatPartici = styled.div`
+  display: flex;
+`;

@@ -13,10 +13,11 @@ import DialTemplate from './components/dialogue/DialTemplate';
 function App() {
   const modalData = useSelector((state) => state.modal.modalData);
   const dialogueData = useSelector((state) => state.modal.dialogueData);
-
+  console.log('배포2')
   return (
     <div className="App">
       <Router>
+        <Header />
         <Header />
         <Routes>
           <Route path='/' element={<IndexPage />} />
@@ -24,7 +25,11 @@ function App() {
           <Route path='/chat' element={<ChatPage />} />
           <Route path='/chat/:match_id' element={<ChatPage />} />
           <Route path='/:region/:sports' element={<SportsPage />} />
+          <Route path='/chat/:match_id' element={<ChatPage />} />
+          <Route path='/:region/:sports' element={<SportsPage />} />
         </Routes>
+        {modalData.modalType ? <ModalTemplate />:<></>}
+        {dialogueData.dialType ? <DialTemplate />:<></>}
         {modalData.modalType ? <ModalTemplate />:<></>}
         {dialogueData.dialType ? <DialTemplate />:<></>}
       </Router>
