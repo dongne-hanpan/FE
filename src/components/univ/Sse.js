@@ -3,8 +3,59 @@ import { useSelector } from 'react-redux';
 import HeaderAlerm from './HeaderAlerm';
 
 const Sse = ({testAlerm, setTestAlerm}) => {
-  console.log('refresh????', testAlerm)
   const userData = useSelector((state) => state.user.userData);
+  console.log('refresh????', testAlerm)
+  useEffect(() => {
+    console.log('init')
+  },[]);
+    
+  useEffect(() => {
+    console.log(testAlerm)
+  },[testAlerm]);
+
+  const connectCallback = (e) => {
+    const myAlerms = JSON.parse(e.data);
+    console.log('connected, compare myAlerms and testAlerm', myAlerms,testAlerm)
+    if(myAlerms !== testAlerm){
+      setTestAlerm(myAlerms);
+    }
+  };
+  const requestCallback = (e) => {
+    const data = JSON.parse(e.data);
+    let newMyAlerms = null;
+    if(data.nickname !== undefined){
+      newMyAlerms = {
+        alermType: 'apply',
+        ...data
+      };
+    }
+    console.log('request', newMyAlerms)
+    console.log('testAlerm',testAlerm);
+    const neww = [...testAlerm, newMyAlerms];
+    console.log('new',neww);
+    setTestAlerm(neww);
+  }
+  const messageCallback = (e) => {
+    const data = JSON.parse(e.data);
+    let newMyAlerms = null;
+    if(data.returnMessage === "신청이 수락되었습니다."){
+      newMyAlerms = {
+        alermType: 'permit',
+        ...data
+      };
+    } else{
+      newMyAlerms = {
+        alermType: 'deny',
+        ...data
+      };
+    }
+    console.log('testAlerm',testAlerm);
+    console.log('newMyAlerms',newMyAlerms);
+    console.log('message, compare myAlerms and testAlerm', newMyAlerms,testAlerm)
+    if([newMyAlerms] !== testAlerm){
+      setTestAlerm([newMyAlerms]);
+    }
+  }
 
   //SSE
   useEffect(() => {
@@ -19,73 +70,23 @@ const Sse = ({testAlerm, setTestAlerm}) => {
         console.log('SSE open success');
         console.log('status from open',eventSource.readyState)
       }
-      // eventSource.onmessage = function(e) {
-      //   console.log(e);
-      //   console.log(JSON.parse(e.data));
-      //   console.log('status from msg',eventSource.readyState)
-      // }
       eventSource.onerror = function (e) {
         console.log(JSON.parse(e.data))
         console.log('status from error',eventSource.readyState)
         eventSource.close();
       }
-      eventSource.addEventListener("connect", function (e) {
-        const myAlerms = JSON.parse(e.data);
-        console.log('connected, compare myAlerms and testAlerm', myAlerms,testAlerm)
-        if(myAlerms !== testAlerm){
-          setTestAlerm(myAlerms);
-        }
-      })
-      eventSource.addEventListener("request", function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-        let newMyAlerms = null;
-        if(data.nickname !== undefined){
-          newMyAlerms = {
-            alermType: 'apply',
-            ...data
-          };
-        }
-        console.log('request', newMyAlerms)
-        console.log('testAlerm',testAlerm);
-        const neww = [...testAlerm, newMyAlerms];
-        console.log('new',neww);
-        setTestAlerm(neww);
-      })
-      eventSource.addEventListener("message", function (e) {
-        const data = JSON.parse(e.data);
-        let newMyAlerms = null;
-        if(data.returnMessage === "신청이 수락되었습니다."){
-          newMyAlerms = {
-            alermType: 'permit',
-            ...data
-          };
-        } else{
-          newMyAlerms = {
-            alermType: 'deny',
-            ...data
-          };
-        }
-        console.log('testAlerm',testAlerm);
-        console.log('newMyAlerms',newMyAlerms);
-        console.log('message, compare myAlerms and testAlerm', newMyAlerms,testAlerm)
-        if([newMyAlerms] !== testAlerm){
-          setTestAlerm([newMyAlerms]);
-        }
-      })
+      eventSource.addEventListener("connect", connectCallback);
+      eventSource.addEventListener("request", requestCallback)
+      eventSource.addEventListener("message", messageCallback)
       return () => {
+        eventSource.removeEventListener('connect', connectCallback);
+        eventSource.removeEventListener('request', requestCallback);
+        eventSource.removeEventListener('message', messageCallback);
         eventSource.close();
       }
     }
   },[userData])
 
-  useEffect(() => {
-    console.log('init')
-  },[]);
-    
-  useEffect(() => {
-    console.log(testAlerm)
-  },[testAlerm]);
 
 
   return(

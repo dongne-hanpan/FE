@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from './components/univ/Header';
@@ -13,7 +13,9 @@ import DialTemplate from './components/dialogue/DialTemplate';
 function App() {
   const modalData = useSelector((state) => state.modal.modalData);
   const dialogueData = useSelector((state) => state.modal.dialogueData);
-  console.log('배포2')
+  useEffect(() => {
+    console.log('배포2')
+  },[])
   return (
     <div className="App">
       <Router>
