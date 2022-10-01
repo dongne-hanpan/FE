@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
-import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
+// import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -15,9 +15,11 @@ import { setLocal } from '../../shared/axios/local';
 
 //temp
 import logo from '../../asset/logo.png';
+import Sse from './Sse';
 
 
 const Header = () => {
+  console.log('here??')
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
@@ -44,6 +46,49 @@ const Header = () => {
     getMyLocation();
   },[])
 
+  //SSE
+  // useEffect(() => {
+  //   const BASE_URL = "http://3.34.142.119";
+  //   const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
+  //   if(userData.username !== undefined){
+  //     const eventSource = new EventSource(subscribeUrl, {
+  //       withCredentials: true,
+  //     });
+  //     eventSource.onopen = function(e){
+  //       console.log('SSE open success');
+  //       console.log('status from open',eventSource.readyState)
+  //     }
+  //     eventSource.onmessage = function(e) {
+  //       console.log(e);
+  //       console.log(JSON.parse(e.data));
+  //       console.log('status from msg',eventSource.readyState)
+  //     }
+  //     eventSource.onerror = function (e) {
+  //       console.log(JSON.parse(e.data))
+  //       console.log('status from error',eventSource.readyState)
+  //       eventSource.close();
+  //     }
+  //     eventSource.addEventListener("connect", function (e) {
+  //       const myAlerms = JSON.parse(e.data);
+  //       console.log('compare myAlerms and testAlerm', myAlerms,testAlerm)
+  //       if(myAlerms !== testAlerm){
+  //         setTestAlerm(myAlerms);
+  //       }
+  //     })
+  //     eventSource.addEventListener("request", function (e) {
+  //       const newMyAlerms = JSON.parse(e.data);
+  //       console.log(newMyAlerms)
+  //       console.log(testAlerm);
+  //       const neww = [...testAlerm, newMyAlerms];
+  //       console.log(neww);
+  //       setTestAlerm(neww);
+  //     })
+  //     return () => {
+  //       eventSource.close();
+  //     }
+  //   }
+  // },[userData])
+
   //refresh 에러 핸들링
   useEffect(() => {
     // if(userData.username === undefined && !cookie){
@@ -51,7 +96,7 @@ const Header = () => {
     // }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-      dispatch(getAlermThunk());
+      // dispatch(getAlermThunk());
     }
     if(authError.errorType === 'refreshUserThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
@@ -84,11 +129,17 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        { alermData.length > 0 ? 
+        <Sse testAlerm={testAlerm} setTestAlerm={setTestAlerm} />
+        {/* { testAlerm.length > 0 ? 
+          testAlerm.map((each,params) => 
+            <HeaderAlerm key={params} data={each} />
+          ): <div>'로그인이 필요합니다'</div>
+        } */}
+        {/* { alermData.length > 0 ? 
           alermData.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
-        }
+        } */}
       </HeaderAlermSection>
 
       <HeaderUserSection>

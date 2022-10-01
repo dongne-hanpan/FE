@@ -8,6 +8,7 @@ const Sse = ({testAlerm, setTestAlerm}) => {
   //SSE
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
+    // const BASE_URL = "http://3.34.142.119";
     const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
     if(userData.username !== undefined){
       const eventSource = new EventSource(subscribeUrl, {
@@ -23,6 +24,7 @@ const Sse = ({testAlerm, setTestAlerm}) => {
       //   console.log('status from msg',eventSource.readyState)
       // }
       eventSource.onerror = function (e) {
+        console.log(JSON.parse(e.data))
         console.log('status from error',eventSource.readyState)
         eventSource.close();
       }
@@ -78,6 +80,15 @@ const Sse = ({testAlerm, setTestAlerm}) => {
       }
     }
   },[userData])
+
+  useEffect(() => {
+    console.log('init')
+  },[]);
+    
+  useEffect(() => {
+    console.log(testAlerm)
+  },[testAlerm]);
+
 
   return(
     <>
