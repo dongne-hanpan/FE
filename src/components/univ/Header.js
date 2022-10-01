@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
-// import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -25,7 +25,8 @@ const Header = () => {
   const authError = useSelector((state) => state.user.error);
   const alermData = useSelector((state) => state.alerm.alermData);
   const navigate = useNavigate();
-  const [testAlerm, setTestAlerm] = useState([]);
+  const cookie = getCookie('mytoken');
+
   const successCallback = (pos) => {
     const crd = pos.coords;
     const myLatLng = {
@@ -44,56 +45,16 @@ const Header = () => {
   useEffect(() => {
     getMyLocation();
   },[])
-
-  //SSE
+  // const [testAlerm, setTestAlerm] = useState([]);
   // useEffect(() => {
-  //   const BASE_URL = "http://3.34.142.119";
-  //   const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
-  //   if(userData.username !== undefined){
-  //     const eventSource = new EventSource(subscribeUrl, {
-  //       withCredentials: true,
-  //     });
-  //     eventSource.onopen = function(e){
-  //       console.log('SSE open success');
-  //       console.log('status from open',eventSource.readyState)
-  //     }
-  //     eventSource.onmessage = function(e) {
-  //       console.log(e);
-  //       console.log(JSON.parse(e.data));
-  //       console.log('status from msg',eventSource.readyState)
-  //     }
-  //     eventSource.onerror = function (e) {
-  //       console.log(JSON.parse(e.data))
-  //       console.log('status from error',eventSource.readyState)
-  //       eventSource.close();
-  //     }
-  //     eventSource.addEventListener("connect", function (e) {
-  //       const myAlerms = JSON.parse(e.data);
-  //       console.log('compare myAlerms and testAlerm', myAlerms,testAlerm)
-  //       if(myAlerms !== testAlerm){
-  //         setTestAlerm(myAlerms);
-  //       }
-  //     })
-  //     eventSource.addEventListener("request", function (e) {
-  //       const newMyAlerms = JSON.parse(e.data);
-  //       console.log(newMyAlerms)
-  //       console.log(testAlerm);
-  //       const neww = [...testAlerm, newMyAlerms];
-  //       console.log(neww);
-  //       setTestAlerm(neww);
-  //     })
-  //     return () => {
-  //       eventSource.close();
-  //     }
-  //   }
-  // },[userData])
+  //   console.log(testAlerm);
+  // },[testAlerm])
 
   //refresh 에러 핸들링
   useEffect(() => {
-    const cookie = getCookie('mytoken');
-    if(userData.username === undefined && !cookie){
-      setTestAlerm([]);
-    }
+    // if(userData.username === undefined && !cookie){
+    //   setTestAlerm([]);
+    // }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
       // dispatch(getAlermThunk());
@@ -129,13 +90,8 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        <Sse testAlerm={testAlerm} setTestAlerm={setTestAlerm} />
-        {/* { testAlerm.length > 0 ? 
-          testAlerm.map((each,params) => 
-            <HeaderAlerm key={params} data={each} />
-          ): <div>'로그인이 필요합니다'</div>
-        } */}
-        {/* { alermData.length > 0 ? 
+        {/* <Sse testAlerm={testAlerm} setTestAlerm={setTestAlerm} /> */}
+        { alermData && alermData.length >0 ? 
           alermData.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
@@ -144,7 +100,6 @@ const Header = () => {
 
       <HeaderUserSection>
         <UserGreet>
-          <UserGreetNormal> {userData.region ? userData.region:''} </UserGreetNormal>
           <UserGreetNormal onClick={goMyPage}>
             {userData.nickname ? 
             <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
