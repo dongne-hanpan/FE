@@ -18,18 +18,13 @@ function App() {
     <div className="App">
       <Router>
         <Header />
-        <Header />
         <Routes>
           <Route path='/' element={<IndexPage />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/chat' element={<ChatPage />} />
           <Route path='/chat/:match_id' element={<ChatPage />} />
           <Route path='/:region/:sports' element={<SportsPage />} />
-          <Route path='/chat/:match_id' element={<ChatPage />} />
-          <Route path='/:region/:sports' element={<SportsPage />} />
         </Routes>
-        {modalData.modalType ? <ModalTemplate />:<></>}
-        {dialogueData.dialType ? <DialTemplate />:<></>}
         {modalData.modalType ? <ModalTemplate />:<></>}
         {dialogueData.dialType ? <DialTemplate />:<></>}
       </Router>
