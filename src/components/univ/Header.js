@@ -15,9 +15,11 @@ import { setLocal } from '../../shared/axios/local';
 
 //temp
 import logo from '../../asset/logo.png';
+import Sse from './Sse';
 
 
 const Header = () => {
+  console.log('here??')
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
@@ -55,7 +57,7 @@ const Header = () => {
     // }
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-      dispatch(getAlermThunk());
+      // dispatch(getAlermThunk());
     }
     if(authError.errorType === 'refreshUserThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
@@ -93,7 +95,7 @@ const Header = () => {
           alermData.map((each,params) => 
             <HeaderAlerm key={params} data={each} />
           ): <div>'로그인이 필요합니다'</div>
-        }
+        } */}
       </HeaderAlermSection>
 
       <HeaderUserSection>
