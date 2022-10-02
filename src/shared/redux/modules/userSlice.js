@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, getwithoutCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
@@ -14,6 +14,13 @@ export const loginUserThunk = createAsyncThunk(
   "user/loginUserThunk",
   async (user_data) => {
     const res = await postWithoutCookie("/api/auth/login", user_data);
+    return res;
+  }
+);
+export const loginKakaoThunk = createAsyncThunk(
+  "user/loginKakaoThunk",
+  async (kakaoCode) => {
+    const res = await getwithoutCookie(`/user/kakao/callback?code=${kakaoCode}`);
     return res;
   }
 );
@@ -68,6 +75,29 @@ const userSlice = createSlice({
           const newUserData = {
             userId: res.userId,
             username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
+      }
+    });
+    builder.addCase(loginKakaoThunk.fulfilled,(state, action) => {
+      const res = action.payload;
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'loginKakaoThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.kakaoId,
+            username: res.kakaoId,
             nickname: res.nickname,
             profileImage: res.profileImage,
           };
