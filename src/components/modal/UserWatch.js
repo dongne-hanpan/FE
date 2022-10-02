@@ -19,7 +19,6 @@ const UserWatch = () => {
   useEffect(() => {
     getComments();
   },[])
-  const sportsList = ['볼링', '달리기', '테니스'];
 
   return(
     <UserWatchComp>
@@ -30,18 +29,6 @@ const UserWatch = () => {
             <Name>{userDetailData.nickname}</Name>
             <ReuseBadge bdgType={'rank'} content={userDetailData.userLevel}/>
           </NameAndBadge>
-          <SportsBadges>
-            {sportsList !== undefined ?
-              sportsList.map((each) => 
-                <ReuseBadge key={each} bdgType={'sports'} content={each} />
-              ):<></>
-            }
-            {/* {userDetailData.sports !== undefined ?
-              userDetailData.sports.map((each) => 
-                <ReuseBadge key={each} bdgType={'sports'} content={each} />
-              ):<></>
-            } */}
-          </SportsBadges>
         </UserInfoDetail>
       </UserInfo>
       <UserRank>
@@ -91,12 +78,6 @@ const Name = styled.div`
   margin-right: 10px;
   font-size: ${({theme}) => theme.fontSize.font_32};
   font-weight: ${({theme}) => theme.fontWeight.bold};
-`
-const SportsBadges = styled.div`
-  display: flex;
-  // align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-start;
 `
 const UserRank = styled.article`
   width: 100%;
