@@ -5,20 +5,22 @@ import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
+import { doKakaoLogin } from './kakaoLogin';
 //temp
 import logo from '../../asset/logo.png';
+
 
 const Login = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
 
-  //doLogin 결과에 따른 에러 핸들링
+  //doLogin, doKakaoLogin 결과에 따른 에러 핸들링
   useEffect(() => {
     if(userData.username){
       dispatch(clearModal());
     }
-    if(authError.errorType === 'loginUserThunk'){
+    if(authError.errorType === 'loginUserThunk' || authError.errorType === 'loginKakaoThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
         dispatch(setDialogue({dialType: 'failLogin'}));
       }
@@ -62,7 +64,7 @@ const Login = () => {
       <ReuseInput injRef={loginPwRef} injType={'password'} placeholderValue={'비밀번호를 입력해주세요'} />
       <ErrorMsg></ErrorMsg>
 
-      <SocialLogin>Google로 로그인</SocialLogin>
+      <SocialLogin onClick={doKakaoLogin}>kakao로 로그인</SocialLogin>
       <ReuseBtn styleType={'stretch'} content={'로그인'} clickEvent={doLogin} />
       <SwitchToSignup>아직 회원이 아니신가요? <SwitchToSignupLink onClick={moveToSignup}>회원가입 하기</SwitchToSignupLink></SwitchToSignup>
     </RegisterComp>
