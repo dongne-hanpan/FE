@@ -72,6 +72,9 @@ const MyPage = () => {
   const showChageProfileModal = () => {
     dispatch(setModal({modalType: 'changeProfile'}));
   }
+  const showMyComments = () => {
+    dispatch(setModal({modalType: 'commentWatch'}));
+  }
   const goChatPage = () => {
     navigate('/chat');
   }
@@ -90,6 +93,7 @@ const MyPage = () => {
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={myPageData.level} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'나의 후기'} clickEvent={showMyComments} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>

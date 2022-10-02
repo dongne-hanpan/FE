@@ -84,6 +84,12 @@ const BadgeComp = styled.div`
         background-color: ${theme.colors.skyblue};
         cursor: pointer;
         `
+      } else if(content === '나의 후기'){
+        return css`
+        margin: 2px;
+        background-color: ${theme.colors.red_pale};
+        cursor: pointer;
+        `  
       } else if(content === '프로필 편집'){
         return css`
         margin: 2px;
