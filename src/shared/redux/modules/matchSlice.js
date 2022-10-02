@@ -33,13 +33,6 @@ export const makeMatchThunk = createAsyncThunk(
     return res;
   }
 );
-export const updateMatchThunk = createAsyncThunk(
-  "match/updateMatchThunk",
-  async(match_data) => {
-    const res = await putWithCookie("/api/match/update", match_data);
-    return res;
-  }
-);
 
 
 const matchSlice = createSlice({
@@ -68,9 +61,6 @@ const matchSlice = createSlice({
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       console.log('make match completed');
       state.matches = action.payload;
-    });
-    builder.addCase(updateMatchThunk.fulfilled, (state, action) => {
-      console.log('update match completed');
     });
   }
 });
