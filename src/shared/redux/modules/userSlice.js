@@ -54,9 +54,14 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     userData: {},
+    userStatus: null,
     error:{}
   },
-  reducers: {},
+  reducers: {
+    clearUserStatus: (state) => {
+      state.userStatus = null;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
     });
@@ -132,9 +137,9 @@ const userSlice = createSlice({
       }
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
-      console.log('logout completed');
       deleteCookie("mytoken");
       state.userData = {};
+      state.userStatus = 'logoutUserThunk';
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
       const res = action.payload;
@@ -151,4 +156,5 @@ const userSlice = createSlice({
   }
 });
 
+export const { clearUserStatus } = userSlice.actions;
 export default userSlice.reducer;

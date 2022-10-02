@@ -13,7 +13,7 @@ const DialPermit = () => {
     const isAccept = e.target.innerText;
     const permitData = {
       match_id: dialData.match_id,
-      nickname: dialData.nickname,
+      nickname: dialData.sender,
       permit: isAccept === '거절하기' ? false : true,
     }
     dispatch(permitAlermThunk(permitData));

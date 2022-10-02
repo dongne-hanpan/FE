@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
-import { getAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { clearUserStatus, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
+import { clearAlerm, clearStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
-import HeaderAlerm from './HeaderAlerm';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseReserved from '../reusable/ReuseReserved';
 import ReuseBadge from '../reusable/ReuseBadge';
 import { setLocal } from '../../shared/axios/local';
+import Sse from './Sse';
 
 //temp
 import logo from '../../asset/logo.png';
@@ -21,7 +21,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
-  const alermData = useSelector((state) => state.alerm.alermData);
+  const authStatus = useSelector((state) => state.user.userStatus);
+  const alermStatus = useSelector((state) => state.alerm.alermStatus);
   const navigate = useNavigate();
   const cookie = getCookie('mytoken');
 
@@ -45,16 +46,25 @@ const Header = () => {
 
   //refresh 에러 핸들링
   useEffect(() => {
+    if(authStatus === 'logoutUserThunk'){
+      dispatch(clearAlerm());
+      dispatch(clearUserStatus());
+    }
+    if(alermStatus === 'permitAlermThunk'){
+      console.log('응답했으니 다시 쌓인거 가져와')
+      dispatch(getAlermThunk());
+      dispatch(clearStatus());
+    }
+
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-      dispatch(getAlermThunk());
     }
     if(authError.errorType === 'refreshUserThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
         dispatch(setDialogue({dialType: 'expireLogin'}))
       }
     }
-  },[userData, authError, dispatch])
+  },[userData, alermStatus, authStatus, authError, dispatch])
 
 
   const goIndexPage = () => {
@@ -80,16 +90,7 @@ const Header = () => {
       </HeaderLogoSection>
 
       <HeaderAlermSection>
-        {/* { testAlerm.length > 0 ? 
-          testAlerm.map((each,params) => 
-            <HeaderAlerm key={params} data={each} />
-          ): <div>'로그인이 필요합니다'</div>
-        } */}
-        { alermData.length > 0 ? 
-          alermData.map((each,params) => 
-            <HeaderAlerm key={params} data={each} />
-          ): <div>'로그인이 필요합니다'</div>
-        }
+        <Sse />
       </HeaderAlermSection>
 
       <HeaderUserSection>
@@ -154,7 +155,6 @@ const HeaderAlermSection = styled.article`
   background-color: ${({theme}) => theme.colors.black};
   overflow-y: hidden;
   transition: height 0.3s ease-in-out;
-  cursor: pointer;
   ${HeaderComp}:hover &{
     height: 170px;
     overflow-y: scroll;

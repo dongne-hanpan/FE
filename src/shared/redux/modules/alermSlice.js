@@ -46,6 +46,20 @@ const alermSlice = createSlice({
     error:{}
   },
   reducers: {
+    pushAlermData: (state,action) => {
+      const newAlermData = [action.payload,...state.alermData];
+      state.alermData = newAlermData;
+    },
+    replaceAlermData: (state,action) => {
+      state.alermData = action.payload;
+    },
+    filterAlermData: (state,action) => {
+      const afterFilter = state.alermData.filter((each) => each.match_id !== action.payload);
+      state.alermData = afterFilter;
+    },
+    clearAlerm:(state) => {
+      state.alermData = [];
+    },
     clearStatus: (state) => {
       state.alermStatus = null;
     },
@@ -65,8 +79,7 @@ const alermSlice = createSlice({
     });
     builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
     });
-    builder.addCase(getAlermThunk.fulfilled, (state, action) => {
-      state.alermData = action.payload;
+    builder.addCase(getAlermThunk.fulfilled, (state) => {
     });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       const res = action.payload;
@@ -77,11 +90,11 @@ const alermSlice = createSlice({
         }
         state.error = errorObj;
       }else{
-        state.alermData = action.payload;
+        state.alermStatus = 'permitAlermThunk';
       }
     });
   }
 });
 
-export const { clearStatus } = alermSlice.actions;
+export const { pushAlermData, replaceAlermData, filterAlermData, clearAlerm, clearStatus } = alermSlice.actions;
 export default alermSlice.reducer;
