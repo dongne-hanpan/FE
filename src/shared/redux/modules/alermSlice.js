@@ -23,7 +23,6 @@ export const getAlermThunk = createAsyncThunk(
   "alerm/getAlermThunk",
   async () => {
     const cookie = getCookie('mytoken');
-//     const res = await getWithCookie("/sub", cookie);
     const res = await getWithCookie("/api/match/request", cookie);
     return res;
   }
@@ -63,6 +62,9 @@ const alermSlice = createSlice({
     clearStatus: (state) => {
       state.alermStatus = null;
     },
+    clearAlermError:(state) => {
+      state.error = {};
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(contactHostThunk.fulfilled, (state, action) => {
@@ -79,7 +81,16 @@ const alermSlice = createSlice({
     });
     builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
     });
-    builder.addCase(getAlermThunk.fulfilled, (state) => {
+    builder.addCase(getAlermThunk.fulfilled, (state,action) => {
+      const resBefore = JSON.stringify(action.payload); 
+      const res = JSON.parse(resBefore);
+      if(res.statusCode){
+        const errorObj = {
+          errorType: 'getAlermThunk',
+          ...res
+        }
+        state.error = errorObj;
+      }
     });
     builder.addCase(permitAlermThunk.fulfilled, (state, action) => {
       const res = action.payload;
@@ -96,5 +107,5 @@ const alermSlice = createSlice({
   }
 });
 
-export const { pushAlermData, replaceAlermData, filterAlermData, clearAlerm, clearStatus } = alermSlice.actions;
+export const { pushAlermData, replaceAlermData, filterAlermData, clearAlerm, clearStatus, clearAlermError } = alermSlice.actions;
 export default alermSlice.reducer;

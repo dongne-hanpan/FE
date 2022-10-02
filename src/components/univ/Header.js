@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUserStatus, logoutUserThunk, refreshUserThunk } from '../../shared/redux/modules/userSlice';
-import { clearAlerm, clearStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { clearUserStatus, logoutUserThunk, refreshUserThunk, reissueThunk } from '../../shared/redux/modules/userSlice';
+import { clearAlerm, clearAlermError, clearStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -20,9 +20,10 @@ import logo from '../../asset/logo.png';
 const Header = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const authError = useSelector((state) => state.user.error);
-  const authStatus = useSelector((state) => state.user.userStatus);
+  const userError = useSelector((state) => state.user.error);
+  const userStatus = useSelector((state) => state.user.userStatus);
   const alermStatus = useSelector((state) => state.alerm.alermStatus);
+  const alermError = useSelector((state) => state.alerm.error);
   const navigate = useNavigate();
   const cookie = getCookie('mytoken');
 
@@ -46,12 +47,11 @@ const Header = () => {
 
   //refresh 에러 핸들링
   useEffect(() => {
-    if(authStatus === 'logoutUserThunk'){
+    if(userStatus === 'logoutUserThunk'){
       dispatch(clearAlerm());
       dispatch(clearUserStatus());
     }
     if(alermStatus === 'permitAlermThunk'){
-      console.log('응답했으니 다시 쌓인거 가져와')
       dispatch(getAlermThunk());
       dispatch(clearStatus());
     }
@@ -59,12 +59,16 @@ const Header = () => {
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
     }
-    if(authError.errorType === 'refreshUserThunk'){
-      if(authError.statusCode === 500 || authError.statusCode === 401){
+    if(userError.statusCode === 401 || alermError.statusCode === '401'){
+      dispatch(reissueThunk());
+      dispatch(clearAlermError());
+    }
+    if(userError.errorType === 'refreshUserThunk'){
+      if(userError.statusCode === 500 || userError.statusCode === 401){
         dispatch(setDialogue({dialType: 'expireLogin'}))
       }
     }
-  },[userData, alermStatus, authStatus, authError, dispatch])
+  },[userData, userStatus, userError, alermStatus, ,alermError, dispatch])
 
 
   const goIndexPage = () => {

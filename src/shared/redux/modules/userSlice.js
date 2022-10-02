@@ -32,6 +32,14 @@ export const refreshUserThunk = createAsyncThunk(
     return res;
   }
 );
+export const reissueThunk = createAsyncThunk(
+  "user/reissueThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/reissue", cookie);
+    return res;
+  }
+);
 export const logoutUserThunk = createAsyncThunk(
   "user/logoutUserThunk",
   async () => {
@@ -135,6 +143,30 @@ const userSlice = createSlice({
       }else{
         deleteCookie('mytoken');
       }
+    });
+    builder.addCase(reissueThunk.fulfilled,(state,action) => {
+      const res = action.payload;
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'reissueThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.userId,
+            username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
+      }
+
     });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
       deleteCookie("mytoken");
