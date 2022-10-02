@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
+import ReuseBtn from '../components/reusable/ReuseBtn';
 
 
 const MyPage = () => {
@@ -21,6 +22,29 @@ const MyPage = () => {
   const myMatchList = useSelector((state) => state.match.matches);
   const myPageData = useSelector((state) => state.match.elseData);
   let sportsEn = null;
+  const [sortedList, setSortedList] = useState(
+    {
+      recruitList:[],
+      reservedList: [],
+      doneList: []
+    });
+  useEffect(() => {
+    const newSortedChatList = {
+      recruitList:[],
+      reservedList: [],
+      doneList: []
+    }
+    myMatchList.map((each) => {
+      if(each.matchStatus === 'recruit'){
+        newSortedChatList.recruitList.push(each)
+      } else if(each.matchStatus === 'reserved'){
+        newSortedChatList.reservedList.push(each)
+      } else{
+        newSortedChatList.doneList.push(each)
+      }
+    })
+    setSortedList(newSortedChatList);
+  },[myMatchList])
 
   //match 받아오기
   useEffect(() => {
@@ -54,6 +78,10 @@ const MyPage = () => {
   const doLogout = () => {
     dispatch(logoutUserThunk());
   }
+  const [doneToggle, setDoneToggle] = useState(false);
+  const showDoneToggle = () => {
+    setDoneToggle(!doneToggle);
+  }
   
   return(
     <MainPage>
@@ -77,7 +105,16 @@ const MyPage = () => {
           <MatchContainerHeaderTitle>나의 매치</MatchContainerHeaderTitle>
         </MatchContainerHeader>
         <MatchContainerBody>
-          {myMatchList? myMatchList.map((each) => 
+          {sortedList.reservedList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
+          )}
+          {sortedList.recruitList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
+          )}
+        <ToggleBtn>
+          <SmallBtn onClick={showDoneToggle}>{doneToggle ? '닫기' : '완료된 매치 보기'}</SmallBtn>
+        </ToggleBtn>
+          {doneToggle ? sortedList.doneList.map((each) => 
             <MatchCard key={each.match_id} data={each} />
           ):<></>}
         </MatchContainerBody>
@@ -133,4 +170,19 @@ const MatchContainerHeaderTitle = styled.h2`
 `
 const MatchContainerBody = styled.ul`
   padding: 0px;
+`
+const ToggleBtn = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`
+const SmallBtn = styled.span`
+  padding: 10px 20px;
+  color: ${({theme}) => theme.colors.gray};
+  font-size: ${({theme}) => theme.fontSize.font_15};
+  font-weight: ${({theme}) => theme.fontWeight.light};
+  cursor: pointer;
 `
