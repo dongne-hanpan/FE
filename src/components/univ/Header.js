@@ -8,9 +8,9 @@ import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
-import ReuseReserved from '../reusable/ReuseReserved';
 import ReuseBadge from '../reusable/ReuseBadge';
 import { setLocal } from '../../shared/axios/local';
+import MyReservedCnt from './MyReservedCnt';
 import Sse from './Sse';
 
 //temp
@@ -115,7 +115,7 @@ const Header = () => {
               <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
               <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
             </UserBtns>
-            <ReuseReserved matches={2} marginPx={2}/> 
+            <MyReservedCnt clickEvent={goChatPage}/> 
           </>
           : <></>
           }
