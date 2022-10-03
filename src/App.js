@@ -8,6 +8,7 @@ import SportsPage from './pages/SportsPage';
 import ChatPage from './pages/ChatPage';
 import ModalTemplate from './components/modal/ModalTemplate';
 import DialTemplate from './components/dialogue/DialTemplate';
+import KakaoRedirect from './components/login/KakaoRedirect';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<IndexPage />} />
+          <Route path="/user/kakao/callback" element={<KakaoRedirect />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/chat' element={<ChatPage />} />
           <Route path='/chat/:match_id' element={<ChatPage />} />

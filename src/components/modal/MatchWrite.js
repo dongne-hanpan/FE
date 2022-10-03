@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseTextarea from '../reusable/ReuseTextarea';
@@ -38,6 +38,7 @@ const MatchWrite = () => {
   const selectChangeHandler = (e) => {
     setPlace(e.target.value);
   }
+  const placeRef = useRef(null);
   const makeMatch = () => {
     const matchDateValue = matchDateRef.current.value;
     const intakeValue = intakeRef.current.value;
@@ -49,6 +50,7 @@ const MatchWrite = () => {
     if(!place){
       whenMsg.current.innerText = '장소를 선택해주세요';
       setWhenErr('danger');
+      placeRef.current.focus();
       return
     }
     //날짜 시간 장소 통과 시 
@@ -99,7 +101,7 @@ const MatchWrite = () => {
       </InputTitleBox>
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} keyDownEvent={preventKeyDown} />
       <PlaceSection>
-        <PlaceSelect onChange={selectChangeHandler}>
+        <PlaceSelect ref={placeRef} onChange={selectChangeHandler}>
           <PlaceOption disabled >볼링장 선택</PlaceOption>
           {thisRegionBowling().map((each) => 
             <PlaceOption key={each.value} value={[each.value,each.address]}>
@@ -125,7 +127,13 @@ const MatchWrite = () => {
 };
 
 export default MatchWrite;
-
+const shake = keyframes`
+  0% { transform: translate(1px, 0px) rotate(0deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  50% { transform: translate(-1px, 0px) rotate(-1deg); }
+  70% { transform: translate(3px, 0px) rotate(1deg); }
+  100% { transform: translate(1px, 0px) rotate(0deg); }
+`
 const ModalWriteComp = styled.section`
   width: 360px;
   display: flex;
@@ -182,6 +190,10 @@ const PlaceSelect = styled.select`
   border: 2px solid ${({theme}) => theme.colors.gray};
   border-radius: 0.5rem;
   z-index: 1;
+  &:focus{
+    animation: ${shake} 0.1s;
+    animation-iteration-count: 3;
+  }
 `
 const PlaceOption = styled.option`
   height: 40px;

@@ -11,6 +11,7 @@ import MatchResult from './MatchResult';
 import UserWatch from './UserWatch';
 import ChangeProfile from './ChangeProfile';
 import MatchComment from './MatchComment';
+import CommentWatch from './CommentWatch';
 
 
 const ModalTemplate = () => {
@@ -47,6 +48,8 @@ const ModalTemplate = () => {
       return <MatchComment />
     } else if(modalData.modalType === 'userWatch'){
       return <UserWatch />
+    } else if(modalData.modalType === 'commentWatch'){
+      return <CommentWatch />
     } else if(modalData.modalType === 'changeProfile'){
       return <ChangeProfile />
     }

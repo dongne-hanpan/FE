@@ -1,136 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAlermThunk, pushAlermData, replaceAlermData } from '../../shared/redux/modules/alermSlice';
 import HeaderAlerm from './HeaderAlerm';
 
-const Sse = ({testAlerm, setTestAlerm}) => {
-  const userData = useSelector((state) => state.user.userData);
-  console.log('refresh????', testAlerm)
-  useEffect(() => {
-    console.log('init')
-  },[]);
-    
-  useEffect(() => {
-    console.log(testAlerm)
-  },[testAlerm]);
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+const Sse = () => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  const alermData = useSelector((state) => state.alerm.alermData);
+
+  let eventSource;
+  const openCallback = () => {
+    console.log('SSE open');
+    dispatch(getAlermThunk());
+  }
+  const errorCallback = (e) => {
+    console.log(JSON.parse(e.data))
+    eventSource.close();
+  }
   const connectCallback = (e) => {
-    const myAlerms = JSON.parse(e.data);
-    console.log('connected, compare myAlerms and testAlerm', myAlerms,testAlerm)
-    if(myAlerms !== testAlerm){
-      setTestAlerm(myAlerms);
+    const data = JSON.parse(e.data);
+    if(data.length !== undefined){
+      dispatch(replaceAlermData(data))
+    }else{
+      dispatch(pushAlermData(data));
     }
   };
-  const requestCallback = (e) => {
-    const data = JSON.parse(e.data);
-    let newMyAlerms = null;
-    if(data.nickname !== undefined){
-      newMyAlerms = {
-        alermType: 'apply',
-        ...data
-      };
-    }
-    console.log('request', newMyAlerms)
-    console.log('testAlerm',testAlerm);
-    const neww = [...testAlerm, newMyAlerms];
-    console.log('new',neww);
-    setTestAlerm(neww);
-  }
-  const messageCallback = (e) => {
-    const data = JSON.parse(e.data);
-    let newMyAlerms = null;
-    if(data.returnMessage === "신청이 수락되었습니다."){
-      newMyAlerms = {
-        alermType: 'permit',
-        ...data
-      };
-    } else{
-      newMyAlerms = {
-        alermType: 'deny',
-        ...data
-      };
-    }
-    console.log('testAlerm',testAlerm);
-    console.log('newMyAlerms',newMyAlerms);
-    console.log('message, compare myAlerms and testAlerm', newMyAlerms,testAlerm)
-    if([newMyAlerms] !== testAlerm){
-      setTestAlerm([newMyAlerms]);
-    }
-  }
 
   //SSE
   useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-    // const BASE_URL = "http://3.34.142.119";
-    const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
-    if(userData.username !== undefined){
-      const eventSource = new EventSource(subscribeUrl, {
-        withCredentials: true,
-      });
-      eventSource.onopen = function(e){
-        console.log('SSE open success');
-        console.log('status from open',eventSource.readyState)
-      }
-      eventSource.onerror = function (e) {
-        console.log(JSON.parse(e.data))
-        console.log('status from error',eventSource.readyState)
-        eventSource.close();
-      }
-      eventSource.addEventListener("connect", function (e) {
-        const myAlerms = JSON.parse(e.data);
-        console.log('connected, compare myAlerms and testAlerm', myAlerms,testAlerm)
-        if(myAlerms !== testAlerm){
-          setTestAlerm(myAlerms);
-        }
-      })
-      eventSource.addEventListener("request", function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-        let newMyAlerms = null;
-        if(data.nickname !== undefined){
-          newMyAlerms = {
-            alermType: 'apply',
-            ...data
-          };
-        }
-        console.log('request', newMyAlerms)
-        console.log('testAlerm',testAlerm);
-        const neww = [...testAlerm, newMyAlerms];
-        console.log('new',neww);
-        setTestAlerm(neww);
-      })
-      eventSource.addEventListener("message", function (e) {
-        const data = JSON.parse(e.data);
-        let newMyAlerms = null;
-        if(data.returnMessage === "신청이 수락되었습니다."){
-          newMyAlerms = {
-            alermType: 'permit',
-            ...data
-          };
-        } else{
-          newMyAlerms = {
-            alermType: 'deny',
-            ...data
-          };
-        }
-        if([newMyAlerms] !== testAlerm){
-          setTestAlerm([newMyAlerms]);
-        }
-      })
+    //로그인 되어 있다면
+    if(userData.userId !== undefined){
+      // SSE 선언, 연결, 이벤트 리스너 등록
+      const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
+      eventSource = new EventSource(subscribeUrl, { withCredentials: true });
+      eventSource.onopen = openCallback
+      eventSource.onerror = errorCallback
+      eventSource.addEventListener("connect", connectCallback)
       return () => {
         eventSource.removeEventListener('connect', connectCallback);
-        eventSource.removeEventListener('request', requestCallback);
-        eventSource.removeEventListener('message', messageCallback);
         eventSource.close();
+        console.log('SSE close');
       }
     }
-  },[userData])
+  },[userData.userId])
 
 
   return(
     <>
-      { testAlerm.length > 0 ? 
-        testAlerm.map((each,params) => 
-          <HeaderAlerm key={params} data={each} />
+      { alermData.length > 0 ? 
+        alermData.map((each,idx) => 
+          <HeaderAlerm key={idx} data={each} />
         ): <div>'로그인이 필요합니다'</div>
       }
     </>

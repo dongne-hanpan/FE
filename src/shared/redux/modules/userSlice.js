@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getWithCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
+import { getWithCookie, getwithoutCookie, postWithCookieFormData, postWithoutCookie } from '../../axios/axios';
 import { getCookie, deleteCookie } from '../../axios/cookie';
 
 
@@ -17,11 +17,26 @@ export const loginUserThunk = createAsyncThunk(
     return res;
   }
 );
+export const loginKakaoThunk = createAsyncThunk(
+  "user/loginKakaoThunk",
+  async (kakaoCode) => {
+    const res = await getwithoutCookie(`/user/kakao/callback?code=${kakaoCode}`);
+    return res;
+  }
+);
 export const refreshUserThunk = createAsyncThunk(
   "user/refreshtUserThunk",
   async () => {
     const cookie = getCookie('mytoken');
     const res = await getWithCookie("/api/auth/refresh", cookie);
+    return res;
+  }
+);
+export const reissueThunk = createAsyncThunk(
+  "user/reissueThunk",
+  async () => {
+    const cookie = getCookie('mytoken');
+    const res = await getWithCookie("/api/auth/reissue", cookie);
     return res;
   }
 );
@@ -47,9 +62,14 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     userData: {},
+    userStatus: null,
     error:{}
   },
-  reducers: {},
+  reducers: {
+    clearUserStatus: (state) => {
+      state.userStatus = null;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(signupUserThunk.fulfilled, (state, action) =>{
     });
@@ -68,6 +88,29 @@ const userSlice = createSlice({
           const newUserData = {
             userId: res.userId,
             username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
+      }
+    });
+    builder.addCase(loginKakaoThunk.fulfilled,(state, action) => {
+      const res = action.payload;
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'loginKakaoThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.kakaoId,
+            username: res.kakaoId,
             nickname: res.nickname,
             profileImage: res.profileImage,
           };
@@ -101,10 +144,34 @@ const userSlice = createSlice({
         deleteCookie('mytoken');
       }
     });
+    builder.addCase(reissueThunk.fulfilled,(state,action) => {
+      const res = action.payload;
+      if(res.status !== 500){
+        if(res.statusCode){
+          const errorObj = {
+            errorType: 'reissueThunk',
+            ...res
+          }
+          state.error = errorObj;
+        }else{
+          const accessToken = res.accessToken;
+          document.cookie = `mytoken=${accessToken}; path=/;`;
+          const newUserData = {
+            userId: res.userId,
+            username: res.username,
+            nickname: res.nickname,
+            profileImage: res.profileImage,
+          };
+          state.error = {};
+          state.userData = newUserData;
+        }
+      }
+
+    });
     builder.addCase(logoutUserThunk.fulfilled,(state,action) => {
-      console.log('logout completed');
       deleteCookie("mytoken");
       state.userData = {};
+      state.userStatus = 'logoutUserThunk';
     });
     builder.addCase(updateProfileThunk.fulfilled, (state, action) => {
       const res = action.payload;
@@ -121,4 +188,5 @@ const userSlice = createSlice({
   }
 });
 
+export const { clearUserStatus } = userSlice.actions;
 export default userSlice.reducer;

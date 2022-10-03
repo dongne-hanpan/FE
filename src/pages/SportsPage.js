@@ -25,11 +25,9 @@ const SportsPage = () => {
   //match 받아오기
   useEffect(() => {
     if(regionId !== '0'){
-      console.log('get matches!!!');
       const additionalUrl = `/${regionId}/${sportsEn}`;
       dispatch(loadMatchThunk(additionalUrl));
     } else{
-      console.log('get All matches!!!');
       dispatch(loadAllMatchThunk(sportsEn));
 
     }

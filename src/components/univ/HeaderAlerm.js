@@ -1,47 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import red from '../../asset/red.png'
+import { filterAlermData } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import ReuseBtn from '../reusable/ReuseBtn';
+
 
 const HeaderAlerm = ({data}) => {
   const dispatch = useDispatch();
-  const { match_id, ...rest } = data;
-  const [isChecked, setIsChecked] = useState(false);
+  const navigate = useNavigate();
 
   const checkApplicant = () => {
-    if(!isChecked){
-      setIsChecked(true)
+    const senderData = {
+      nickname: data.sender,
+      profileImage: data.sender_ProfileImage,
+      userLevel: data.sender_Level,
+      averageScore: data.sender_AverageScore,
+      matchCount: data.sender_MatchCnt,
+      mannerPoint: data.sender_MannerPoint,
     }
-    dispatch(setModal({modalType: 'userWatch', userData: rest}))
+    dispatch(setModal({modalType: 'userWatch', userData: senderData}))
   }
 
   const showPermitDial = (e) => {
-    if(e.target.ariaLabel === 'userDetail'){
+    const {ariaLabel} = e.target;
+    if(ariaLabel === 'userDetail' || ariaLabel === 'moveToChat'){
       return
     }
-    dispatch(setDialogue({dialType: 'permit', data: data}))
-  }
-  const alermRouter = () => {
-    if(data.alermType === 'permit'){
-      return `${data.date} 일자의 신청이 수락되었습니다`
-    } else if(data.alermType === 'deny'){
-      return `${data.date} 일자의 신청이 거절되었습니다`
-    } else if(data.alermType === 'apply'|| data.nickname !== undefined){
-      return `${data.nickname} 님의 신청이 도착했습니다`
+    if(data.alarmType === 'apply'){
+      dispatch(setDialogue({dialType: 'permit', data: data}))
     }
   }
+  const moveChatroom = () => {
+    navigate(`/chat/${data.match_id}`)
+  }
+  const alermRouter = () => {
+    if(data.alarmType === 'permit'){
+      return `${data.match_date} 일자의 신청이 수락되었습니다`
+    } else if(data.alarmType === 'deny'){
+      return `${data.match_date} 일자의 신청이 거절되었습니다`
+    } else if(data.alarmType === 'apply'|| data.nickname !== undefined){
+      return `${data.sender} 님의 신청이 도착했습니다`
+    }
+  }
+  const alermBtnRouter = () => {
+    if(data.alarmType === 'apply'){
+      return <AlermBtn aria-label='userDetail' onClick={checkApplicant}><Icon aria-label='userDetail' className='fa-solid fa-user' /></AlermBtn>
+    } else if(data.alarmType === 'permit'){
+      return <AlermBtn aria-label='moveToChat' onClick={moveChatroom}><Icon aria-label='moveToChat' className='fa-solid fa-right-to-bracket' /></AlermBtn>
+    } else if(data.alarmType === 'deny'){
+      return 
+    }
+  }
+  const removeThisAlerm = () => {
+    dispatch(filterAlermData(data.match_id));
+  }
+  
   return(
-    <AlermComp onClick={showPermitDial}>
+    <AlermComp onClick={data.alarmType === 'apply' ? showPermitDial : removeThisAlerm}>
       <AlermImgBox>
-        {isChecked ? <></> : <AlermImg src={red} alt='checkToggle'/>}
+        <AlermImg src={red} alt='checkToggle'/>
       </AlermImgBox>
       <AlermMsg>
         {alermRouter()}
       </AlermMsg>
       <AlermBtnBox>
-        <ReuseBtn name={'userDetail'} direc={'horiz'} styleType={'small'} content={'정보'} clickEvent={checkApplicant} />
+        {alermBtnRouter()}
       </AlermBtnBox>
     </AlermComp>
   )
@@ -70,9 +95,23 @@ const AlermMsg = styled.div`
   width: 300px;
   margin-right: 10px;
   text-align: end;
+  cursor: pointer;
   font-size: ${({theme}) => theme.fontSize.font_14};
   color: ${({theme}) => theme.colors.background};
 `
 const AlermBtnBox = styled.div`
   display: flex;
 `;
+const AlermBtn = styled.button`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: ${({theme}) => theme.fontSize.font_13};
+  background-color: ${({theme}) => theme.colors.skyblue};
+  border-radius: 1rem;
+`
+const Icon = styled.i`
+`
