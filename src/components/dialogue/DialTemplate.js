@@ -32,6 +32,7 @@ import DialConfReserve from './DialConfReserve';
 import DialDenyResultAgain from './DialDenyResultAgain';
 import DialConfAlone from './DialConfAlone';
 import DialAlreadyDone from './DialAlreadyDone';
+import DialNoService from './DialNoService';
 
 
 const DialTemplate = () => {
@@ -50,7 +51,9 @@ const DialTemplate = () => {
   }
 
   const dialRouter = () => {
-    if(dialData.dialType === 'confirmRemove'){
+    if(dialData.dialType === 'noService'){
+      return <DialNoService />
+    } else if(dialData.dialType === 'confirmRemove'){
       return <DialConfRemove />
     } else if(dialData.dialType === 'confirmSignup'){
       return <DialConfSignup />
