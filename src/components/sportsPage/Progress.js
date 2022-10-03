@@ -1,12 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Progress = ({data}) => {
-
+const Progress = ({data, type}) => {
+  const dataCalc = () => {
+    if(type === 'score'){
+      return <HighLight height={(data/300*100) + '%'}/>
+    } else if(type === 'count'){
+      return <HighLight height={'100%'}/>
+    } else if(type === 'temper'){
+      return <HighLight height={(data*10) + '%'}/>
+    }
+  }
   return(
     <ProgressBar>
       <Dot />
-      <HighLight height={data + '%'}/>
+      {dataCalc()}
     </ProgressBar>
   )
 }
