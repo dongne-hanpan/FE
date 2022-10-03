@@ -20,6 +20,7 @@ jobs:
       REACT_APP_LATITUDE: ${{ secrets.REACT_APP_LATITUDE }}
       REACT_APP_LONGITUDE: ${{ secrets.REACT_APP_LONGITUDE }}
       REACT_APP_NAVER_ID: ${{ secrets.REACT_APP_NAVER_ID }}
+      REACT_APP_KAKAO_KEY: ${{ secrets.REACT_APP_KAKAO_KEY }}
 
     strategy:
       matrix:

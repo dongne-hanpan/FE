@@ -23,6 +23,7 @@ export const getAlermThunk = createAsyncThunk(
   "alerm/getAlermThunk",
   async () => {
     const cookie = getCookie('mytoken');
+//     const res = await getWithCookie("/sub", cookie);
     const res = await getWithCookie("/api/match/request", cookie);
     return res;
   }
