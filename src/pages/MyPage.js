@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,29 @@ const MyPage = () => {
   const myMatchList = useSelector((state) => state.match.matches);
   const myPageData = useSelector((state) => state.match.elseData);
   let sportsEn = null;
+  const [sortedList, setSortedList] = useState(
+    {
+      recruitList:[],
+      reservedList: [],
+      doneList: []
+    });
+  useEffect(() => {
+    const newSortedChatList = {
+      recruitList:[],
+      reservedList: [],
+      doneList: []
+    }
+    myMatchList.map((each) => {
+      if(each.matchStatus === 'recruit'){
+        newSortedChatList.recruitList.push(each)
+      } else if(each.matchStatus === 'reserved'){
+        newSortedChatList.reservedList.push(each)
+      } else{
+        newSortedChatList.doneList.push(each)
+      }
+    })
+    setSortedList(newSortedChatList);
+  },[myMatchList])
 
   //match 받아오기
   useEffect(() => {
@@ -48,11 +71,18 @@ const MyPage = () => {
   const showChageProfileModal = () => {
     dispatch(setModal({modalType: 'changeProfile'}));
   }
+  const showMyComments = () => {
+    dispatch(setModal({modalType: 'commentWatch'}));
+  }
   const goChatPage = () => {
     navigate('/chat');
   }
   const doLogout = () => {
     dispatch(logoutUserThunk());
+  }
+  const [doneToggle, setDoneToggle] = useState(false);
+  const showDoneToggle = () => {
+    setDoneToggle(!doneToggle);
   }
   
   return(
@@ -62,6 +92,7 @@ const MyPage = () => {
         <UserBtns>
           <ReuseBadge direc={'verti'} bdgType={'rank'} content={myPageData.level} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
+          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'나의 후기'} clickEvent={showMyComments} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
           <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
         </UserBtns>
@@ -77,7 +108,16 @@ const MyPage = () => {
           <MatchContainerHeaderTitle>나의 매치</MatchContainerHeaderTitle>
         </MatchContainerHeader>
         <MatchContainerBody>
-          {myMatchList? myMatchList.map((each) => 
+          {sortedList.reservedList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
+          )}
+          {sortedList.recruitList.map((each) => 
+            <MatchCard key={each.match_id} data={each} />
+          )}
+        <ToggleBtn>
+          <SmallBtn onClick={showDoneToggle}>{doneToggle ? '닫기' : '완료된 매치 보기'}</SmallBtn>
+        </ToggleBtn>
+          {doneToggle ? sortedList.doneList.map((each) => 
             <MatchCard key={each.match_id} data={each} />
           ):<></>}
         </MatchContainerBody>
@@ -133,4 +173,19 @@ const MatchContainerHeaderTitle = styled.h2`
 `
 const MatchContainerBody = styled.ul`
   padding: 0px;
+`
+const ToggleBtn = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`
+const SmallBtn = styled.span`
+  padding: 10px 20px;
+  color: ${({theme}) => theme.colors.gray};
+  font-size: ${({theme}) => theme.fontSize.font_15};
+  font-weight: ${({theme}) => theme.fontWeight.light};
+  cursor: pointer;
 `

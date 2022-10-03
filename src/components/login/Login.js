@@ -5,20 +5,23 @@ import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
+import { doKakaoLogin } from './kakaoLogin';
 //temp
 import logo from '../../asset/logo.png';
+import kakaoLogo from '../../asset/kakao_logo.png'
+
 
 const Login = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const authError = useSelector((state) => state.user.error);
 
-  //doLogin 결과에 따른 에러 핸들링
+  //doLogin, doKakaoLogin 결과에 따른 에러 핸들링
   useEffect(() => {
     if(userData.username){
       dispatch(clearModal());
     }
-    if(authError.errorType === 'loginUserThunk'){
+    if(authError.errorType === 'loginUserThunk' || authError.errorType === 'loginKakaoThunk'){
       if(authError.statusCode === 500 || authError.statusCode === 401){
         dispatch(setDialogue({dialType: 'failLogin'}));
       }
@@ -60,9 +63,9 @@ const Login = () => {
         <InputTitle>비밀번호</InputTitle>
       </InputTitleBox>
       <ReuseInput injRef={loginPwRef} injType={'password'} placeholderValue={'비밀번호를 입력해주세요'} />
-      <ErrorMsg></ErrorMsg>
-
-      <SocialLogin>Google로 로그인</SocialLogin>
+      <SocialLogin onClick={doKakaoLogin}>
+        <KakaoText><KakaoImg src={kakaoLogo} alt="kakao logo" />카카오 아이디로 로그인</KakaoText>
+      </SocialLogin>
       <ReuseBtn styleType={'stretch'} content={'로그인'} clickEvent={doLogin} />
       <SwitchToSignup>아직 회원이 아니신가요? <SwitchToSignupLink onClick={moveToSignup}>회원가입 하기</SwitchToSignupLink></SwitchToSignup>
     </RegisterComp>
@@ -76,9 +79,6 @@ const RegisterComp = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .errorMsg{
-    margin: 16px 0px;
-  }
 `
 const LogoBox = styled.div`
   width: 100%;
@@ -102,18 +102,30 @@ const InputTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_18};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-const ErrorMsg = styled.div`
-`
 const SocialLogin = styled.button`
   width: 100%;
   height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
   margin-bottom: 10px;
-  border: 2px solid ${({theme}) => theme.colors.gray};
+  border: 0px solid ${({theme}) => theme.colors.gray};
   border-radius: 0.5rem;
+  background-color: #FEE500;
+  color: #181600;
   &:hover{
-    border: 2px solid ${({theme}) => theme.colors.darkgray};
-    transition: all 0.3s ease-in-out;
+    border: 1.5px solid ${({theme}) => theme.colors.darkgray};
+    transition: all 0.2s ease-in-out;
   }
+`
+const KakaoText = styled.span`
+  position: relative;
+`
+const KakaoImg = styled.img`
+  position: absolute;
+  left: -95px;
+  width: 18px;
 `
 const SwitchToSignup = styled.div`
   margin-top: 26px;

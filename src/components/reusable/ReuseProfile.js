@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { setModal } from '../../shared/redux/modules/modalSlice';
 
 import profile from '../../asset/defaultprofile.jpg';
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
-  const dispatch = useDispatch()
   return(
     <ProfileComp direc={direc} onClick={clickEvent}>
       <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' />

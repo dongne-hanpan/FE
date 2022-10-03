@@ -20,8 +20,8 @@ const MatchWatch = () => {
       nickname: modalData.writer,
       profileImage: modalData.profileImage_HOST,
       userLevel: modalData.level_HOST,
-      averageScore: 0,
-      matchCount: 0,
+      averageScore: modalData.averageScore_HOST,
+      matchCount: modalData.matchCnt_HOST,
       mannerPoint: modalData.mannerPoint_HOST,
     }
     dispatch(setModal({modalType: 'userWatch', userData: userDetailData}))
@@ -134,7 +134,7 @@ const MatchTime = styled.div`
 const MatchPlace = styled.div`
   width: 100%;
   display: flex;
-  font-size: ${({theme}) => theme.fontSize.font_32};
+  font-size: ${({theme}) => theme.fontSize.font_28};
 `
 const Place = styled.div`
   position: relative;
