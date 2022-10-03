@@ -62,7 +62,11 @@ const MatchWatch = () => {
           <MatchPlace>
             <Place>{modalData.place}
             <PlaceIcon className="fa-solid fa-circle-info">
-              <PlaceDetail>{modalData.placeDetail}<CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn></PlaceDetail>
+              <PlaceDetail>{modalData.placeDetail}
+                {window.location.protocol !== 'http:' ?
+                  <CopyBtn onClick={copyPlaceDetail}>복사하기</CopyBtn>
+                  :<></>}
+              </PlaceDetail>
             </PlaceIcon>
             </Place>
           </MatchPlace>
