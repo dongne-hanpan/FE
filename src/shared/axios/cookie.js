@@ -5,7 +5,6 @@ export function setCookie(name, value, options = {}) {
   };
 
   if (options.expires instanceof Date) {
-    console.log('convert to string');
     options.expires = options.expires.toUTCString();
   }
 
@@ -28,10 +27,4 @@ export function deleteCookie(name) {
 export function getCookie(name) {
   const rareCookie = document.cookie.split('=')[1];
   return rareCookie;
-
-  // let matches = document.cookie.match(new RegExp(
-  //   "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  // ));
-  // console.log(matches)
-  // return matches ? decodeURIComponent(matches[1]) : undefined;
 }

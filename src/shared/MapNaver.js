@@ -61,9 +61,3 @@ const MapComp = styled.div`
   border:1px solid #d3d1c6;
   border-radius: 0.5rem; 
 `
-// 코드 참고 블로그
-// ref: https://blog.naver.com/PostView.naver?blogId=lsw3210&logNo=221996143141&categoryNo=26&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=search
-// docs
-// https://navermaps.github.io/maps.js/docs/index.html
-// 사용법:
-//   모르는 것 있을 때 검색창에 class.이라고 치면 관련 api 목록 조회 가능

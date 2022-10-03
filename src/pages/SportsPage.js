@@ -39,7 +39,6 @@ const SportsPage = () => {
         alert("'전체 지역'이 아닌 구체적인 지역을 선택해주세요")
         regionRef.current.focus();
       }else{
-        console.log('write!!');
         dispatch(setModal({modalType: 'matchWrite'}))
       }
     }else{

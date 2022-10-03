@@ -48,7 +48,6 @@ const MyPage = () => {
   //match 받아오기
   useEffect(() => {
     if(getLocal('sports') !== null){
-      console.log('get my matches!!!');
       sportsEn = getLocal('sports').sportsEn;
       const additionalUrl = `/${sportsEn}`;
       dispatch(loadMyMatchThunk(additionalUrl));

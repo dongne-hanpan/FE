@@ -3,9 +3,6 @@ import styled, {css} from 'styled-components';
 
 
 const ReuseBtn = ({name, direc, styleType, content, clickEvent}) => {
-  if(styleType === undefined){
-    console.log(content, 'styleType 설정하세요')
-  }
   return(
     <BtnComp aria-label={name} direc={direc} styleType={styleType} onClick={clickEvent}>
       {content}

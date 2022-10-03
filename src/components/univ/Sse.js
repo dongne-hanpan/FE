@@ -12,11 +12,10 @@ const Sse = () => {
 
   let eventSource;
   const openCallback = () => {
-    console.log('SSE open');
     dispatch(getAlermThunk());
   }
   const errorCallback = (e) => {
-    console.log(JSON.parse(e.data))
+
     eventSource.close();
   }
   const connectCallback = (e) => {
