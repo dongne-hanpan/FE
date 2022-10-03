@@ -36,7 +36,7 @@ const Header = () => {
     setLocal('myLatLng', myLatLng)
   }
   const errorCallback = () => {
-    console.log('fail get my Location data')
+    console.error('fail get my Location data')
   }
   const getMyLocation = () => {
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback)

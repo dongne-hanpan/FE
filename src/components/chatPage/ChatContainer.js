@@ -35,11 +35,10 @@ const ChatContainer = () => {
   }
 
   const onConnected = () => {
-    console.log("연결됨");
     client.subscribe(`/queue/match/${nowChatId}`,connectWebsocket);
   };
   const onError = (err) => {
-    console.log(err);
+    console.error(err);
   };
   const connect = () => {
     client.connect(headers, onConnected, onError);
@@ -151,7 +150,6 @@ const ChatContainer = () => {
     if(e.code === 'Enter'){
       const nowTextareaValue = msgArea.current.value;
       if(e.ctrlKey){
-        console.log(nowTextareaValue);
         msgArea.current.value = nowTextareaValue + '\r\n';
       }else{
         e.preventDefault();

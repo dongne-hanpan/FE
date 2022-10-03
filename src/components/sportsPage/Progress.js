@@ -2,20 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Progress = ({data}) => {
-  // const bucket_list = useSelector((state) => state.bucket.list);
-  // let count = 0;
-  // bucket_list.map((each, i) => {
-  //   if(each.completed){
-  //     count ++
-  //   }
-  //   return null
-  // })
 
   return(
     <ProgressBar>
       <Dot />
       <HighLight height={data + '%'}/>
-      {/* <HighLight width={(count / bucket_list.length) * 100 + '%'}/> */}
     </ProgressBar>
   )
 }
