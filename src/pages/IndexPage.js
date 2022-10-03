@@ -4,15 +4,22 @@ import styled from 'styled-components';
 import { setLocal } from '../shared/axios/local';
 import ReuseBtn from '../components/reusable/ReuseBtn';
 import { sportsData, sportsConverter } from '../data/regionSportsData';
+import { useDispatch } from 'react-redux';
+import { setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const IndexPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [sports, setSports] = useState(null);
   const [hoverSports, setHoverSports] = useState(null);
 
   const selectSports = (e) => {
     const closeBtn = e.target.closest('button');
+    if(closeBtn.ariaLabel !== '볼링'){
+      dispatch(setDialogue({dialType: 'noService'}))
+      return
+    }
     setSports(closeBtn.ariaLabel);
   };
   const showSportsName = (e) => {
