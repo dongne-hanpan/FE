@@ -11,7 +11,6 @@ import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
-import ReuseBtn from '../components/reusable/ReuseBtn';
 
 
 const MyPage = () => {
