@@ -6,7 +6,7 @@ const Progress = ({data, type}) => {
     if(type === 'score'){
       return <HighLight height={(data/300*100) + '%'}/>
     } else if(type === 'count'){
-      return <HighLight height={'100%'}/>
+      return <HighLight height={ data === 0 ?  '0%' : '100%'}/>
     } else if(type === 'temper'){
       return <HighLight height={(data*10) + '%'}/>
     }
