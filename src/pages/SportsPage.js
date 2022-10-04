@@ -4,35 +4,69 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { loadAllMatchThunk, loadMatchThunk } from '../shared/redux/modules/matchSlice';
-import MatchCard from '../components/sportsPage/MatchCard';
-import { getLocal, setLocal } from '../shared/axios/local';
+import { clearAlermError, clearAlermStatus } from '../shared/redux/modules/alermSlice';
 import { regionData, sportsData } from '../data/regionSportsData';
+import { getLocal, setLocal } from '../shared/axios/local';
+import MatchCard from '../components/sportsPage/MatchCard';
 
 
 const SportsPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const matchList = useSelector((state) => state.match.matches);
+  const alermStatus = useSelector((state) => state.alerm.alermStatus);
+  const alermError = useSelector((state) => state.alerm.error);
   const sportsLocal = getLocal('sports');
-  const sports = sportsLocal.sports;
-  const sportsEn = sportsLocal.sportsEn;
   const regionLocal = getLocal('region');
+  const sportsEn = sportsLocal.sportsEn;
+  const sports = sportsLocal.sports;
   const regionId = regionLocal.regionId;
   const region = regionLocal.region;
   const matchsports = sportsData.filter((each) => each.sports === sports)[0];
-  const regionRef = useRef(null);
+  
+  // alerm 에러 핸들링
+  useEffect(() => {
+    if(alermStatus !== null){
+      if(alermStatus === 'success'){
+        dispatch(setDialogue({dialType: 'confirmApply'}))
+      }
+      dispatch(clearAlermStatus());
+    }
+    if(alermError.errorType !== undefined){
+      if(alermError.errorType === 'contactHostThunk'){
+        if(alermError.statusCode === 500){
+          if(alermError.message === '이미 신청한 매치 입니다'){
+            dispatch(setDialogue({dialType: 'denyContactAgain', matchId: alermError.match_id}));
+          }else if(alermError.message === '참여 가능 인원이 초과되었습니다'){
+            dispatch(setDialogue({dialType: 'denyContact'}));
+          }
+        } else if(alermError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyExist'}));
+        }
+      } else if(alermError.errorType === 'permitAlermThunk'){
+        if(alermError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'applyCanceled'}));
+        } else if(alermError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyExist'}));
+        }
+      }
+      dispatch(clearAlermError())
+    }
+  },[alermStatus, alermError])
 
-  //match 받아오기
+  //매치 받아오기
   useEffect(() => {
     if(regionId !== '0'){
       const additionalUrl = `/${regionId}/${sportsEn}`;
       dispatch(loadMatchThunk(additionalUrl));
     } else{
       dispatch(loadAllMatchThunk(sportsEn));
-
     }
   },[regionId])
-
+  
+  //매치 작성하기
+  const regionRef = useRef(null);
   const doMatchWrite = () => {
     if(userData.username){
       if(regionId === '0'){
@@ -46,7 +80,7 @@ const SportsPage = () => {
     }
   }
 
-  const navigate = useNavigate();
+  //지역 selectbox 핸들러
   const selectChangeHandler = (e) => {
     const regionArray = e.target.value.split(',');
     const selectRegionId = regionArray[0];
@@ -64,7 +98,6 @@ const SportsPage = () => {
       <SportsAndRank>
         <SportsImg src={matchsports.sportsImage} alt={sports} />
       </SportsAndRank>
-
       <MatchContainer>
         <MatchContainerHeader>
           <MatchContainerHeaderTitle>{sports} 한 판? <MatchRegion>{region}</MatchRegion></MatchContainerHeaderTitle>

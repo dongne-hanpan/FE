@@ -5,7 +5,7 @@ import { clearAll} from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 
 
-const DialConfWrite = ({dialData}) => {
+const DialDenyLeave = () => {
   const dispatch = useDispatch();
   const cancel = () => {
     dispatch(clearAll());
@@ -13,8 +13,8 @@ const DialConfWrite = ({dialData}) => {
   return(
     <>
       <DialMessages>
-        <DialMessageTitle>🎉 작성 완료 🎉</DialMessageTitle>
-        <DialMessageExtra>마이페이지에서 확인 가능합니다</DialMessageExtra>
+        <DialMessageTitle>🚫 나가기 불가 🚫</DialMessageTitle>
+        <DialMessageExtra>결과 입력을 완료해야 나갈 수 있습니다.</DialMessageExtra>
       </DialMessages>
       <DialBtns>
         <ReuseBtn styleType={'stretch'} content={'확인'} clickEvent={cancel} />
@@ -23,7 +23,7 @@ const DialConfWrite = ({dialData}) => {
   )
 };
 
-export default DialConfWrite;
+export default DialDenyLeave;
 
 
 const DialMessages = styled.div`
@@ -39,7 +39,7 @@ const DialMessageTitle = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
-  const DialMessageExtra = styled.div`
+const DialMessageExtra = styled.div`
   font-size: ${({theme}) => theme.fontSize.font_16};
   font-weight: ${({theme}) => theme.fontWeight.light};
 `

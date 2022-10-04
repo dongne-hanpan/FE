@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { signupUserThunk } from '../../shared/redux/modules/userSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getwithoutCookie } from '../../shared/axios/axios';
-import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const Signup = () => {
@@ -109,7 +109,7 @@ const Signup = () => {
     return regExp.test(idValue);
   }
   const isValidNickname = (asValue) => {
-    var regExp = /^[가-힣a-z0-9_-]{2,12}$/;
+    var regExp = /^[가-힣a-z0-9_-]{2,8}$/;
     return regExp.test(asValue);
   }
   const isValidPw = (pwValue) => {

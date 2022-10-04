@@ -5,20 +5,21 @@ import { getCookie } from '../../shared/axios/cookie';
 
 
 const MyReservedCnt = ({clickEvent}) => {
+  //나의 매치 수 받아오기
   const cookie = getCookie('mytoken')
   const [reservedCnt,setReservedCnt] = useState(0);
   const getMyReservedCnt = async() => {
     const res = await getWithCookie('/api/match/reserved-match',cookie);
-    if(res.statusCode !== undefined){
-      return
+    if(res.statusCode === undefined){
+      setReservedCnt(res.length);
     }
-    setReservedCnt(res.length);
   }
   useEffect(() => {
     if(cookie !== null){
       getMyReservedCnt();
     }
   },[])
+
   return(
     <ReserveComp onClick={clickEvent}>
       <ReserveCnt>

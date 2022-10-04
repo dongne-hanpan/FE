@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { getAlermThunk, pushAlermData, replaceAlermData } from '../../shared/redux/modules/alermSlice';
 import HeaderAlerm from './HeaderAlerm';
+
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -27,11 +29,9 @@ const Sse = () => {
     }
   };
 
-  //SSE
+  //SSE 연결
   useEffect(() => {
-    //로그인 되어 있다면
     if(userData.userId !== undefined){
-      // SSE 선언, 연결, 이벤트 리스너 등록
       const subscribeUrl = `${BASE_URL}/sub/${userData.userId}`;
       eventSource = new EventSource(subscribeUrl, { withCredentials: true });
       eventSource.onopen = openCallback
@@ -45,16 +45,32 @@ const Sse = () => {
     }
   },[userData.userId])
 
-
   return(
     <>
       { alermData.length > 0 ? 
         alermData.map((each,idx) => 
           <HeaderAlerm key={idx} data={each} />
-        ): <div>'로그인이 필요합니다'</div>
+        ): 
+        <AlermComp>
+          <AlermIcon className='fa-solid fa-bell' />
+        </AlermComp>
       }
     </>
   )
 };
 
 export default Sse;
+
+
+const AlermComp = styled.div`
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+`
+const AlermIcon = styled.i`
+  margin-left: 20px;
+  color: ${({theme}) => theme.colors.darkgray };
+  font-size: ${({theme}) => theme.fontSize.font_20};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`

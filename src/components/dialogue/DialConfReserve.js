@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearDialogue} from '../../shared/redux/modules/modalSlice';
 import { reservedChatThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 

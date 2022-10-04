@@ -8,10 +8,10 @@ import Signup from '../login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
 import MatchResult from './MatchResult';
-import UserWatch from './UserWatch';
 import ChangeProfile from './ChangeProfile';
 import MatchComment from './MatchComment';
 import CommentWatch from './CommentWatch';
+import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {
@@ -19,12 +19,10 @@ const ModalTemplate = () => {
   const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
-      if(modalData.modalType === 'matchWrite' 
-        || modalData.modalType === 'matchResult' 
-        || modalData.modalType === 'matchComment' 
-        || modalData.modalType === 'changeProfile'
-        ){
+      if(modalData.modalType === 'matchWrite' || modalData.modalType === 'changeProfile'){
         dispatch(setDialogue({dialType: 'confirmRemove'}));
+      } else if(modalData.modalType === 'matchResult' || modalData.modalType === 'matchComment' ){
+        dispatch(setDialogue({dialType: 'confirmLeave'}));
       } else if(modalData.modalType === 'login' || modalData.modalType === 'signup'){
         dispatch(setDialogue({dialType: 'confirmLeave'}));
       }else{

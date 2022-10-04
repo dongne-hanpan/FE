@@ -2,37 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
-import Deco from '../univ/Deco';
+import DialConfAlone from './DialConfAlone';
+import DialConfApply from './DialConfApply';
+import DialConfWrite from './DialConfWrite';
+import DialConfLogin from './DialConfLogin';
+import DialConfLeave from './DialConfLeave';
 import DialConfRemove from './DialConfRemove';
 import DialConfSignup from './DialConfSignup';
-import DialConfWrite from './DialConfWrite';
-import DialConfApply from './DialConfApply';
-import DialConfLogin from './DialConfLogin';
 import DialConfResult from './DialConfResult';
-import DialDenyExist from './DialDenyExist';
-import DialDenyResult from './DialDenyResult';
-import DialReserveWho from './DialReserveWho';
-import DialRemoveMatch from './DialRemoveMatch';
-import DialPermit from './DialPermit';
-import DialConfLeave from './DialConfLeave';
-import DialDenyReserved from './DialDenyReserved';
-import DialDenyContact from './DialDenyContact';
-import DialDenyContactAgain from './DialDenyContactAgain';
-import DialApplyCanceled from './DialApplyCanceled';
 import DialConfComment from './DialConfComment';
-import DialDenyCommentAgain from './DialDenyCommentAgain';
-import DialFailLogin from './DialFailLogin';
-import DialExpireLogin from './DialExpireLogin';
-import DialDenyFileType from './DialDenyFileType';
-import DialDenyFileUpload from './DialDenyFileUpload';
-import DialDenyChatExist from './DialDenyChatExist';
-import DialDenyEnterChatroom from './DialDenyEnterChatroom';
-import DialConfReserved from './DialConfReserved';
 import DialConfReserve from './DialConfReserve';
+import DialConfReserved from './DialConfReserved';
+import DialDenyExist from './DialDenyExist';
+import DialDenyLeave from './DialDenyLeave';
+import DialDenyResult from './DialDenyResult';
+import DialDenyContact from './DialDenyContact';
+import DialDenyFileType from './DialDenyFileType';
+import DialDenyReserved from './DialDenyReserved';
+import DialDenyChatExist from './DialDenyChatExist';
+import DialDenyFileUpload from './DialDenyFileUpload';
 import DialDenyResultAgain from './DialDenyResultAgain';
-import DialConfAlone from './DialConfAlone';
+import DialDenyContactAgain from './DialDenyContactAgain';
+import DialDenyCommentAgain from './DialDenyCommentAgain';
+import DialDenyEnterChatroom from './DialDenyEnterChatroom';
 import DialAlreadyDone from './DialAlreadyDone';
+import DialApplyCanceled from './DialApplyCanceled';
+import DialExpireLogin from './DialExpireLogin';
+import DialRemoveMatch from './DialRemoveMatch';
+import DialFailLogin from './DialFailLogin';
 import DialNoService from './DialNoService';
+import DialPermit from './DialPermit';
+import Deco from '../univ/Deco';
 
 
 const DialTemplate = () => {
@@ -79,6 +79,8 @@ const DialTemplate = () => {
       return <DialConfAlone />
     } else if(dialData.dialType === 'alreadyDone'){
       return <DialAlreadyDone />
+    } else if(dialData.dialType === 'denyLeave'){
+      return <DialDenyLeave />
     } else if(dialData.dialType === 'denyContact'){
       return <DialDenyContact />
     } else if(dialData.dialType === 'denyContactAgain'){
@@ -103,8 +105,6 @@ const DialTemplate = () => {
       return <DialDenyFileUpload />
     } else if(dialData.dialType === 'applyCanceled'){
       return <DialApplyCanceled />
-    } else if(dialData.dialType === 'reserveWho'){
-      return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){
       return <DialRemoveMatch />
     } else if(dialData.dialType === 'permit'){

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
 import { permitAlermThunk } from '../../shared/redux/modules/alermSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 const DialPermit = () => {
   const dispatch = useDispatch();

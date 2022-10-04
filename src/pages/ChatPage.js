@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
+import { getCookie } from '../shared/axios/cookie';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
-import { getCookie } from '../shared/axios/cookie';
-import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const ChatPage = () => {
@@ -19,55 +19,57 @@ const ChatPage = () => {
   const chatStatus = useSelector((state) => state.chat.chatStatus);
   const chatError = useSelector((state) => state.chat.error);
 
+  //채팅방 데이터 받아오기
   useEffect(() => {
     if(nowChatId !== undefined){
       dispatch(getChatDataThunk(nowChatId));
     }
   },[nowChatId,dispatch])
 
+  //채팅 관련 에러 핸들링
   useEffect(() => {
     //성공 시
-    if(chatStatus.statusType === 'reservedChatThunk'){
-      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+    if(chatStatus.statusType !== undefined){
+      if(chatStatus.statusType === 'reservedChatThunk'){
+        dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+      }
+      if(chatStatus.statusType === 'submitMyResultThunk'){
+        dispatch(setDialogue({dialType: 'confirmResult'}));
+      }
+      if(chatStatus.statusType === 'submitCommentThunk'){
+        dispatch(setDialogue({dialType: 'confirmComment'}))
+      }
+      if(chatStatus.statusType === 'leaveChatThunk'){
+        navigate(`/chat`);
+        dispatch(clearDialogue());
+      }
       dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'submitMyResultThunk'){
-      dispatch(setDialogue({dialType: 'confirmResult'}));
-      dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'submitCommentThunk'){
-      dispatch(setDialogue({dialType: 'confirmComment'}))
-      dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'leaveChatThunk'){
-      navigate(`/chat`);
-      dispatch(clearChatStatus());
-      dispatch(clearDialogue());
     }
     //에러 시
-    if(chatError.errorType === 'getChatDataThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
-      } else if(chatError.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyChatExist'}))
+    if(chatError.errorType !== undefined){
+      if(chatError.errorType === 'getChatDataThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
+        } else if(chatError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyChatExist'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'submitMyResultThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyResultAgain'}))
+      if(chatError.errorType === 'submitMyResultThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyResultAgain'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'submitCommentThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyCommentAgain'}))
+      if(chatError.errorType === 'submitCommentThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyCommentAgain'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'leaveChatThunk'){
-      if(chatError.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      if(chatError.errorType === 'leaveChatThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyLeave'}))
+        }else if(chatError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyChatExist'}))
+        }
       }
       dispatch(clearChatError());
     }
@@ -91,8 +93,14 @@ const ChatPage = () => {
             <ChatPlace>{chatData.place}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
-            {chatData.userListInMatch ? chatData.userListInMatch.map((each,params) => 
-            <ReuseProfile key={params} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
+            {chatData.userListInMatch ? chatData.userListInMatch.map((each,index) => 
+            {
+              if(index < 3){
+                return <ReuseProfile key={index} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} />
+              } else if(index+1 === chatData.userListInMatch.length){
+                return <ProfileMore>+ {chatData.userListInMatch.length - 3}</ProfileMore>
+              }
+            }
             ):<></>}
           </ChatPartici>
         </ChatHead>
@@ -137,6 +145,7 @@ const ChatHead = styled.article`
   background-color: ${({theme}) => theme.colors.core};
 `
 const ChatInfo = styled.div`
+  min-width: 220px;
 `;
 const ChatDate = styled.div`
   margin-bottom: 6px;
@@ -156,5 +165,21 @@ const ChatPlace = styled.div`
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
 const ChatPartici = styled.div`
+  width: 180px;
   display: flex;
+  justify-content: flex-end;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
+const ProfileMore = styled.div`
+  position: relative;
+  left: -3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({theme}) => theme.colors.skyblue};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`

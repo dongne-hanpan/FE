@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 import { updateProfileThunk } from '../../shared/redux/modules/userSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
@@ -72,7 +72,7 @@ const ChangeProfile = () => {
       </InputTitleBox>
         {preview ? 
           <PreviewImgBox onDrop={dropImg} onDragOver={dragOverImg}>
-            <PreviewImg src={preview} alt="preview" />
+            <PreviewImg src={preview} alt="preview" loading='lazy' />
           </PreviewImgBox>
         :
           <DropImgBox onDrop={dropImg} onDragOver={dragOverImg}>사진과 동영상을 여기에 끌어다 놓으세요</DropImgBox>

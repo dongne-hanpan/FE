@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { contactHostThunk } from '../../shared/redux/modules/alermSlice';
-import ReuseBtn from '../reusable/ReuseBtn';
-import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseTemperature from '../reusable/ReuseTemperature';
+import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseBadge from '../reusable/ReuseBadge';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 const MatchWatch = () => {
   const navigate = useNavigate();

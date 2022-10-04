@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMyChatListThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseProfile from '../reusable/ReuseProfile';
@@ -15,7 +15,8 @@ const ChatNav = () => {
   const nowChatId = useParams().match_id;
   const userData = useSelector((state) => state.user.userData);
   const myChatList = useSelector((state) => state.chat.chatList);
-  const [doneToggle, setDoneToggle] = useState(false);
+
+  // 받아온 나의 채팅리스트 종류에 따라 정렬
   const [sortedChatList, setSortedChatList] = useState(
     {
       recruitChatList:[],
@@ -48,6 +49,9 @@ const ChatNav = () => {
   const goMyPage = () => {
     navigate('/mypage');
   }
+
+  //완료된 매치 버튼 토글
+  const [doneToggle, setDoneToggle] = useState(false);
   const showDoneToggle = () => {
     setDoneToggle(!doneToggle);
   }
@@ -58,9 +62,6 @@ const ChatNav = () => {
         <ReuseWeather color={'black'} />
       </ChatNavHead>
       <ChatNavContainer>
-        {/* {myChatList.map((each) => 
-          <ChatBox key={each.chatId} data={each} />
-        )} */}
         {sortedChatList.reservedChatList.map((each) => 
           <ChatBox key={each.chatId} data={each} />
         )}
