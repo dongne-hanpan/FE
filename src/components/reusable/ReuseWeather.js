@@ -21,13 +21,13 @@ const ReuseWeather = ({ color }) => {
       return [sunny,'맑음'];
     } else if(weatherId > 800){
       return [cloud,'구름'];
-    } else if(700 <= weatherId < 800){
+    } else if(700 <= weatherId && weatherId < 800){
       return [drizzle,'흐림'];
-    } else if(600 <= weatherId < 700){
+    } else if(600 <= weatherId && weatherId  < 700){
       return [snow,'눈'];
-    } else if(500<= weatherId < 600){
+    } else if(500<= weatherId && weatherId  < 600){
       return [rain,'비'];
-    } else if(200<= weatherId < 300){
+    } else if(200<= weatherId && weatherId  < 300){
       return [thunder,'뇌우'];
     }
   }
@@ -46,7 +46,7 @@ const ReuseWeather = ({ color }) => {
     <>
     {weather.length !== 0 ? 
       <WeatherComp>
-        <WeatherImg src={weather[0]} alt="weather emoji"/>
+        <WeatherImg src={weather[0]} alt="weather emoji" loading='lazy'/>
         <WeatherContent color={color}>{weather[1]}</WeatherContent>
         <WeatherContent color={color}>{weather[2]} 도</WeatherContent>
       </WeatherComp>

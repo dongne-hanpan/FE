@@ -6,7 +6,7 @@ import profile from '../../asset/defaultprofile.png';
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   return(
     <ProfileComp direc={direc} onClick={clickEvent}>
-      <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' />
+      <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' loading='lazy'/>
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>
       : <></>

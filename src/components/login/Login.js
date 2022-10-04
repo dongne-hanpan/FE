@@ -52,7 +52,7 @@ const Login = () => {
   return(
     <RegisterComp>
       <LogoBox>
-        <LoginLogo src={logo} alt="logo" />
+        <LoginLogo src={logo} alt="logo" loading='lazy'/>
       </LogoBox>
       <InputTitleBox>
         <InputTitle>아이디</InputTitle>
@@ -64,7 +64,7 @@ const Login = () => {
       </InputTitleBox>
       <ReuseInput injRef={loginPwRef} injType={'password'} placeholderValue={'비밀번호를 입력해주세요'} />
       <SocialLogin onClick={doKakaoLogin}>
-        <KakaoText><KakaoImg src={kakaoLogo} alt="kakao logo" />카카오 아이디로 로그인</KakaoText>
+        <KakaoText><KakaoImg src={kakaoLogo} alt="kakao logo" loading='lazy'/>카카오 아이디로 로그인</KakaoText>
       </SocialLogin>
       <ReuseBtn styleType={'stretch'} content={'로그인'} clickEvent={doLogin} />
       <SwitchToSignup>아직 회원이 아니신가요? <SwitchToSignupLink onClick={moveToSignup}>회원가입 하기</SwitchToSignupLink></SwitchToSignup>

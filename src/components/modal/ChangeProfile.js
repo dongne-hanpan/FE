@@ -72,7 +72,7 @@ const ChangeProfile = () => {
       </InputTitleBox>
         {preview ? 
           <PreviewImgBox onDrop={dropImg} onDragOver={dragOverImg}>
-            <PreviewImg src={preview} alt="preview" />
+            <PreviewImg src={preview} alt="preview" loading='lazy' />
           </PreviewImgBox>
         :
           <DropImgBox onDrop={dropImg} onDragOver={dragOverImg}>사진과 동영상을 여기에 끌어다 놓으세요</DropImgBox>

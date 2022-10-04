@@ -44,7 +44,7 @@ const MatchComment = () => {
   return(
     <ModalCommentComp>
       <MatchCommentHeader>
-        <SportsImg src={modalData.sportsImage} alt='sports' />
+        <SportsImg src={modalData.sportsImage} alt='sports' loading='lazy' />
         <MatchDateTimePlace>
           <MatchDay>{chatData.date}</MatchDay>
           <MatchTime>{chatData.time}</MatchTime>
