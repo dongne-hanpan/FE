@@ -143,8 +143,11 @@ const ChatContainer = () => {
   // enter로 메시지 보내기
   const keyDownHandler = (e) => {
     if(e.code === 'Enter'){
+      if (e.nativeEvent.isComposing){
+        return
+      }
       const nowTextareaValue = msgArea.current.value;
-      if(e.ctrlKey){
+      if(e.ctrlKey || e.altKey){
         msgArea.current.value = nowTextareaValue + '\r\n';
       }else{
         e.preventDefault();
