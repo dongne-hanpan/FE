@@ -14,9 +14,6 @@ import DialTemplate from './components/dialogue/DialTemplate';
 function App() {
   const modalData = useSelector((state) => state.modal.modalData);
   const dialogueData = useSelector((state) => state.modal.dialogueData);
-  useEffect(() => {
-    console.log('배포2')
-  },[])
   
   return (
     <div className="App">
