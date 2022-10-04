@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getWithCookie, getwithoutCookie, postWithCookie, putWithCookie } from '../../axios/axios';
+import { getWithCookie, getwithoutCookie, postWithCookie } from '../../axios/axios';
 import { getCookie } from '../../axios/cookie';
 
 

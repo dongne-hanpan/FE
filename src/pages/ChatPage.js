@@ -91,8 +91,14 @@ const ChatPage = () => {
             <ChatPlace>{chatData.place}</ChatPlace>
           </ChatInfo>
           <ChatPartici>
-            {chatData.userListInMatch ? chatData.userListInMatch.map((each,params) => 
-            <ReuseProfile key={params} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} content={each.nickname} />
+            {chatData.userListInMatch ? chatData.userListInMatch.map((each,index) => 
+            {
+              if(index < 3){
+                return <ReuseProfile key={index} direc={'horiz'} imgSrc={each.profileImage} imgSize={30} />
+              } else if(index+1 === chatData.userListInMatch.length){
+                return <ProfileMore>+ {chatData.userListInMatch.length - 3}</ProfileMore>
+              }
+            }
             ):<></>}
           </ChatPartici>
         </ChatHead>
@@ -137,6 +143,7 @@ const ChatHead = styled.article`
   background-color: ${({theme}) => theme.colors.core};
 `
 const ChatInfo = styled.div`
+  min-width: 220px;
 `;
 const ChatDate = styled.div`
   margin-bottom: 6px;
@@ -156,5 +163,21 @@ const ChatPlace = styled.div`
   font-weight: ${({theme}) => theme.fontWeight.medium};
 `
 const ChatPartici = styled.div`
+  width: 180px;
   display: flex;
+  justify-content: flex-end;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
+const ProfileMore = styled.div`
+  position: relative;
+  left: -3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({theme}) => theme.colors.skyblue};
+  font-size: ${({theme}) => theme.fontSize.font_12};
+  font-weight: ${({theme}) => theme.fontWeight.bold};
+`

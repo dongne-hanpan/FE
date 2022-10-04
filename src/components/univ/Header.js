@@ -134,7 +134,7 @@ export default Header;
 
 const HeaderComp = styled.header`
   width: 100vw;
-  min-width: 800px;
+  min-width: 835px;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -149,6 +149,7 @@ const HeaderComp = styled.header`
 `
 const HeaderLogoSection = styled.article`
   flex-grow: 4;
+  min-width: 150px;
   `
   const HeaderLogo = styled.img`
   height: 40px;
@@ -158,7 +159,7 @@ const HeaderLogoSection = styled.article`
 const HeaderAlermSection = styled.article`
   flex-grow: 6;
   max-width: 500px;
-  min-width: 340px;
+  min-width: 400px;
   height: 40px;
   display: flex;
   flex-direction: column;
@@ -180,7 +181,7 @@ const HeaderUserSection = styled.article`
   flex-direction: column;
 `
 const UserGreet = styled.div`
-  min-width: 300px;
+  min-width: 250px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
