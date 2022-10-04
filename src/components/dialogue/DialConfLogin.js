@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 const DialConfLogin = ({dialData}) => {
   const dispatch = useDispatch();

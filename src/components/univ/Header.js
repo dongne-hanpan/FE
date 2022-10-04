@@ -1,32 +1,31 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUserStatus, logoutUserThunk, refreshUserThunk, reissueThunk } from '../../shared/redux/modules/userSlice';
-import { clearAlerm, clearAlermError, clearStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
+import { clearAlerm, clearAlermError, clearAlermStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
+import { setLocal } from '../../shared/axios/local';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseBadge from '../reusable/ReuseBadge';
-import { setLocal } from '../../shared/axios/local';
 import MyReservedCnt from './MyReservedCnt';
 import Sse from './Sse';
-
-//temp
 import logo from '../../asset/logo.png';
 
 
 const Header = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
   const userError = useSelector((state) => state.user.error);
   const userStatus = useSelector((state) => state.user.userStatus);
   const alermStatus = useSelector((state) => state.alerm.alermStatus);
   const alermError = useSelector((state) => state.alerm.error);
-  const navigate = useNavigate();
   const cookie = getCookie('mytoken');
 
+  // 나의 위치 값 받아오기
   const successCallback = (pos) => {
     const crd = pos.coords;
     const myLatLng = {
@@ -35,8 +34,8 @@ const Header = () => {
     }
     setLocal('myLatLng', myLatLng)
   }
-  const errorCallback = () => {
-    console.error('fail get my Location data')
+  const errorCallback = (e) => {
+    console.error(e);
   }
   const getMyLocation = () => {
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
@@ -47,18 +46,21 @@ const Header = () => {
 
   //refresh 에러 핸들링
   useEffect(() => {
+    if(userData.username === undefined && cookie){
+      dispatch(refreshUserThunk());
+    }
     if(userStatus === 'logoutUserThunk'){
       dispatch(clearAlerm());
       dispatch(clearUserStatus());
     }
     if(alermStatus === 'permitAlermThunk'){
       dispatch(getAlermThunk());
-      dispatch(clearStatus());
+      dispatch(clearAlermStatus());
     }
+  },[userData, userStatus, alermStatus, dispatch])
 
-    if(userData.username === undefined && cookie){
-      dispatch(refreshUserThunk());
-    }
+  //refresh 에러 핸들링
+  useEffect(() => {
     if(userError.statusCode === 401 || alermError.statusCode === '401'){
       dispatch(reissueThunk());
       dispatch(clearAlermError());
@@ -68,9 +70,9 @@ const Header = () => {
         dispatch(setDialogue({dialType: 'expireLogin'}))
       }
     }
-  },[userData, userStatus, userError, alermStatus, ,alermError, dispatch])
+  },[userError, alermError, dispatch])
 
-
+  // 네비게이터 함수 모음
   const goIndexPage = () => {
     navigate('/');
   }
@@ -87,6 +89,7 @@ const Header = () => {
   const doLogout = () => {
     dispatch(logoutUserThunk());
   }
+
   return(
     <HeaderComp>
       <HeaderLogoSection>

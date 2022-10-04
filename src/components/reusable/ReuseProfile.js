@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import profile from '../../asset/defaultprofile.png';
 
-import profile from '../../asset/defaultprofile.jpg';
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   return(
     <ProfileComp direc={direc} onClick={clickEvent}>
-      <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' />
+      <Profile imgSize={imgSize} src={imgSrc ? imgSrc : profile} alt='profile' loading='lazy'/>
       {content ? 
       <ProfileContent contentSize={contentSize}>{content}</ProfileContent>
       : <></>

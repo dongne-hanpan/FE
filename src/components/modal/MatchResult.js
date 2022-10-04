@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitMyResultThunk } from '../../shared/redux/modules/chatSlice';
-import { getLocal } from '../../shared/axios/local';
 import { clearModal } from '../../shared/redux/modules/modalSlice';
+import { getLocal } from '../../shared/axios/local';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
 
@@ -42,7 +42,7 @@ const MatchResult = () => {
   return(
     <ModalResultComp>
       <MatchCommentHeader>
-        <SportsImg src={modalData.sportsImage} alt='sports' />
+        <SportsImg src={modalData.sportsImage} alt='sports' loading='lazy'/>
         <MatchDateTimePlace>
           <MatchDay>{chatData.date}</MatchDay>
           <MatchTime>{chatData.time}</MatchTime>

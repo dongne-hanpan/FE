@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from './components/univ/Header';
 import IndexPage from './pages/IndexPage'
+import KakaoRedirect from './components/login/KakaoRedirect';
 import MyPage from './pages/MyPage';
-import SportsPage from './pages/SportsPage';
 import ChatPage from './pages/ChatPage';
+import SportsPage from './pages/SportsPage';
 import ModalTemplate from './components/modal/ModalTemplate';
 import DialTemplate from './components/dialogue/DialTemplate';
-import KakaoRedirect from './components/login/KakaoRedirect';
 
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     console.log('배포2')
   },[])
+  
   return (
     <div className="App">
       <Router>

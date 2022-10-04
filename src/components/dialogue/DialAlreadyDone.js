@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import ReuseBtn from '../reusable/ReuseBtn';
+import { useDispatch } from 'react-redux';
 import { clearAll } from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const DialAlreadyDone = () => {

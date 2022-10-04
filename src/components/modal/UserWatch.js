@@ -2,9 +2,9 @@ import React, { useEffect,useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { postWithoutCookie } from '../../shared/axios/axios';
+import ReuseTemperature from '../reusable/ReuseTemperature';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseBadge from '../reusable/ReuseBadge';
-import ReuseTemperature from '../reusable/ReuseTemperature';
 import Comment from '../univ/Comment';
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginKakaoThunk } from '../../shared/redux/modules/userSlice';
 import Loading from '../univ/Loading';
 
@@ -9,13 +9,14 @@ import Loading from '../univ/Loading';
 const KakaoRedirect = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {search} = useLocation();
+  const { search } = useLocation();
   const kakaoCode = search.split('?code=')[1];
   const userData = useSelector((state) => state.user.userData);
 
-  const sendToBack = async() => {
+  const sendToBackend = async() => {
     dispatch(loginKakaoThunk(kakaoCode));
   }
+  // 로그인되어있지 않다면 리다이렉트
   useEffect(() => {
     if(userData.nickname !== undefined){
       navigate('/')
@@ -24,9 +25,10 @@ const KakaoRedirect = () => {
 
   useEffect(() => {
     if(kakaoCode!== null){
-      sendToBack()
+      sendToBackend()
     }
   }, [kakaoCode]);
+  
   return (
     <MainPage>
       <Loading size={40} />

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseProfile from '../components/reusable/ReuseProfile';
-import ReuseTemperature from '../components/reusable/ReuseTemperature';
-import ReuseBadge from '../components/reusable/ReuseBadge';
-import MatchCard from '../components/sportsPage/MatchCard';
-import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
+import { getLocal } from '../shared/axios/local';
+import ReuseProfile from '../components/reusable/ReuseProfile';
+import ReuseTemperature from '../components/reusable/ReuseTemperature';
+import ReuseBadge from '../components/reusable/ReuseBadge';
+import MatchCard from '../components/sportsPage/MatchCard';
 
 
 const MyPage = () => {
@@ -20,7 +20,10 @@ const MyPage = () => {
   const authError = useSelector((state) => state.user.error);
   const myMatchList = useSelector((state) => state.match.matches);
   const myPageData = useSelector((state) => state.match.elseData);
+  const cookie = getCookie('mytoken');
   let sportsEn = null;
+
+  // 받아온 MyMatchList 종류별로 정리
   const [sortedList, setSortedList] = useState(
     {
       recruitList:[],
@@ -38,7 +41,7 @@ const MyPage = () => {
         newSortedChatList.recruitList.push(each)
       } else if(each.matchStatus === 'reserved'){
         newSortedChatList.reservedList.push(each)
-      } else{
+      } else if(each.matchStatus === 'done'){
         newSortedChatList.doneList.push(each)
       }
     })
@@ -54,13 +57,17 @@ const MyPage = () => {
     }
   },[]);
 
+  //프로필이미지 변경 에러 핸들링
   useEffect(() => {
     if(authError.errorType === 'updateProfileThunk'){
       if(authError.statusCode === 500){
         dispatch(setDialogue({dialType: 'denyFileUpload'}));
       }
     }
-    const cookie = getCookie('mytoken');
+  },[authError])
+
+  //유저정보 없으면 리다이렉트
+  useEffect(() => {
     if(!cookie && !userData.username){
       navigate('/')
     }
@@ -79,6 +86,7 @@ const MyPage = () => {
   const doLogout = () => {
     dispatch(logoutUserThunk());
   }
+  //완료된 매치 보기
   const [doneToggle, setDoneToggle] = useState(false);
   const showDoneToggle = () => {
     setDoneToggle(!doneToggle);

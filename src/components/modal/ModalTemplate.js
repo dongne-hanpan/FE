@@ -8,10 +8,10 @@ import Signup from '../login/Signup';
 import MatchWrite from './MatchWrite';
 import MatchWatch from './MatchWatch';
 import MatchResult from './MatchResult';
-import UserWatch from './UserWatch';
 import ChangeProfile from './ChangeProfile';
 import MatchComment from './MatchComment';
 import CommentWatch from './CommentWatch';
+import UserWatch from './UserWatch';
 
 
 const ModalTemplate = () => {

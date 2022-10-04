@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../reusable/ReuseBtn';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearDialogue } from '../../shared/redux/modules/modalSlice';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { clearDialogue } from '../../shared/redux/modules/modalSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const DialDenyEnterChatroom = () => {

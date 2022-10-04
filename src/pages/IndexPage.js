@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { sportsData, sportsConverter } from '../data/regionSportsData';
+import { setDialogue } from '../shared/redux/modules/modalSlice';
 import { setLocal } from '../shared/axios/local';
 import ReuseBtn from '../components/reusable/ReuseBtn';
-import { sportsData, sportsConverter } from '../data/regionSportsData';
-import { useDispatch } from 'react-redux';
-import { setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const IndexPage = () => {
@@ -18,16 +18,18 @@ const IndexPage = () => {
     const closeBtn = e.target.closest('button');
     if(closeBtn.ariaLabel !== '볼링'){
       dispatch(setDialogue({dialType: 'noService'}))
-      return
+    }else{
+      setSports(closeBtn.ariaLabel);
     }
-    setSports(closeBtn.ariaLabel);
   };
+
   const showSportsName = (e) => {
     if(sports === null){
       const closeBtn = e.target.closest('button');
       setHoverSports(closeBtn.ariaLabel);
     }
   }
+
   const moveToSportsPage = () => {
     if(sports === null){
       alert('스포츠를 선택해주세요');
@@ -47,6 +49,7 @@ const IndexPage = () => {
     setLocal('region', regionInLocal);
     navigate(`/all/${sports}`);
   }
+
   return (
     <IndexComp>
       <SportsComp>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseBadge from '../reusable/ReuseBadge';
 

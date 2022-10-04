@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearAll } from '../../shared/redux/modules/modalSlice';
 import { cancelApplyThunk } from '../../shared/redux/modules/alermSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const DialDenyContactAgain = () => {

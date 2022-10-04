@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { css } from 'styled-components';
 import { submitCommentThunk } from '../../shared/redux/modules/chatSlice';
-import Result from '../chatPage/Results';
+import { clearModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
+import Result from '../chatPage/Results';
 
 
 const MatchComment = () => {
@@ -44,7 +44,7 @@ const MatchComment = () => {
   return(
     <ModalCommentComp>
       <MatchCommentHeader>
-        <SportsImg src={modalData.sportsImage} alt='sports' />
+        <SportsImg src={modalData.sportsImage} alt='sports' loading='lazy' />
         <MatchDateTimePlace>
           <MatchDay>{chatData.date}</MatchDay>
           <MatchTime>{chatData.time}</MatchTime>
@@ -120,37 +120,4 @@ const ResultFormContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`
-
-const InputTitleBox = styled.div`
-  width: 360px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-`
-const InputTitle = styled.div`
-  font-size: ${({theme}) => theme.fontSize.font_18};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
-const ErrMessage = styled.span`
-  margin-left: 10px;
-  font-size: ${({theme}) => theme.fontSize.font_12};
-  ${({status, theme}) => {
-    if(status === 'success'){
-      return css`
-      display: inline;
-      color: ${theme.colors.green};
-      `
-    } else if(status === 'danger'){
-      return css`
-      display: inline;
-      color: ${theme.colors.red_light};
-      `
-    } else if(status === 'none'){
-      return css`
-      display: none;
-      `
-    }
-  }}
 `
