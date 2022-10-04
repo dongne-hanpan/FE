@@ -65,7 +65,9 @@ const ChatPage = () => {
         }
       }
       if(chatError.errorType === 'leaveChatThunk'){
-        if(chatError.statusCode === 404){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyLeave'}))
+        }else if(chatError.statusCode === 404){
           dispatch(setDialogue({dialType: 'denyChatExist'}))
         }
       }
