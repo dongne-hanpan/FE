@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
+import styled, {css} from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, {css} from 'styled-components';
 import { contactHostThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBadge from '../reusable/ReuseBadge';

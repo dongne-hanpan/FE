@@ -1,10 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
-import red from '../../asset/red.png'
 import { filterAlermData } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import red from '../../asset/red.png'
 
 
 const HeaderAlerm = ({data}) => {

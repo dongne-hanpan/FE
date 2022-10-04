@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
-import Progress from '../sportsPage/Progress';
 import ReuseProfile from './ReuseProfile';
+import Progress from '../sportsPage/Progress';
 
 
 const ReuseTemperature = ({type, type2, data, userProfile, username}) => {

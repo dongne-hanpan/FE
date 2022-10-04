@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseBtn from '../reusable/ReuseBtn';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
 import { leaveChatThunk } from '../../shared/redux/modules/chatSlice';
+import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const DialRemoveMatch = () => {

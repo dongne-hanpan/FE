@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitCommentThunk } from '../../shared/redux/modules/chatSlice';
-import Result from '../chatPage/Results';
+import { clearModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
-import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
+import Result from '../chatPage/Results';
 
 
 const MatchComment = () => {

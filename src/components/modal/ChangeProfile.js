@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 import { updateProfileThunk } from '../../shared/redux/modules/userSlice';
 import ReuseBtn from '../reusable/ReuseBtn';

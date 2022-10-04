@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginKakaoThunk } from '../../shared/redux/modules/userSlice';
 import Loading from '../univ/Loading';
 

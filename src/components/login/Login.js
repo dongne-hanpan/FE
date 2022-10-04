@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { doKakaoLogin } from './kakaoLogin';
 import { loginUserThunk } from '../../shared/redux/modules/userSlice';
 import { clearModal, setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 import ReuseInput from '../reusable/ReuseInput';
-import { doKakaoLogin } from './kakaoLogin';
-//temp
 import logo from '../../asset/logo.png';
 import kakaoLogo from '../../asset/kakao_logo.png'
 

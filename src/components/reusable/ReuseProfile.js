@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import profile from '../../asset/defaultprofile.png';
+
 
 const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}) => {
   return(

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
+import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
+import { getCookie } from '../shared/axios/cookie';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
 import ChatContainer from '../components/chatPage/ChatContainer';
-import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
-import { getCookie } from '../shared/axios/cookie';
-import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const ChatPage = () => {

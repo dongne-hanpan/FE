@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ReuseProfile from '../components/reusable/ReuseProfile';
-import ReuseTemperature from '../components/reusable/ReuseTemperature';
-import ReuseBadge from '../components/reusable/ReuseBadge';
-import MatchCard from '../components/sportsPage/MatchCard';
-import { getLocal } from '../shared/axios/local';
 import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
+import { getLocal } from '../shared/axios/local';
+import ReuseProfile from '../components/reusable/ReuseProfile';
+import ReuseTemperature from '../components/reusable/ReuseTemperature';
+import ReuseBadge from '../components/reusable/ReuseBadge';
+import MatchCard from '../components/sportsPage/MatchCard';
 
 
 const MyPage = () => {

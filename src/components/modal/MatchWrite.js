@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styled, { css, keyframes } from 'styled-components';
-import ReuseBtn from '../reusable/ReuseBtn';
-import ReuseInput from '../reusable/ReuseInput';
-import ReuseTextarea from '../reusable/ReuseTextarea';
+import { useDispatch } from 'react-redux';
 import { getLocal } from '../../shared/axios/local';
 import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
+import ReuseTextarea from '../reusable/ReuseTextarea';
 import bowlingData from '../../data/bowlingData';
+import ReuseInput from '../reusable/ReuseInput';
+import ReuseBtn from '../reusable/ReuseBtn';
 import MapNaver from '../../shared/MapNaver';
 
 

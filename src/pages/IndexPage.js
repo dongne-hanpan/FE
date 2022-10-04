@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { sportsData, sportsConverter } from '../data/regionSportsData';
+import { setDialogue } from '../shared/redux/modules/modalSlice';
 import { setLocal } from '../shared/axios/local';
 import ReuseBtn from '../components/reusable/ReuseBtn';
-import { sportsData, sportsConverter } from '../data/regionSportsData';
-import { useDispatch } from 'react-redux';
-import { setDialogue } from '../shared/redux/modules/modalSlice';
 
 
 const IndexPage = () => {

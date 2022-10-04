@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { loadAllMatchThunk, loadMatchThunk } from '../shared/redux/modules/matchSlice';
-import MatchCard from '../components/sportsPage/MatchCard';
-import { getLocal, setLocal } from '../shared/axios/local';
 import { regionData, sportsData } from '../data/regionSportsData';
+import { getLocal, setLocal } from '../shared/axios/local';
+import MatchCard from '../components/sportsPage/MatchCard';
 
 
 const SportsPage = () => {

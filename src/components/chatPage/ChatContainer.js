@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 import styled from 'styled-components';
-import ChatContent from './ChatContent';
-import ChatNotice from './ChatNotice';
-
-//채팅
+import { useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from "axios";
 import StompJS from "stompjs";
 import SockJS from "sockjs-client";
-import axios from "axios";
 import { getCookie } from "../../shared/axios/cookie";
-import { useDispatch, useSelector } from 'react-redux';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
-import { sportsData } from '../../data/regionSportsData';
 import { getLocal } from '../../shared/axios/local';
 import { getWithCookie } from '../../shared/axios/axios';
+import { sportsData } from '../../data/regionSportsData';
+import ChatContent from './ChatContent';
+import ChatNotice from './ChatNotice';
 
 
 const ChatContainer = () => {
