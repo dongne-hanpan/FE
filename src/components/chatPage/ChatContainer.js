@@ -143,8 +143,11 @@ const ChatContainer = () => {
   // enter로 메시지 보내기
   const keyDownHandler = (e) => {
     if(e.code === 'Enter'){
+      if (e.nativeEvent.isComposing){
+        return
+      }
       const nowTextareaValue = msgArea.current.value;
-      if(e.ctrlKey){
+      if(e.ctrlKey || e.altKey){
         msgArea.current.value = nowTextareaValue + '\r\n';
       }else{
         e.preventDefault();
@@ -260,6 +263,7 @@ const ChatTextarea = styled.textarea`
   margin-bottom: 14px;
   border-radius: 0.5rem;
   background-color: ${({theme}) => theme.colors.background_light};
+  resize: none;
 `
 const ButtonBox = styled.button`
   width: 150px;

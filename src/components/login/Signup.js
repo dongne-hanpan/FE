@@ -109,7 +109,7 @@ const Signup = () => {
     return regExp.test(idValue);
   }
   const isValidNickname = (asValue) => {
-    var regExp = /^[가-힣a-z0-9_-]{2,12}$/;
+    var regExp = /^[가-힣a-z0-9_-]{2,8}$/;
     return regExp.test(asValue);
   }
   const isValidPw = (pwValue) => {

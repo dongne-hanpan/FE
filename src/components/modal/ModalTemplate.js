@@ -19,12 +19,10 @@ const ModalTemplate = () => {
   const modalData = useSelector((state) => state.modal.modalData);
   const removeModal = (e) => {
     if(e.target.ariaLabel === 'modalToggle'){
-      if(modalData.modalType === 'matchWrite' 
-        || modalData.modalType === 'matchResult' 
-        || modalData.modalType === 'matchComment' 
-        || modalData.modalType === 'changeProfile'
-        ){
+      if(modalData.modalType === 'matchWrite' || modalData.modalType === 'changeProfile'){
         dispatch(setDialogue({dialType: 'confirmRemove'}));
+      } else if(modalData.modalType === 'matchResult' || modalData.modalType === 'matchComment' ){
+        dispatch(setDialogue({dialType: 'confirmLeave'}));
       } else if(modalData.modalType === 'login' || modalData.modalType === 'signup'){
         dispatch(setDialogue({dialType: 'confirmLeave'}));
       }else{

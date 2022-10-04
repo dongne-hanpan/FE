@@ -62,23 +62,25 @@ const HeaderAlerm = ({data}) => {
       <AlermImgBox>
         <AlermImg src={red} alt='checkToggle'/>
       </AlermImgBox>
-      <AlermMsg>
-        {alermRouter()}
-      </AlermMsg>
-      <AlermBtnBox>
-        {alermBtnRouter()}
-      </AlermBtnBox>
+      <Alerm>
+        <AlermMsg>
+          {alermRouter()}
+        </AlermMsg>
+        <AlermBtnBox>
+          {alermBtnRouter()}
+        </AlermBtnBox>
+      </Alerm>
     </AlermComp>
   )
 };
 
 export default HeaderAlerm;
 
-
 const AlermComp = styled.div`
   width: 100%;
-  min-height: 40px;
+  height: 40px;
   display: flex;
+  justify-content: center;
   align-items: center;
 `
 const AlermImgBox = styled.div`
@@ -87,13 +89,20 @@ const AlermImgBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 20px;
-`
-const AlermImg = styled.img`
+  `
+  const AlermImg = styled.img`
   width: 10px;
+  justify-content: center;
+  `
+  const Alerm = styled.div`
+  width: 100%;
+  max-width: 400px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const AlermMsg = styled.div`
-  width: 300px;
-  margin-right: 10px;
   text-align: end;
   cursor: pointer;
   font-size: ${({theme}) => theme.fontSize.font_14};
@@ -101,6 +110,7 @@ const AlermMsg = styled.div`
 `
 const AlermBtnBox = styled.div`
   display: flex;
+  margin-left: 10px;
 `;
 const AlermBtn = styled.button`
   width: 20px;

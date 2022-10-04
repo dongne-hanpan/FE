@@ -14,6 +14,7 @@ import DialConfComment from './DialConfComment';
 import DialConfReserve from './DialConfReserve';
 import DialConfReserved from './DialConfReserved';
 import DialDenyExist from './DialDenyExist';
+import DialDenyLeave from './DialDenyLeave';
 import DialDenyResult from './DialDenyResult';
 import DialDenyContact from './DialDenyContact';
 import DialDenyFileType from './DialDenyFileType';
@@ -28,7 +29,6 @@ import DialAlreadyDone from './DialAlreadyDone';
 import DialApplyCanceled from './DialApplyCanceled';
 import DialExpireLogin from './DialExpireLogin';
 import DialRemoveMatch from './DialRemoveMatch';
-import DialReserveWho from './DialReserveWho';
 import DialFailLogin from './DialFailLogin';
 import DialNoService from './DialNoService';
 import DialPermit from './DialPermit';
@@ -78,6 +78,8 @@ const DialTemplate = () => {
       return <DialConfAlone />
     } else if(dialData.dialType === 'alreadyDone'){
       return <DialAlreadyDone />
+    } else if(dialData.dialType === 'denyLeave'){
+      return <DialDenyLeave />
     } else if(dialData.dialType === 'denyContact'){
       return <DialDenyContact />
     } else if(dialData.dialType === 'denyContactAgain'){
@@ -102,8 +104,6 @@ const DialTemplate = () => {
       return <DialDenyFileUpload />
     } else if(dialData.dialType === 'applyCanceled'){
       return <DialApplyCanceled />
-    } else if(dialData.dialType === 'reserveWho'){
-      return <DialReserveWho />
     } else if(dialData.dialType === 'removeMatch'){
       return <DialRemoveMatch />
     } else if(dialData.dialType === 'permit'){
