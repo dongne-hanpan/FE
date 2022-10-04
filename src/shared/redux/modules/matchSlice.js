@@ -59,7 +59,6 @@ const matchSlice = createSlice({
       state.matches = matchList;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
-      console.log('make match completed');
       state.matches = action.payload;
     });
   }

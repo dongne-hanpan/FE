@@ -134,6 +134,7 @@ export default Header;
 
 const HeaderComp = styled.header`
   width: 100vw;
+  min-width: 800px;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -147,7 +148,7 @@ const HeaderComp = styled.header`
   }
 `
 const HeaderLogoSection = styled.article`
-  flex-grow: 3;
+  flex-grow: 4;
   `
   const HeaderLogo = styled.img`
   height: 40px;
@@ -155,7 +156,9 @@ const HeaderLogoSection = styled.article`
   cursor: pointer;
 `
 const HeaderAlermSection = styled.article`
-  min-width: 450px;
+  flex-grow: 6;
+  max-width: 500px;
+  min-width: 340px;
   height: 40px;
   display: flex;
   flex-direction: column;
@@ -177,6 +180,7 @@ const HeaderUserSection = styled.article`
   flex-direction: column;
 `
 const UserGreet = styled.div`
+  min-width: 300px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
