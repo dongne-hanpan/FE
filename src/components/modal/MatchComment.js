@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitCommentThunk } from '../../shared/redux/modules/chatSlice';
 import { clearModal } from '../../shared/redux/modules/modalSlice';
@@ -120,37 +120,4 @@ const ResultFormContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`
-
-const InputTitleBox = styled.div`
-  width: 360px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-`
-const InputTitle = styled.div`
-  font-size: ${({theme}) => theme.fontSize.font_18};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
-const ErrMessage = styled.span`
-  margin-left: 10px;
-  font-size: ${({theme}) => theme.fontSize.font_12};
-  ${({status, theme}) => {
-    if(status === 'success'){
-      return css`
-      display: inline;
-      color: ${theme.colors.green};
-      `
-    } else if(status === 'danger'){
-      return css`
-      display: inline;
-      color: ${theme.colors.red_light};
-      `
-    } else if(status === 'none'){
-      return css`
-      display: none;
-      `
-    }
-  }}
 `

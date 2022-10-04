@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, {css} from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,32 +12,7 @@ const MatchCard = ({data}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.user.userData);
-  const alermStatus = useSelector((state) => state.alerm.alermStatus);
-  const alermData = useSelector((state) => state.alerm.error);
-
-  useEffect(() => {
-    if(alermStatus === 'success'){
-      dispatch(setDialogue({dialType: 'confirmApply'}))
-    }
-    if(alermData.errorType === 'contactHostThunk'){
-      if(alermData.statusCode === 500){
-        if(alermData.message === '이미 신청한 매치 입니다'){
-          dispatch(setDialogue({dialType: 'denyContactAgain', matchId: data.match_id}));
-        } else if(alermData.message === '참여 가능 인원이 초과되었습니다'){
-          dispatch(setDialogue({dialType: 'denyContact'}));
-        }
-      } else if(alermData.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyExist'}));
-      }
-    } else if(alermData.errorType === 'permitAlermThunk'){
-      if(alermData.statusCode === 500){
-        dispatch(setDialogue({dialType: 'applyCanceled'}));
-      } else if(alermData.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyExist'}));
-      }
-    }
-  },[alermData, alermStatus])
-
+  
   const showMatch = (e) => {
     if(e.target.ariaLabel === 'contactBtn' || e.target.ariaLabel === 'removeBtn'){
       return
@@ -173,9 +148,4 @@ const MatchIntakeCnt = styled.span`
   color: ${({matchStatus,isFull, theme}) => isFull&&(matchStatus !== 'done') ? theme.colors.black : theme.colors.gray};
 `
 const MatchIntakeFull = styled.span`
-`
-
-const BtnBox = styled.div`
-  display: flex;
-  margin-left: 6px;
 `

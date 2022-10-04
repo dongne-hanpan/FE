@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { clearAll } from '../../shared/redux/modules/modalSlice';
-import { clearStatus } from '../../shared/redux/modules/alermSlice';
+import { clearAlermStatus } from '../../shared/redux/modules/alermSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
 
 
 const DialApplyCanceled = () => {
   const dispatch = useDispatch();
   const cancel = () => {
-    dispatch(clearStatus());
+    dispatch(clearAlermStatus());
     dispatch(clearAll());
   }
   return(

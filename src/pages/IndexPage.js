@@ -18,16 +18,18 @@ const IndexPage = () => {
     const closeBtn = e.target.closest('button');
     if(closeBtn.ariaLabel !== '볼링'){
       dispatch(setDialogue({dialType: 'noService'}))
-      return
+    }else{
+      setSports(closeBtn.ariaLabel);
     }
-    setSports(closeBtn.ariaLabel);
   };
+
   const showSportsName = (e) => {
     if(sports === null){
       const closeBtn = e.target.closest('button');
       setHoverSports(closeBtn.ariaLabel);
     }
   }
+
   const moveToSportsPage = () => {
     if(sports === null){
       alert('스포츠를 선택해주세요');
@@ -47,6 +49,7 @@ const IndexPage = () => {
     setLocal('region', regionInLocal);
     navigate(`/all/${sports}`);
   }
+
   return (
     <IndexComp>
       <SportsComp>

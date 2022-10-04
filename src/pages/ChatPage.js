@@ -19,55 +19,55 @@ const ChatPage = () => {
   const chatStatus = useSelector((state) => state.chat.chatStatus);
   const chatError = useSelector((state) => state.chat.error);
 
+  //채팅방 데이터 받아오기
   useEffect(() => {
     if(nowChatId !== undefined){
       dispatch(getChatDataThunk(nowChatId));
     }
   },[nowChatId,dispatch])
 
+  //채팅 관련 에러 핸들링
   useEffect(() => {
     //성공 시
-    if(chatStatus.statusType === 'reservedChatThunk'){
-      dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+    if(chatStatus.statusType !== undefined){
+      if(chatStatus.statusType === 'reservedChatThunk'){
+        dispatch(setDialogue({dialType: 'confirmReserved', matchId: nowChatId}));
+      }
+      if(chatStatus.statusType === 'submitMyResultThunk'){
+        dispatch(setDialogue({dialType: 'confirmResult'}));
+      }
+      if(chatStatus.statusType === 'submitCommentThunk'){
+        dispatch(setDialogue({dialType: 'confirmComment'}))
+      }
+      if(chatStatus.statusType === 'leaveChatThunk'){
+        navigate(`/chat`);
+        dispatch(clearDialogue());
+      }
       dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'submitMyResultThunk'){
-      dispatch(setDialogue({dialType: 'confirmResult'}));
-      dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'submitCommentThunk'){
-      dispatch(setDialogue({dialType: 'confirmComment'}))
-      dispatch(clearChatStatus());
-    }
-    if(chatStatus.statusType === 'leaveChatThunk'){
-      navigate(`/chat`);
-      dispatch(clearChatStatus());
-      dispatch(clearDialogue());
     }
     //에러 시
-    if(chatError.errorType === 'getChatDataThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
-      } else if(chatError.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyChatExist'}))
+    if(chatError.errorType !== undefined){
+      if(chatError.errorType === 'getChatDataThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyEnterChatroom'}))
+        } else if(chatError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyChatExist'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'submitMyResultThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyResultAgain'}))
+      if(chatError.errorType === 'submitMyResultThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyResultAgain'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'submitCommentThunk'){
-      if(chatError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyCommentAgain'}))
+      if(chatError.errorType === 'submitCommentThunk'){
+        if(chatError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'denyCommentAgain'}))
+        }
       }
-      dispatch(clearChatError());
-    }
-    if(chatError.errorType === 'leaveChatThunk'){
-      if(chatError.statusCode === 404){
-        dispatch(setDialogue({dialType: 'denyChatExist'}))
+      if(chatError.errorType === 'leaveChatThunk'){
+        if(chatError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyChatExist'}))
+        }
       }
       dispatch(clearChatError());
     }

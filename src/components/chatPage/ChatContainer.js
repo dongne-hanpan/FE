@@ -23,25 +23,21 @@ const ChatContainer = () => {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${cookie}`,
   };
-  //나 이제 채팅 쓸꺼야
+  //채팅 init
   let sock = new SockJS(`${BASE_URL}/ws/chat`);
   let client = StompJS.over(sock);
 
+  // 채팅 연결
   const connectWebsocket = async() => {
     const res = await getWithCookie(`/chat/message/${nowChatId}`,cookie);
     setMessageList([...res])
   }
-
-  const onConnected = () => {
-    client.subscribe(`/queue/match/${nowChatId}`,connectWebsocket);
-  };
-  const onError = (err) => {
-    console.error(err);
-  };
+  const onConnected = () => { client.subscribe(`/queue/match/${nowChatId}`,connectWebsocket) };
+  const onError = (err) => { console.error(err) };
   const connect = () => {
     client.connect(headers, onConnected, onError);
   };
-
+  //채팅방 안에 있다면 연결
   useEffect(() => {
     if (nowChatId !== undefined) {
       connect();
@@ -60,15 +56,15 @@ const ChatContainer = () => {
     });
   }, [nowChatId]);
 
-  //메세지 보내기 관련
+  //채팅방 각종 action 관련
   const dispatch = useDispatch();
-  const chatData = useSelector((state) => state.chat.nowChatData);
-  const matchStatus = chatData.matchStatus;
   const userData = useSelector((state) => state.user.userData);
+  const chatData = useSelector((state) => state.chat.nowChatData);
   const sportsLocal = getLocal('sports');
   const sports = sportsLocal.sports;
   const matchsports = sportsData.filter((each) => each.sports === sports)[0];
-  
+  const matchStatus = chatData.matchStatus;
+
   const doReserved = () => {
     if( matchStatus === 'done'){
       dispatch(setDialogue({dialType: 'alreadyDone'}))
@@ -108,7 +104,6 @@ const ChatContainer = () => {
       dispatch(setDialogue({dialType: 'denyResult'}));
     }
   }
-
   const leaveChatRoom = () => {
     if(chatData.writer === userData.nickname){
       dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: true}));
@@ -116,7 +111,7 @@ const ChatContainer = () => {
       dispatch(setDialogue({dialType: 'removeMatch', matchId: nowChatId, isHost: false}));
     }
   }
-
+  //메세지 보내기
   const msgArea = useRef(null);
   const sendMessage = () => {
     if( matchStatus !== 'done'){
@@ -136,7 +131,8 @@ const ChatContainer = () => {
       msgArea.current.value = '';
     }
   };
-  //메시지 아래로 이동
+
+  //메시지 가장 아래로 이동
   const lastMsg = useRef(null);
   useEffect(() => {
     if(lastMsg.current !== null){
@@ -144,6 +140,7 @@ const ChatContainer = () => {
     }
   },[messageList])
 
+  // enter로 메시지 보내기
   const keyDownHandler = (e) => {
     if(e.code === 'Enter'){
       const nowTextareaValue = msgArea.current.value;
@@ -155,6 +152,7 @@ const ChatContainer = () => {
       }
     }
   }
+  
   return(
     <>
     <ChatContainerComp>

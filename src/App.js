@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     console.log('배포2')
   },[])
+  
   return (
     <div className="App">
       <Router>
