@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import App from './App';
@@ -44,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
         cursor: pointer;
     }
 `
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <ThemeProvider theme={theme}>

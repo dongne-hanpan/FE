@@ -1,8 +1,9 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 import Deco from '../univ/Deco';
+import Loading from '../univ/Loading';
 
 
 const Login = lazy(() => import('../login/Login'));
@@ -62,7 +63,9 @@ const ModalTemplate = () => {
       </ModalOutBtn>
       <ModalSection>
         <Deco />
-        {modalRouter()}
+        <Suspense fallback={<Loading size={30} type={'modal'} />}>
+          {modalRouter()}
+        </Suspense>
       </ModalSection>
     </ModalComp>
   )
