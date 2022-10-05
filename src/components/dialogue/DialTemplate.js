@@ -34,6 +34,7 @@ import DialNoService from './DialNoService';
 import DialPermit from './DialPermit';
 import Deco from '../univ/Deco';
 
+
 const DialTemplate = () => {
   const dialData = useSelector((state) => state.modal.dialogueData);
   const dispatch = useDispatch();

@@ -17,6 +17,7 @@ const Sse = () => {
     dispatch(getAlermThunk());
   }
   const errorCallback = (e) => {
+
     eventSource.close();
   }
   const connectCallback = (e) => {
@@ -39,6 +40,7 @@ const Sse = () => {
       return () => {
         eventSource.removeEventListener('connect', connectCallback);
         eventSource.close();
+        console.log('SSE close');
       }
     }
   },[userData.userId])
