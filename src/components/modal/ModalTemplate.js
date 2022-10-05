@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearModal, setDialogue } from '../../shared/redux/modules/modalSlice';
 import Deco from '../univ/Deco';
-import Login from '../login/Login';
-import Signup from '../login/Signup';
-import MatchWrite from './MatchWrite';
-import MatchWatch from './MatchWatch';
-import MatchResult from './MatchResult';
-import ChangeProfile from './ChangeProfile';
-import MatchComment from './MatchComment';
-import CommentWatch from './CommentWatch';
-import UserWatch from './UserWatch';
+
+
+const Login = lazy(() => import('../login/Login'));
+const Signup = lazy(() => import('../login/Signup'));
+const MatchWrite = lazy(() => import('./MatchWrite'));
+const MatchWatch = lazy(() => import('./MatchWatch'));
+const MatchResult = lazy(() => import('./MatchResult'));
+const ChangeProfile = lazy(() => import('./ChangeProfile'));
+const MatchComment = lazy(() => import('./MatchComment'));
+const CommentWatch = lazy(() => import('./CommentWatch'));
+const UserWatch = lazy(() => import('./UserWatch'));
 
 
 const ModalTemplate = () => {
