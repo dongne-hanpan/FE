@@ -1,9 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearDialogue } from '../../shared/redux/modules/modalSlice';
 import { leaveChatThunk } from '../../shared/redux/modules/chatSlice';
 import ReuseBtn from '../reusable/ReuseBtn';
+import {
+  DialMessages,
+  DialMessageTitle,
+  DialMessageExtra,
+  DialBtnsTwo
+} from '../../shared/css/dialogueStyle';
 
 
 const DialRemoveMatch = () => {
@@ -25,36 +30,12 @@ const DialRemoveMatch = () => {
           <DialMessageExtra>본 작업은 되돌릴 수 없습니다</DialMessageExtra>
         }
       </DialMessages>
-      <DialBtns>
+      <DialBtnsTwo>
         <ReuseBtn styleType={'danger'} content={'나가기'} clickEvent={leaveChatRoom} />
         <ReuseBtn styleType={'normal'} content={'취소'} clickEvent={cancel} />
-      </DialBtns>
+      </DialBtnsTwo>
     </>
   )
 };
 
 export default DialRemoveMatch;
-
-const DialMessages = styled.div`
-  width: 100%;
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const DialMessageTitle = styled.div`
-  margin-bottom: 12px;
-  font-size: ${({theme}) => theme.fontSize.font_16};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
-  const DialMessageExtra = styled.div`
-  font-size: ${({theme}) => theme.fontSize.font_16};
-  font-weight: ${({theme}) => theme.fontWeight.light};
-`
-const DialBtns = styled.div`
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: space-around;
-`
