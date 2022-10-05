@@ -69,9 +69,9 @@
 ###  재사용가능한 컴포넌트
 - [🤔Wiki(FE: 재사용가능한 컴포넌트 만들기) 바로가기](https://github.com/dongne-hanpan/FE/wiki/FE:---%EC%9E%AC%EC%82%AC%EC%9A%A9%EA%B0%80%EB%8A%A5%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0)
 - **팀원의 이탈로 인해 인적 리소스 부족**  
-    재사용성이라는 리액트의 특성을 살린 효율적인 개발이 필요
-    Atomic Design System을 기반으로
-    재사용 가능한 컴포넌트를 고려하여 와이어프레임 디자인 (Figma)
+    재사용성이라는 리액트의 특성을 살린 효율적인 개발이 필요  
+    Atomic Design System을 기반으로  
+    재사용 가능한 컴포넌트를 고려하여 와이어프레임 디자인 (Figma)  
 
 - **Styled-components**  
     theme, GlobalStyle을 통해 전역적인 세팅
