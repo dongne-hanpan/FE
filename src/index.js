@@ -6,10 +6,10 @@ import App from './App';
 import theme from './shared/css/theme';
 import store from './shared/redux/configure';
 
-
 const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
+        font-family: 'Noto Sans KR', sans-serif;
     }
     .App {
         position: relative;
@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0px;
         background-color: ${({theme}) => theme.colors.background};
         overflow: hidden;
+        font-family: 'Noto Sans KR', sans-serif;
     }
     h1{
         margin: 0px;
