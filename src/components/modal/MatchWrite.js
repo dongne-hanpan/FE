@@ -210,7 +210,7 @@ const PlaceMap = styled.div`
   margin-bottom: 12px;
 `
 const InputTitleSmall = styled.div`
-  width: 330px;
+  width: 380px;
   height: 40px;
   display: flex;
   justify-content: flex-start;
