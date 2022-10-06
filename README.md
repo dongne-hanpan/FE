@@ -79,7 +79,6 @@
 ###  재사용가능한 컴포넌트
 - [🤔Wiki(FE: 재사용가능한 컴포넌트 만들기) 바로가기](https://github.com/dongne-hanpan/FE/wiki/FE:---%EC%9E%AC%EC%82%AC%EC%9A%A9%EA%B0%80%EB%8A%A5%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0)
 
-- [🤔Wiki(FE: 리펙토링 및 성능 개선) 바로가기](https://github.com/dongne-hanpan/FE/wiki/FE:-%EB%A6%AC%ED%8E%99%ED%86%A0%EB%A7%81-%EB%B0%8F-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0)
 - **팀원의 이탈로 인해 인적 리소스 부족**  
     재사용성이라는 리액트의 특성을 살린 효율적인 개발이 필요  
     Atomic Design System을 기반으로  
@@ -103,6 +102,7 @@
     wiki 링크  
 
 - **Redux toolkit**  
+- **[FE: 전역상태 관리 tool 선택의 과정](https://github.com/dongne-hanpan/FE/wiki/FE:-%EC%A0%84%EC%97%AD%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC-tool-%EC%84%A0%ED%83%9D%EC%9D%98-%EA%B3%BC%EC%A0%95F)**
     전역 상태 관리가 필요
     redux에 비해 보일러 플레이트가 적음
     내장된 redux-thunk
@@ -139,6 +139,8 @@
 ## 🚫 트러블 슈팅
 ### 🤔 FE: Axios 에러 핸들링을 어디서 할 것인가?
 - **[상세내용이 담긴 Wiki 바로가기](https://github.com/dongne-hanpan/FE/wiki/FE:-Axios-%EC%97%90%EB%9F%AC-%ED%95%B8%EB%93%A4%EB%A7%81%EC%9D%84-%EC%96%B4%EB%94%94%EC%84%9C-%ED%95%A0-%EA%B2%83%EC%9D%B8%EA%B0%80%3F)**
+### 🤔 FE: 리펙토링 및 성능 개선
+- **[상세내용이 담긴 Wiki 바로가기](https://github.com/dongne-hanpan/FE/wiki/FE:-%EB%A6%AC%ED%8E%99%ED%86%A0%EB%A7%81-%EB%B0%8F-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0)**
 ### 🤔 Web Socket 연결 불안정
 - **상황 :**
     Web Socket을 연결하고 채팅을 시도하는데, 연결을 확인했음에도 불구하고  
@@ -146,8 +148,8 @@
     가장 큰 문제는 같은 코드이지만  
     해당 에러가 시도하는 사람의 환경에 따라 에러 발생 빈도가 매우 다르다는 점  
 -  **해결**  
-    채팅 기능을 담당한 팀원(최영준)의 로컬 환경에서는 에러가 나지 않아 개선할 수 없었고  
-    에러를 빈번하게 마주하는 팀원(김영동)이 코드를 뜯어보고 안정화 시켰다.  
+    채팅 기능을 담당한 팀원의 로컬 환경에서는 에러가 나지 않아 개선할 수 없었고  
+    에러를 빈번하게 마주하는 팀원이 코드를 뜯어보고 안정화 시켰다.  
 
     웹소켓에 의해 변경되는 state 값이
     웹소켓 연결, 전송 쪽 로직에 무분별하게 자리잡고 있었고
