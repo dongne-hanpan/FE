@@ -25,16 +25,6 @@ const Header = () => {
   const alermError = useSelector((state) => state.alerm.error);
   const cookie = getCookie('mytoken');
 
-
-  // refresh는
-  // 토큰은 있는데 새로고침 등으로 유저정보가 사라졌을 때
-  // 유저정보를 받아오기
-
-  // reissue는
-  // 401에러로 토큰이 만료되었을 때,
-  // 새로운 토큰을 받아오기
-
-
   // 나의 위치 값 받아오기
   const successCallback = (pos) => {
     const crd = pos.coords;
