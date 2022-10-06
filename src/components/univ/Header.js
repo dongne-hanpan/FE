@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUserStatus, logoutUserThunk, refreshUserThunk, reissueThunk } from '../../shared/redux/modules/userSlice';
+import { clearUserError, clearUserStatus, logoutUserThunk, refreshUserThunk, reissueThunk } from '../../shared/redux/modules/userSlice';
 import { clearAlerm, clearAlermError, clearAlermStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
@@ -25,6 +25,16 @@ const Header = () => {
   const alermError = useSelector((state) => state.alerm.error);
   const cookie = getCookie('mytoken');
 
+
+  // refresh는
+  // 토큰은 있는데 새로고침 등으로 유저정보가 사라졌을 때
+  // 유저정보를 받아오기
+
+  // reissue는
+  // 401에러로 토큰이 만료되었을 때,
+  // 새로운 토큰을 받아오기
+
+
   // 나의 위치 값 받아오기
   const successCallback = (pos) => {
     const crd = pos.coords;
@@ -44,33 +54,71 @@ const Header = () => {
     getMyLocation();
   },[])
 
-  //refresh 에러 핸들링
+  // 새로고침으로 인해, 브라우저 종료로 인해
+  // 토큰은 남아있는데, 유저정보가 비어있다면
   useEffect(() => {
     if(userData.username === undefined && cookie){
       dispatch(refreshUserThunk());
-    }
-    if(userStatus === 'logoutUserThunk'){
-      dispatch(clearAlerm());
+    } 
+  },[userData])
+  
+  //유저관련 에러 핸들링
+  useEffect(() => {
+    // 유저 관련 통신이 성공했을 경우
+    if(userStatus !== null){
+      if(userStatus === 'logoutUserThunk'){
+        dispatch(clearAlerm());
+      }
       dispatch(clearUserStatus());
     }
-    if(alermStatus === 'permitAlermThunk'){
-      dispatch(getAlermThunk());
+    if(userError.errorType !== undefined){
+      // 로그인 실패 시
+      if(userError.errorType === 'loginUserThunk' || userError.errorType === 'loginKakaoThunk'){
+        if(userError.statusCode === 500 || userError.statusCode === 401){
+          dispatch(setDialogue({dialType: 'failLogin'}));
+        }
+      }
+      // refresh 실패 시, 토큰이 만료되었다는 뜻이니까 => reissue 요청
+      if(userError.errorType === 'refreshUserThunk'){
+        if(userError.statusCode === 500 || userError.statusCode === 401){
+          dispatch(reissueThunk());
+        }
+      }
+      // reissue 실패 시
+      if(userError.errorType === 'reissueThunk'){
+        if(userError.statusCode === 500 || userError.statusCode === 401){
+          dispatch(setDialogue({dialType: 'expireLogin'}))
+        }
+      }
+      dispatch(clearUserError());
+    }
+  },[userStatus, userError, dispatch])
+
+  //알람 관련 에러 핸들링
+  useEffect(() => {
+    if(alermStatus !== null){
+      // 수락이나 거절 눌렀으면 알람 새로 다시 가져와
+      if(alermStatus === 'permitAlermThunk'){
+        dispatch(getAlermThunk());
+      }
       dispatch(clearAlermStatus());
     }
-  },[userData, userStatus, alermStatus, dispatch])
-
-  //refresh 에러 핸들링
-  useEffect(() => {
-    if(userError.statusCode === 401 || alermError.statusCode === '401'){
-      dispatch(reissueThunk());
-      dispatch(clearAlermError());
-    }
-    if(userError.errorType === 'refreshUserThunk'){
-      if(userError.statusCode === 500 || userError.statusCode === 401){
-        dispatch(setDialogue({dialType: 'expireLogin'}))
+    if(alermError.errorType !== undefined){
+      // 알람 관련api에서  401에러가 떴다면, 토큰 다시 가져와
+      if(alermError.statusCode === 401 || alermError.statusCode === '401'){
+        dispatch(reissueThunk());
+        dispatch(clearAlermError());
+        return
+      }
+      if(alermError.errorType === 'permitAlermThunk'){
+        if(alermError.statusCode === 500){
+          dispatch(setDialogue({dialType: 'applyCanceled'}));
+        } else if(alermError.statusCode === 404){
+          dispatch(setDialogue({dialType: 'denyExist'}));
+        }
       }
     }
-  },[userError, alermError, dispatch])
+  },[alermStatus, alermError, dispatch])
 
   // 네비게이터 함수 모음
   const goIndexPage = () => {
