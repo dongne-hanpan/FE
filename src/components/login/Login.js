@@ -13,19 +13,13 @@ import kakaoLogo from '../../asset/kakao_logo.png'
 const Login = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  const authError = useSelector((state) => state.user.error);
 
-  //doLogin, doKakaoLogin 결과에 따른 에러 핸들링
+  //유저 정보가 있다면 창 닫기
   useEffect(() => {
     if(userData.username){
       dispatch(clearModal());
     }
-    if(authError.errorType === 'loginUserThunk' || authError.errorType === 'loginKakaoThunk'){
-      if(authError.statusCode === 500 || authError.statusCode === 401){
-        dispatch(setDialogue({dialType: 'failLogin'}));
-      }
-    }
-  },[userData, authError, dispatch])
+  },[userData, dispatch])
 
   const moveToSignup = () => {
     dispatch(setModal({modalType: 'signup'}))

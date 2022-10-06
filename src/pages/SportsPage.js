@@ -25,10 +25,10 @@ const SportsPage = () => {
   const region = regionLocal.region;
   const matchsports = sportsData.filter((each) => each.sports === sports)[0];
   
-  // alerm 에러 핸들링
+  // contactToHost 관련 에러 핸들링
   useEffect(() => {
     if(alermStatus !== null){
-      if(alermStatus === 'success'){
+      if(alermStatus === 'contactHostThunk'){
         dispatch(setDialogue({dialType: 'confirmApply'}))
       }
       dispatch(clearAlermStatus());
@@ -41,12 +41,6 @@ const SportsPage = () => {
           }else if(alermError.message === '참여 가능 인원이 초과되었습니다'){
             dispatch(setDialogue({dialType: 'denyContact'}));
           }
-        } else if(alermError.statusCode === 404){
-          dispatch(setDialogue({dialType: 'denyExist'}));
-        }
-      } else if(alermError.errorType === 'permitAlermThunk'){
-        if(alermError.statusCode === 500){
-          dispatch(setDialogue({dialType: 'applyCanceled'}));
         } else if(alermError.statusCode === 404){
           dispatch(setDialogue({dialType: 'denyExist'}));
         }

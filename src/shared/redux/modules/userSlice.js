@@ -68,6 +68,9 @@ const userSlice = createSlice({
   reducers: {
     clearUserStatus: (state) => {
       state.userStatus = null;
+    },
+    clearUserError: (state) => {
+      state.error = {};
     }
   },
   extraReducers: (builder) => {
@@ -81,6 +84,7 @@ const userSlice = createSlice({
             errorType: 'loginUserThunk',
             ...res
           }
+          state.userStatus = null;
           state.error = errorObj;
         }else{
           const accessToken = res.accessToken;
@@ -92,6 +96,7 @@ const userSlice = createSlice({
             profileImage: res.profileImage,
           };
           state.error = {};
+          state.userStatus = 'loginUserThunk';
           state.userData = newUserData;
         }
       }
@@ -104,6 +109,7 @@ const userSlice = createSlice({
             errorType: 'loginKakaoThunk',
             ...res
           }
+          state.userStatus = null;
           state.error = errorObj;
         }else{
           const accessToken = res.accessToken;
@@ -115,6 +121,7 @@ const userSlice = createSlice({
             profileImage: res.profileImage,
           };
           state.error = {};
+          state.userStatus = 'loginKakaoThunk';
           state.userData = newUserData;
         }
       }
@@ -128,6 +135,7 @@ const userSlice = createSlice({
             errorType: 'refreshUserThunk',
             ...res
           }
+          state.userStatus = null;
           state.error = errorObj;
         }else{
           const data = action.payload;
@@ -141,6 +149,7 @@ const userSlice = createSlice({
           state.userData = newUserData;
         }
       }else{
+        state.error = {};
         deleteCookie('mytoken');
       }
     });
@@ -152,6 +161,7 @@ const userSlice = createSlice({
             errorType: 'reissueThunk',
             ...res
           }
+          state.userStatus = null;
           state.error = errorObj;
         }else{
           const accessToken = res.accessToken;
@@ -163,6 +173,7 @@ const userSlice = createSlice({
             profileImage: res.profileImage,
           };
           state.error = {};
+          state.userStatus = 'reissueThunk';
           state.userData = newUserData;
         }
       }
@@ -188,5 +199,5 @@ const userSlice = createSlice({
   }
 });
 
-export const { clearUserStatus } = userSlice.actions;
+export const { clearUserStatus, clearUserError } = userSlice.actions;
 export default userSlice.reducer;
