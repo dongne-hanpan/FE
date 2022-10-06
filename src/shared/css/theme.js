@@ -43,7 +43,6 @@ const fontSize = {
   /* Font weight */
 const fontWeight = {
   bold: 700,
-  semi_bold: 600,
   medium: 500,
   regular: 400,
   light: 300,

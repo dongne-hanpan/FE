@@ -1,7 +1,8 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearAll, clearDialogue } from '../../shared/redux/modules/modalSlice';
+import Loading from '../univ/Loading';
 import Deco from '../univ/Deco';
 
 
@@ -120,7 +121,9 @@ const DialTemplate = () => {
     <DialComp aria-label='dialToggle' onClick={removeDial}>
       <DialSection aria-label='dialTemplate'>
         <Deco />
-        {dialRouter()}
+          <Suspense fallback={<Loading size={20} />}>
+            {dialRouter()}
+          </Suspense>
       </DialSection>
     </DialComp>
   )

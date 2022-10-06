@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 import Header from './components/univ/Header';
 import IndexPage from './pages/IndexPage'
 import Loading from './components/univ/Loading';
-
-
+import ModalTemplate from './components/modal/ModalTemplate';
+import DialTemplate from './components/dialogue/DialTemplate';
+import ErrorBoundary from './shared/ErrorBoundary';
+//로딩 지연
+const SportsPage = lazy(() => import('./pages/SportsPage'));
 const KakaoRedirect = lazy(() => import('./components/login/KakaoRedirect'));
 const MyPage = lazy(() => import('./pages/MyPage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
-const SportsPage = lazy(() => import('./pages/SportsPage'));
-const ModalTemplate = lazy(() => import('./components/modal/ModalTemplate'));
-const DialTemplate = lazy(() => import('./components/dialogue/DialTemplate'));
 
 
 function App() {
@@ -21,8 +21,9 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Suspense fallback={<Loading />}>
-          <Header />
+        <Header />
+        <ErrorBoundary>
+          <Suspense fallback={<Loading size={40} />}>
           <Routes>
             <Route path='/' element={<IndexPage />} />
             <Route path="/user/kakao/callback" element={<KakaoRedirect />} />
@@ -33,7 +34,8 @@ function App() {
           </Routes>
           {modalData.modalType ? <ModalTemplate />:<></>}
           {dialogueData.dialType ? <DialTemplate />:<></>}
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       </Router>
     </div>
   );
