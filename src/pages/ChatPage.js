@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearChatError, clearChatStatus, getChatDataThunk } from '../shared/redux/modules/chatSlice';
 import { clearDialogue, setDialogue } from '../shared/redux/modules/modalSlice';
+import { reissueThunk } from '../shared/redux/modules/userSlice';
 import { getCookie } from '../shared/axios/cookie';
 import ChatNav from '../components/chatPage/ChatNav';
 import ReuseProfile from '../components/reusable/ReuseProfile';
@@ -47,6 +48,12 @@ const ChatPage = () => {
     }
     //에러 시
     if(chatError.errorType !== undefined){
+      // 알람 관련api에서  401에러가 떴다면, 토큰 다시 가져와
+      if(chatError.statusCode === 401 || chatError.statusCode === '401'){
+        dispatch(reissueThunk());
+        dispatch(clearChatError());
+        return
+      }
       if(chatError.errorType === 'getChatDataThunk'){
         if(chatError.statusCode === 500){
           dispatch(setDialogue({dialType: 'denyEnterChatroom'}))

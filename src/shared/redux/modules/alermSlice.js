@@ -75,9 +75,11 @@ const alermSlice = createSlice({
           errorType: 'contactHostThunk',
           ...res
         }
+        state.alermStatus = null;
         state.error = errorObj;
       }else{
-        state.alermStatus = 'success';
+        state.error = {}
+        state.alermStatus = 'contactHostThunk';
       }
     });
     builder.addCase(cancelApplyThunk.fulfilled, (state, action) => {
@@ -91,6 +93,7 @@ const alermSlice = createSlice({
           errorType: 'getAlermThunk',
           ...res
         }
+        state.alermStatus = null;
         state.error = errorObj;
       }
     });
@@ -101,9 +104,11 @@ const alermSlice = createSlice({
           errorType: 'permitAlermThunk',
           ...res
         }
+        state.alermStatus = null;
         state.error = errorObj;
       }else{
         state.alermStatus = 'permitAlermThunk';
+        state.error = {}
       }
     });
   }
