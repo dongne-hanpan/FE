@@ -12,7 +12,7 @@ import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseBadge from '../reusable/ReuseBadge';
 import MyReservedCnt from './MyReservedCnt';
 import Sse from './Sse';
-import logo from '../../asset/logo.png';
+import HeaderLogo from './HeaderLogo';
 
 
 const Header = () => {
@@ -111,9 +111,6 @@ const Header = () => {
   },[alermStatus, alermError, dispatch])
 
   // 네비게이터 함수 모음
-  const goIndexPage = () => {
-    navigate('/');
-  }
   const goMyPage = () => {
     if(userData.username){
       navigate('/mypage');
@@ -130,9 +127,7 @@ const Header = () => {
 
   return(
     <HeaderComp>
-      <HeaderLogoSection>
-        <HeaderLogo src={logo} alt="dongne_logo" onClick={goIndexPage} />
-      </HeaderLogoSection>
+      <HeaderLogo />
 
       <HeaderAlermSection>
         <Sse />
@@ -184,15 +179,6 @@ const HeaderComp = styled.header`
     height: 200px;
     transition: height 0.5s ease-in-out;
   }
-`
-const HeaderLogoSection = styled.article`
-  flex-grow: 4;
-  min-width: 150px;
-  `
-  const HeaderLogo = styled.img`
-  height: 40px;
-  margin: 0px 10px;
-  cursor: pointer;
 `
 const HeaderAlermSection = styled.article`
   flex-grow: 6;
