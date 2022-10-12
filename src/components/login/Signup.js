@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { signupUserThunk } from '../../shared/redux/modules/userSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getwithoutCookie } from '../../shared/axios/axios';
+import { isValidUsername, isValidNickname, isValidPw } from '../../shared/function/validater';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseBtn from '../reusable/ReuseBtn';
 
@@ -103,19 +104,6 @@ const Signup = () => {
 
   const [validUsername, setValidUsername] = useState(null);
   const [validNickname, setValidNickname] = useState(null);
-
-  const isValidUsername = (idValue) => {
-    var regExp = /^[a-z0-9_]{6,12}$/ 
-    return regExp.test(idValue);
-  }
-  const isValidNickname = (asValue) => {
-    var regExp = /^[가-힣a-z0-9_-]{2,8}$/;
-    return regExp.test(asValue);
-  }
-  const isValidPw = (pwValue) => {
-    var regExp = /^(?=.*[a-z])(?=.*[0-9])(?!.*[^a-zA-z0-9]).{8,20}$/;
-    return regExp.test(pwValue);
-  }
 
   //아이디 중복체크
   const checkDupUsername = async(e) => {
