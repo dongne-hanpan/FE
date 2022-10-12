@@ -149,10 +149,6 @@ const InputTitleBox = styled.div`
   align-items: center;
   margin-bottom: 6px;
 `
-const InputTitle = styled.div`
-  font-size: ${({theme}) => theme.fontSize.font_18};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
 const ErrMessage = styled.span`
   margin: 0px 10px;
   font-size: ${({theme}) => theme.fontSize.font_12};
