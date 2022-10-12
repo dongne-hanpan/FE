@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { sportsData, sportsConverter } from '../data/regionSportsData';
 import { setDialogue } from '../shared/redux/modules/modalSlice';
 import { setLocal } from '../shared/axios/local';
+import SportsImgBox from '../components/indexPage/SportsImgBox';
 import ReuseBtn from '../components/reusable/ReuseBtn';
 
 
@@ -14,23 +15,23 @@ const IndexPage = () => {
   const [sports, setSports] = useState(null);
   const [hoverSports, setHoverSports] = useState(null);
 
-  const selectSports = (e) => {
+  const selectSports = useCallback((e) => {
     const closeBtn = e.target.closest('button');
     if(closeBtn.ariaLabel !== '볼링'){
       dispatch(setDialogue({dialType: 'noService'}))
     }else{
       setSports(closeBtn.ariaLabel);
     }
-  };
+  },[dispatch]);
 
-  const showSportsName = (e) => {
+  const showSportsName = useCallback((e) => {
     if(sports === null){
       const closeBtn = e.target.closest('button');
       setHoverSports(closeBtn.ariaLabel);
     }
-  }
+  },[sports]) 
 
-  const moveToSportsPage = () => {
+  const moveToSportsPage = useCallback(() => {
     if(sports === null){
       alert('스포츠를 선택해주세요');
       return
@@ -48,15 +49,13 @@ const IndexPage = () => {
     setLocal('sports', sportsInLocal);
     setLocal('region', regionInLocal);
     navigate(`/all/${sports}`);
-  }
+  },[sports, navigate]);
 
   return (
     <IndexComp>
       <SportsComp>
         {sportsData.map((each) => 
-          <SportsImgBox key={each.sportsId} aria-label={each.sports} onClick={selectSports} onMouseEnter={showSportsName}>
-            <SportsImg src={each.sportsImage} alt={each.sports} sports={sports} />
-          </SportsImgBox>
+          <SportsImgBox key={each.sportsId} clickedSports={sports} data={each} selectSports={selectSports} showSportsName={showSportsName} />
         )}
       </SportsComp>
       <SportsName>{sports ? sports: hoverSports}</SportsName>
@@ -82,21 +81,6 @@ const SportsComp = styled.section`
   align-items: center;
   flex-wrap: wrap;
   margin-bottom: 10px;
-`
-const SportsImgBox = styled.button`
-  width: 200px;
-  margin: 0px 10px;
-  margin-bottom: 20px;
-  border-radius: 2rem 1rem 1rem 0rem;
-`
-const SportsImg = styled.img`
-  width: 200px;
-  height: auto;
-  border-radius: 2rem 1rem 1rem 0rem;
-  border: 3px solid ${({alt, sports, theme}) => alt === sports ?  theme.colors.skyblue: theme.colors.background};
-  &:hover{
-    border: 3px solid ${({theme}) => theme.colors.skyblue};
-  }
 `
 const SportsName = styled.h1`
   height: 30px;

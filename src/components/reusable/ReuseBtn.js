@@ -10,7 +10,7 @@ const ReuseBtn = ({name, direc, styleType, content, clickEvent}) => {
   )
 };
 
-export default ReuseBtn;
+export default React.memo(ReuseBtn);
 
 const BtnComp = styled.button`
   display: flex;
