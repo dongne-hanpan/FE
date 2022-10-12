@@ -8,7 +8,7 @@ const ReuseTextarea = ({injRef, injClass, height, placeholderValue, onChageEvent
   )
 };
 
-export default ReuseTextarea;
+export default React.memo(ReuseTextarea);
 
 const TextareaComp = styled.textarea`
   width: 100%;

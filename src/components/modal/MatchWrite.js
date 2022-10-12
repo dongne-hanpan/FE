@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getLocal } from '../../shared/axios/local';
@@ -6,6 +6,7 @@ import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { makeMatchThunk } from '../../shared/redux/modules/matchSlice';
 import ReuseTextarea from '../reusable/ReuseTextarea';
 import bowlingData from '../../data/bowlingData';
+import ReuseTitleBox from '../reusable/ReuseTitleBox';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseBtn from '../reusable/ReuseBtn';
 import MapNaver from '../../shared/MapNaver';
@@ -31,9 +32,10 @@ const MatchWrite = () => {
     const maxDate = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
     matchDateRef.current.max = maxDate.toISOString().slice(0, -8);
   },[]);
-  const preventKeyDown = (e) => {
+
+  const preventKeyDown = useCallback((e) => {
     e.preventDefault();
-  }
+  },[]);
 
   const selectChangeHandler = (e) => {
     setPlace(e.target.value);
@@ -96,10 +98,9 @@ const MatchWrite = () => {
 
   return(
     <ModalWriteComp>
-      <InputTitleBox>
-        <InputTitle>일자, 시간, 장소<ErrMessage ref={whenMsg} status={whenErr}></ErrMessage></InputTitle>
-      </InputTitleBox>
+      <ReuseTitleBox withBtn={false} titleContent={'일자, 시간, 장소'} titleRef={whenMsg} titleStatus={whenErr} />
       <ReuseInput injRef={matchDateRef} injType={'datetime-local'} keyDownEvent={preventKeyDown} />
+      
       <PlaceSection>
         <PlaceSelect ref={placeRef} onChange={selectChangeHandler}>
           <PlaceOption disabled >볼링장 선택</PlaceOption>
@@ -113,10 +114,10 @@ const MatchWrite = () => {
           <MapNaver injAddress={place ? place.split(',')[1] : null} />
         </PlaceMap>
       </PlaceSection>
-      <InputTitleBox>
-        <InputTitle>하고싶은 말</InputTitle>
-      </InputTitleBox>
+
+      <ReuseTitleBox withBtn={false} titleContent={'하고싶은 말'} />
       <ReuseTextarea injRef={matchDescRef} height={90} placeholderValue={'구체적인 모집 조건이나 하고 싶은 말을 남겨주세요'} />
+
       <InputTitleBox>
         <InputTitleSmall>총 인원<ErrMessage ref={intakeMsg} status={intakeErr}></ErrMessage></InputTitleSmall>
         <ReuseInput injRef={intakeRef} injType={'number'} placeholderValue={'본인 포함 1 ~ 6 명까지'}/>
