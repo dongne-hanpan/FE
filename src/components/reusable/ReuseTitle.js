@@ -6,7 +6,10 @@ const ReuseTitle = ({injContent,injErrRef,injErrStatus}) => {
   return(
     <InputTitle>
       {injContent}
-      <ErrMessage ref={injErrRef} status={injErrStatus}></ErrMessage>
+      {injErrRef ? 
+        <ErrMessage ref={injErrRef} status={injErrStatus}></ErrMessage>
+        : <></>
+      }
     </InputTitle>
   )
 };
