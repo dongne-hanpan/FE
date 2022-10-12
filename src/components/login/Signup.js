@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useCallback, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { signupUserThunk } from '../../shared/redux/modules/userSlice';
-import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
+import { setDialogue } from '../../shared/redux/modules/modalSlice';
 import { getwithoutCookie } from '../../shared/axios/axios';
 import { isValidUsername, isValidNickname, isValidPw } from '../../shared/function/validater';
+import ReuseTitleBox from '../reusable/ReuseTitleBox';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseBtn from '../reusable/ReuseBtn';
 import SwitchLoginSignup from './SwitchLoginSignup';
@@ -104,7 +105,7 @@ const Signup = () => {
   const [validNickname, setValidNickname] = useState(null);
 
   //아이디 중복체크
-  const checkDupUsername = async(e) => {
+  const checkDupUsername = useCallback(async(e) => {
     const username = signupUsernameRef.current.value;
     const afterCheck = isValidUsername(username);
     if(!afterCheck){
@@ -122,10 +123,10 @@ const Signup = () => {
         setUsernameErr('danger')
       }
     }
-  };
+  },[])
 
   //유저이름 중복체크
-  const checkDupNickname = async(e) => {
+  const checkDupNickname = useCallback(async(e) => {
     const nickname = signupNicknameRef.current.value;
     const afterCheck = isValidNickname(nickname);
     if(!afterCheck){
@@ -142,31 +143,21 @@ const Signup = () => {
         setNicknameErr('danger');
       }
     }
-  };
+  },[]);
 
   return(
     <RegisterComp>
       <SignupSection>
-        <InputTitleBox>
-          <InputTitle>아이디<ErrMessage ref={usernameMsg} status={usernameErr}></ErrMessage></InputTitle>
-          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupUsername} />
-        </InputTitleBox>
+        <ReuseTitleBox withBtn={true} btnClickEvent={checkDupUsername} titleContent={'아이디'} titleRef={usernameMsg} titleStatus={usernameErr} />
         <ReuseInput injRef={signupUsernameRef} injType={'text'} placeholderValue={'아이디 (6-12자 이내, 영문, 숫자 사용 가능)'} />
 
-        <InputTitleBox>
-          <InputTitle>닉네임<ErrMessage ref={nicknameMsg} status={nicknameErr}></ErrMessage></InputTitle>
-          <ReuseBtn styleType={'shrink'} content={'중복체크'} clickEvent={checkDupNickname} />
-        </InputTitleBox>
+        <ReuseTitleBox withBtn={true} btnClickEvent={checkDupNickname} titleContent={'닉네임'} titleRef={nicknameMsg} titleStatus={nicknameErr} />
         <ReuseInput injRef={signupNicknameRef} injType={'text'} placeholderValue={'닉네임(2-12자 이내, 영문,숫자 사용 가능)'} />
 
-        <InputTitleBox>
-          <InputTitle>비밀번호<ErrMessage ref={pwMsg} status={pwErr}></ErrMessage></InputTitle>
-        </InputTitleBox>
+        <ReuseTitleBox withBtn={false} titleContent={'비밀번호'} titleRef={pwMsg} titleStatus={pwErr} />
         <ReuseInput injRef={signupPwRef} injType={'password'} placeholderValue={'비밀번호 (8자 이상, 문자/숫자/기호 사용 가능)'} />
 
-        <InputTitleBox>
-          <InputTitle>비밀번호 확인<ErrMessage ref={pwConfirmMsg} status={pwConfirmErr}></ErrMessage></InputTitle>
-        </InputTitleBox>
+        <ReuseTitleBox withBtn={false} titleContent={'비밀번호 확인'} titleRef={pwConfirmMsg} titleStatus={pwConfirmErr} />
         <ReuseInput injRef={signupPwConfirmRef} injType={'password'} placeholderValue={'비밀번호를 다시 한번 입력해주세요'} />
       </SignupSection>
       <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doSignup}/>
@@ -187,44 +178,4 @@ const RegisterComp = styled.section`
 const SignupSection = styled.div`
   margin-top: 50px;
   margin-bottom: 30px;
-`
-const InputTitleBox = styled.div`
-  width: 360px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`
-const InputTitle = styled.div`
-  font-size: ${({theme}) => theme.fontSize.font_18};
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
-const ErrMessage = styled.span`
-  margin-left: 10px;
-  font-size: ${({theme}) => theme.fontSize.font_12};
-  ${({status, theme}) => {
-    if(status === 'success'){
-      return css`
-      display: inline;
-      color: ${theme.colors.green};
-      `
-    } else if(status === 'danger'){
-      return css`
-      display: inline;
-      color: ${theme.colors.red_light};
-      `
-    } else if(status === 'none'){
-      return css`
-      display: none;
-      `
-    }
-  }}
-`
-const SwitchToLogin = styled.div`
-  margin-top: 26px;
-  font-size: ${({theme}) => theme.fontSize.font_14};
-`
-const SwitchToLoginLink = styled.span`
-  color: ${({theme}) => theme.colors.core};
-  cursor: pointer;
 `

@@ -16,7 +16,7 @@ const ReuseInput = ({injRef, injClass, injType, placeholderValue, keyDownEvent})
   )
 };
 
-export default ReuseInput;
+export default React.memo(ReuseInput);
 
 const InputComp = styled.input`
   width: 100%;
