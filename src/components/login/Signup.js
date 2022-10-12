@@ -7,13 +7,11 @@ import { getwithoutCookie } from '../../shared/axios/axios';
 import { isValidUsername, isValidNickname, isValidPw } from '../../shared/function/validater';
 import ReuseInput from '../reusable/ReuseInput';
 import ReuseBtn from '../reusable/ReuseBtn';
+import SwitchLoginSignup from './SwitchLoginSignup';
 
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const moveToLogin = () => {
-    dispatch(setModal({modalType: 'login'}))
-  }
 
   //회원가입
   const signupUsernameRef = useRef(null);
@@ -172,7 +170,7 @@ const Signup = () => {
         <ReuseInput injRef={signupPwConfirmRef} injType={'password'} placeholderValue={'비밀번호를 다시 한번 입력해주세요'} />
       </SignupSection>
       <ReuseBtn styleType={'stretch'} content={'회원가입'} clickEvent={doSignup}/>
-      <SwitchToLogin>이미 회원이신가요? <SwitchToLoginLink onClick={moveToLogin}>로그인하기</SwitchToLoginLink></SwitchToLogin>
+      <SwitchLoginSignup presentComp={'signup'} />
     </RegisterComp>
   )
 };
