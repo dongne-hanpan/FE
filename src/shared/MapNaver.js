@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { getLocal } from './axios/local';
 
 
-
 const MapNaver = ({injAddress}) => {
   const mapElement = useRef(null);
   const {naver} = window;
@@ -30,12 +29,12 @@ const MapNaver = ({injAddress}) => {
       map,
     });
   },[nowLatLng]);
-
+  
   useEffect(() => {
     if(map !== null && injAddress !== null){
       naver.maps.Service.geocode({ address: injAddress }, function(status, response) {
-        if (status === naver.maps.Service.Status.ERROR) {
-            return alert('Something wrong!');
+        if(status === naver.maps.Service.Status.ERROR) {
+          return alert('Something wrong!');
         }
         // 성공 시의 response 처리
         const latlng = response.result.items[0].point;
@@ -45,14 +44,12 @@ const MapNaver = ({injAddress}) => {
     }
   },[injAddress])
 
-
-
   return (
     <MapComp ref={mapElement}></MapComp>
   );
 };
 
-export default MapNaver;
+export default React.memo(MapNaver);
 
 const MapComp = styled.div`
   width:100%;
