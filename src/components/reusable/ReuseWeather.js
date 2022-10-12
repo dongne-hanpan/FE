@@ -55,7 +55,7 @@ const ReuseWeather = ({ color }) => {
   )
 };
 
-export default ReuseWeather;
+export default React.memo(ReuseWeather);
 
 const WeatherComp = styled.div`
   display: flex;
