@@ -10,6 +10,7 @@ import { getLocal } from '../../shared/axios/local';
 import { getMyLocation } from '../../shared/function/getMyLocation';
 import HeaderLogo from './HeaderLogo';
 import Sse from './Sse';
+import GreetMsg from './GreetMsg';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseVerticalBtns from '../reusable/ReuseVerticalBtns';
 import MyReservedCnt from './MyReservedCnt';
@@ -117,7 +118,6 @@ const Header = () => {
     dispatch(logoutUserThunk());
   },[])
 
-
   const btnDataMaker = useMemo(() => {
     const btnsData = [
       {id: 0, content: '마이 페이지', clickEvent: goMyPage},
@@ -137,12 +137,7 @@ const Header = () => {
 
       <HeaderUserSection>
         <UserGreet>
-          <UserGreetNormal onClick={goMyPage}>
-            {userData.nickname ? 
-            <><UserName>{userData.nickname}</UserName> 님 안녕하세요</>
-            :'로그인 해주세요'
-            }
-          </UserGreetNormal>
+          <GreetMsg clickEvent={goMyPage} />
           <ReuseProfile imgSize={30} imgSrc={userData.profileImage} clickEvent={goMyPage} />
         </UserGreet>
         <UserElse>
@@ -210,15 +205,6 @@ const UserGreet = styled.div`
   margin-top: 4px;
   margin-bottom: 10px;
 `
-const UserGreetNormal = styled.div`
-  margin-right: 10px;
-  color: ${({theme}) => theme.colors.background};
-  font-weight: ${({theme}) => theme.fontWeight.light};
-  cursor: pointer;
-`
-const UserName = styled.span`
-  font-weight: ${({theme}) => theme.fontWeight.medium};
-`
 const UserElse = styled.div`
   height: 0px;
   display: flex;
@@ -230,9 +216,4 @@ const UserElse = styled.div`
     height: 120px;
     transition: height 0.5s ease-in-out;
   }
-`
-const UserBtns = styled.article`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
 `
