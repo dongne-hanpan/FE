@@ -6,7 +6,8 @@ import { clearUserError, clearUserStatus, logoutUserThunk, refreshUserThunk, rei
 import { clearAlerm, clearAlermError, clearAlermStatus, getAlermThunk } from '../../shared/redux/modules/alermSlice';
 import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
-import { setLocal } from '../../shared/axios/local';
+import { getLocal } from '../../shared/axios/local';
+import { getMyLocation } from '../../shared/function/getMyLocation';
 import ReuseProfile from '../reusable/ReuseProfile';
 import ReuseWeather from '../reusable/ReuseWeather';
 import ReuseBadge from '../reusable/ReuseBadge';
@@ -25,23 +26,12 @@ const Header = () => {
   const alermError = useSelector((state) => state.alerm.error);
   const cookie = getCookie('mytoken');
 
-  // 나의 위치 값 받아오기
-  const successCallback = (pos) => {
-    const crd = pos.coords;
-    const myLatLng = {
-      lat: crd.latitude,
-      lng: crd.longitude
-    }
-    setLocal('myLatLng', myLatLng)
-  }
-  const errorCallback = (e) => {
-    console.error(e);
-  }
-  const getMyLocation = () => {
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
-  }
+  // 첫 렌더링 시 나의 위치 값 받아오기
   useEffect(() => {
-    getMyLocation();
+    const myLatLng = getLocal('myLatLng');
+    if(!myLatLng){
+      getMyLocation();
+    }
   },[])
 
   // 새로고침으로 인해, 브라우저 종료로 인해
