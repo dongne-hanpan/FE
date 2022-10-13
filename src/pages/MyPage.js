@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,8 +8,8 @@ import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
 import { getCookie } from '../shared/axios/cookie';
 import { getLocal } from '../shared/axios/local';
 import ReuseProfile from '../components/reusable/ReuseProfile';
+import ReuseVerticalBtns from '../components/reusable/ReuseVerticalBtns';
 import ReuseTemperature from '../components/reusable/ReuseTemperature';
-import ReuseBadge from '../components/reusable/ReuseBadge';
 import MatchCard from '../components/sportsPage/MatchCard';
 
 
@@ -74,18 +74,29 @@ const MyPage = () => {
   },[userData,authError,navigate])
 
 
-  const showChageProfileModal = () => {
+  const showChageProfileModal = useCallback(() => {
     dispatch(setModal({modalType: 'changeProfile'}));
-  }
-  const showMyComments = () => {
-    dispatch(setModal({modalType: 'commentWatch'}));
-  }
-  const goChatPage = () => {
+  },[]);
+  const showMyComments = useCallback(() => {
+      dispatch(setModal({modalType: 'commentWatch'}));
+  },[]);
+  const goChatPage = useCallback(() => {
     navigate('/chat');
-  }
-  const doLogout = () => {
+  },[]);
+  const doLogout = useCallback(() => {
     dispatch(logoutUserThunk());
-  }
+  },[])
+
+  const btnDataMaker = useMemo(() => {
+    const btnsData = [
+      {id: 0, type:'rank', content:myPageData.level},
+      {id: 1, type:'btn', content:'프로필 편집', clickEvent: showChageProfileModal},
+      {id: 3, type:'btn', content:'나의 후기', clickEvent: showMyComments},
+      {id: 3, type:'btn', content:'채팅창 가기', clickEvent: goChatPage},
+      {id: 4, type:'btn', content:'로그 아웃', clickEvent: doLogout},
+    ];
+    return btnsData;
+  },[myPageData.level, showChageProfileModal, showMyComments, goChatPage, doLogout])
   //완료된 매치 보기
   const [doneToggle, setDoneToggle] = useState(false);
   const showDoneToggle = () => {
@@ -96,13 +107,7 @@ const MyPage = () => {
     <MainPage>
       <SportsAndRank>
         <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
-        <UserBtns>
-          <ReuseBadge direc={'verti'} bdgType={'rank'} content={myPageData.level} />
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'프로필 편집'} clickEvent={showChageProfileModal} />
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'나의 후기'} clickEvent={showMyComments} />
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
-          <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
-        </UserBtns>
+        <ReuseVerticalBtns data={btnDataMaker} />
         <RankArticle>
           <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score} />
           <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount} />
@@ -153,11 +158,6 @@ const SportsAndRank = styled.section`
   justify-content: space-between;
   width: 700px;
   margin-bottom: 20px;
-`
-const UserBtns = styled.article`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
 `
 const RankArticle = styled.article`
   display: flex;

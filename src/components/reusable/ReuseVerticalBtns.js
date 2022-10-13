@@ -8,7 +8,7 @@ const ReuseVerticalBtns = ({data}) => {
   return(
     <VerticalBtnsComp>
       {data.map((each) => 
-          <ReuseBadge key={each.id} direc={'verti'} bdgType={'btn'} content={each.content} clickEvent={each.clickEvent} />
+          <ReuseBadge key={each.id} direc={'verti'} bdgType={each.type} content={each.content} clickEvent={each.clickEvent} />
       )}
     </VerticalBtnsComp>
   )

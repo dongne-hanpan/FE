@@ -120,9 +120,9 @@ const Header = () => {
 
   const btnDataMaker = useMemo(() => {
     const btnsData = [
-      {id: 0, content: '마이 페이지', clickEvent: goMyPage},
-      {id: 1, content: '채팅창 가기', clickEvent: goChatPage},
-      {id: 2, content: '로그 아웃', clickEvent: doLogout},
+      {id: 0, type:'btn', content:'마이 페이지', clickEvent: goMyPage},
+      {id: 1, type:'btn', content:'채팅창 가기', clickEvent: goChatPage},
+      {id: 2, type:'btn', content:'로그 아웃', clickEvent: doLogout},
     ];
     return btnsData;
   },[goMyPage, goChatPage, doLogout])
