@@ -53,8 +53,8 @@ const MyPageHead = () => {
       {id: 0, type:'rank', content:myPageData.level},
       {id: 1, type:'btn', content:'프로필 편집', clickEvent: showChageProfileModal},
       {id: 3, type:'btn', content:'나의 후기', clickEvent: showMyComments},
-      {id: 3, type:'btn', content:'채팅창 가기', clickEvent: goChatPage},
-      {id: 4, type:'btn', content:'로그 아웃', clickEvent: doLogout},
+      {id: 4, type:'btn', content:'채팅창 가기', clickEvent: goChatPage},
+      {id: 5, type:'btn', content:'로그 아웃', clickEvent: doLogout},
     ];
     return btnsData;
   },[myPageData.level, showChageProfileModal, showMyComments, goChatPage, doLogout])
