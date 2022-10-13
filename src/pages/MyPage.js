@@ -94,15 +94,6 @@ const MainPage = styled.main`
       display: none;
   }
 `
-const SportsAndRank = styled.section`
-  display: flex;
-  justify-content: space-between;
-  width: 700px;
-  margin-bottom: 20px;
-`
-const RankArticle = styled.article`
-  display: flex;
-`
 const MatchContainer = styled.section`
   width: 700px;
   display: flex;
