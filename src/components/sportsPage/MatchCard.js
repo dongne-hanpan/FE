@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled, {css} from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const MatchCard = ({data}) => {
     }
     dispatch(setModal(matchData))
   }
-  const checkParticipant = () => {
+  const checkParticipant = useMemo(() => {
     const userListInMatch = data.userListInMatch;
     for(let i=0; i<userListInMatch.length; i++){
       if(userListInMatch[i].nickname === userData.nickname){
@@ -31,10 +31,11 @@ const MatchCard = ({data}) => {
       }
     }
     return false;
-  }
-  const contactToHost = () => {
+  },[data.userListInMatch])
+  
+  const contactToHost = useCallback(() => {
     if(userData.nickname !== undefined){
-      if(checkParticipant() === false){
+      if(checkParticipant === false){
         dispatch(contactHostThunk(data.match_id));
       }else{
         navigate(`/chat/${data.match_id}`)
@@ -42,7 +43,7 @@ const MatchCard = ({data}) => {
     }else{
       dispatch(setDialogue({dialType: 'confirmLogin'}))
     }
-  };
+  },[userData.nickname, checkParticipant])
 
   return(
     <MatchComp matchStatus={data.matchStatus} onClick={showMatch}>
@@ -65,14 +66,14 @@ const MatchCard = ({data}) => {
         </MatchIntake>
         {data.matchStatus === 'done' ? 
           <ReuseBtn styleType={'done'} content={'완 료'} />
-          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant() ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
+          :<ReuseBtn name={'contactBtn'} styleType={'shrink'} content={checkParticipant ? '채팅방 가기':'연락하기'} clickEvent={contactToHost} />
         }
       </MatchBtns>
     </MatchComp>
   )
 };
 
-export default MatchCard;
+export default React.memo(MatchCard);
 
 
 const MatchComp = styled.li`
