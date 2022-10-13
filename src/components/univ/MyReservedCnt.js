@@ -30,7 +30,7 @@ const MyReservedCnt = ({clickEvent}) => {
   )
 };
 
-export default MyReservedCnt;
+export default React.memo(MyReservedCnt);
 
 
 

@@ -10,7 +10,7 @@ const ReuseBadge = ({direc, bdgType, content, clickEvent}) => {
   )
 };
 
-export default ReuseBadge;
+export default React.memo(ReuseBadge);
 
 const BadgeComp = styled.div`
   height: 20px;

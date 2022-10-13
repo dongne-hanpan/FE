@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,12 +8,12 @@ import { setDialogue, setModal } from '../../shared/redux/modules/modalSlice';
 import { getCookie } from '../../shared/axios/cookie';
 import { getLocal } from '../../shared/axios/local';
 import { getMyLocation } from '../../shared/function/getMyLocation';
-import ReuseProfile from '../reusable/ReuseProfile';
-import ReuseWeather from '../reusable/ReuseWeather';
-import ReuseBadge from '../reusable/ReuseBadge';
-import MyReservedCnt from './MyReservedCnt';
-import Sse from './Sse';
 import HeaderLogo from './HeaderLogo';
+import Sse from './Sse';
+import ReuseProfile from '../reusable/ReuseProfile';
+import ReuseVerticalBtns from '../reusable/ReuseVerticalBtns';
+import MyReservedCnt from './MyReservedCnt';
+import ReuseWeather from '../reusable/ReuseWeather';
 
 
 const Header = () => {
@@ -101,19 +101,31 @@ const Header = () => {
   },[alermStatus, alermError, dispatch])
 
   // 네비게이터 함수 모음
-  const goMyPage = () => {
+  const goMyPage = useCallback(() => {
     if(userData.username){
       navigate('/mypage');
     } else{
       dispatch(setModal({modalType: 'login'}))
     }
-  }
-  const goChatPage = () => {
+  },[userData.username]);
+
+  const goChatPage = useCallback(() => {
     navigate('/chat');
-  }
-  const doLogout = () => {
+  },[]);
+
+  const doLogout = useCallback(() => {
     dispatch(logoutUserThunk());
-  }
+  },[])
+
+
+  const btnDataMaker = useMemo(() => {
+    const btnsData = [
+      {id: 0, content: '마이 페이지', clickEvent: goMyPage},
+      {id: 1, content: '채팅창 가기', clickEvent: goChatPage},
+      {id: 2, content: '로그 아웃', clickEvent: doLogout},
+    ];
+    return btnsData;
+  },[goMyPage, goChatPage, doLogout])
 
   return(
     <HeaderComp>
@@ -136,11 +148,7 @@ const Header = () => {
         <UserElse>
           {userData.username ? 
           <>
-            <UserBtns>
-              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'마이 페이지'} clickEvent={goMyPage} />
-              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'채팅창 가기'} clickEvent={goChatPage} />
-              <ReuseBadge direc={'verti'} bdgType={'btn'} content={'로그 아웃'} clickEvent={doLogout} />
-            </UserBtns>
+            <ReuseVerticalBtns data={btnDataMaker} />
             <MyReservedCnt clickEvent={goChatPage}/> 
           </>
           : <></>

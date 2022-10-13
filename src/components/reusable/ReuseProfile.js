@@ -15,7 +15,7 @@ const ReuseProfile = ({direc, imgSize, imgSrc, clickEvent, content, contentSize}
   )
 };
 
-export default ReuseProfile;
+export default React.memo(ReuseProfile);
 
 
 const ProfileComp = styled.button`

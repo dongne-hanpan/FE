@@ -59,7 +59,7 @@ const Sse = () => {
   )
 };
 
-export default Sse;
+export default React.memo(Sse);
 
 
 const AlermComp = styled.div`
