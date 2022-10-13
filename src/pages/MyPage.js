@@ -1,26 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUserThunk } from '../shared/redux/modules/userSlice';
 import { loadMyMatchThunk } from '../shared/redux/modules/matchSlice';
-import { setDialogue, setModal } from '../shared/redux/modules/modalSlice';
-import { getCookie } from '../shared/axios/cookie';
 import { getLocal } from '../shared/axios/local';
-import ReuseProfile from '../components/reusable/ReuseProfile';
-import ReuseVerticalBtns from '../components/reusable/ReuseVerticalBtns';
-import ReuseTemperature from '../components/reusable/ReuseTemperature';
 import MatchCard from '../components/sportsPage/MatchCard';
+import MyPageHead from '../components/myPage/MyPageHead';
 
 
 const MyPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
-  const authError = useSelector((state) => state.user.error);
   const myMatchList = useSelector((state) => state.match.matches);
-  const myPageData = useSelector((state) => state.match.elseData);
-  const cookie = getCookie('mytoken');
   let sportsEn = null;
 
   // 받아온 MyMatchList 종류별로 정리
@@ -57,46 +46,6 @@ const MyPage = () => {
     }
   },[]);
 
-  //프로필이미지 변경 에러 핸들링
-  useEffect(() => {
-    if(authError.errorType === 'updateProfileThunk'){
-      if(authError.statusCode === 500){
-        dispatch(setDialogue({dialType: 'denyFileUpload'}));
-      }
-    }
-  },[authError])
-
-  //유저정보 없으면 리다이렉트
-  useEffect(() => {
-    if(!cookie && !userData.username){
-      navigate('/')
-    }
-  },[userData,authError,navigate])
-
-
-  const showChageProfileModal = useCallback(() => {
-    dispatch(setModal({modalType: 'changeProfile'}));
-  },[]);
-  const showMyComments = useCallback(() => {
-      dispatch(setModal({modalType: 'commentWatch'}));
-  },[]);
-  const goChatPage = useCallback(() => {
-    navigate('/chat');
-  },[]);
-  const doLogout = useCallback(() => {
-    dispatch(logoutUserThunk());
-  },[])
-
-  const btnDataMaker = useMemo(() => {
-    const btnsData = [
-      {id: 0, type:'rank', content:myPageData.level},
-      {id: 1, type:'btn', content:'프로필 편집', clickEvent: showChageProfileModal},
-      {id: 3, type:'btn', content:'나의 후기', clickEvent: showMyComments},
-      {id: 3, type:'btn', content:'채팅창 가기', clickEvent: goChatPage},
-      {id: 4, type:'btn', content:'로그 아웃', clickEvent: doLogout},
-    ];
-    return btnsData;
-  },[myPageData.level, showChageProfileModal, showMyComments, goChatPage, doLogout])
   //완료된 매치 보기
   const [doneToggle, setDoneToggle] = useState(false);
   const showDoneToggle = () => {
@@ -105,15 +54,7 @@ const MyPage = () => {
   
   return(
     <MainPage>
-      <SportsAndRank>
-        <ReuseProfile imgSrc={userData.profileImage} imgSize={'220'} />
-        <ReuseVerticalBtns data={btnDataMaker} />
-        <RankArticle>
-          <ReuseTemperature type={'personal'} type2={'score'} data={myPageData.score} />
-          <ReuseTemperature type={'personal'} type2={'count'} data={myPageData.matchCount} />
-          <ReuseTemperature type={'personal'} type2={'temper'} data={myPageData.mannerPoint} />
-        </RankArticle>
-      </SportsAndRank>
+      <MyPageHead />
 
       <MatchContainer>
         <MatchContainerHeader>
