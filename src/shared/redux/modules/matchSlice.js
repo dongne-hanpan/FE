@@ -55,8 +55,23 @@ const matchSlice = createSlice({
     });
     builder.addCase(loadMyMatchThunk.fulfilled, (state, action) => {
       const {matchList, ...rest} = action.payload;
+        // 받아온 MyMatchList 종류별로 정리
+      const newSortedChatList = {
+        recruitList:[],
+        reservedList: [],
+        doneList: []
+      }
+      matchList.map((each) => {
+        if(each.matchStatus === 'recruit'){
+          newSortedChatList.recruitList.push(each)
+        } else if(each.matchStatus === 'reserved'){
+          newSortedChatList.reservedList.push(each)
+        } else if(each.matchStatus === 'done'){
+          newSortedChatList.doneList.push(each)
+        }
+      })
       state.elseData = rest;
-      state.matches = matchList;
+      state.matches = newSortedChatList;
     });
     builder.addCase(makeMatchThunk.fulfilled, (state, action) => {
       state.matches = action.payload;
